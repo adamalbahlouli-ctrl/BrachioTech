@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="NeuralWorks — Your all-in-one digital services hub. Website development, mobile apps, AI services, game modding, music production, and more." />
-  <meta name="keywords" content="NeuralWorks, digital services, web development, mobile apps, AI, game mods, music production, technical support" />
+  <meta name="description" content="NeuralWorks — A digital agency that designs and builds modern websites, web applications, and AI-powered digital solutions for ambitious businesses." />
+  <meta name="keywords" content="NeuralWorks, digital agency, web development, website design, web applications, AI solutions, custom software, Morocco" />
   <meta name="author" content="Adam EL Bahlouli" />
-  <meta property="og:title" content="NeuralWorks — Build Your Digital Future" />
-  <meta property="og:description" content="Professional digital services: web dev, mobile apps, AI, game mods, music &amp; more." />
+  <meta property="og:title" content="NeuralWorks — Digital Solutions Agency" />
+  <meta property="og:description" content="We design and build modern websites, web applications and AI-powered digital solutions for businesses and creators." />
   <meta property="og:image" content="https://i.postimg.cc/4Nc6kcV0/file-00000000b61871f4b423d0cf70eb6f37.png" />
-  <title>NeuralWorks — Build Your Digital Future</title>
+  <title>NeuralWorks — Digital Solutions Agency</title>
   <link rel="icon" href="https://i.postimg.cc/4Nc6kcV0/file-00000000b61871f4b423d0cf70eb6f37.png" type="image/png" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -29,10 +29,11 @@
     </a>
 
     <ul class="nav-links" role="list">
-      <li><a href="#hero"     class="nav-link active" id="nav-home">Home</a></li>
-      <li><a href="#services" class="nav-link"         id="nav-services">Services</a></li>
-      <li><a href="#about"    class="nav-link"         id="nav-about">About</a></li>
-      <li><a href="#contact"  class="nav-link"         id="nav-contact">Contact</a></li>
+      <li><a href="#hero"       class="nav-link active" id="nav-home">Home</a></li>
+      <li><a href="#services"   class="nav-link"        id="nav-services">Services</a></li>
+      <li><a href="#packages"   class="nav-link"        id="nav-packages">Pricing</a></li>
+      <li><a href="#about"      class="nav-link"        id="nav-about">About</a></li>
+      <li><a href="#contact"    class="nav-link"        id="nav-contact">Contact</a></li>
       <li>
         <button class="nav-link settings-link" id="settings-trigger" aria-haspopup="dialog" aria-expanded="false">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -45,7 +46,7 @@
     </ul>
 
     <div class="nav-actions">
-      <a href="#contact" class="btn btn-primary btn-sm nav-cta">Get Started</a>
+      <a href="#contact" class="btn btn-primary btn-sm nav-cta" id="nav-cta-btn">Start a Project</a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-drawer">
         <span></span><span></span><span></span>
       </button>
@@ -55,10 +56,11 @@
 
 <!-- Mobile Drawer -->
 <div class="nav-drawer" id="nav-drawer" aria-label="Mobile navigation">
-  <a href="#hero"     class="nav-link" id="drawer-home">Home</a>
-  <a href="#services" class="nav-link" id="drawer-services">Services</a>
-  <a href="#about"    class="nav-link" id="drawer-about">About</a>
-  <a href="#contact"  class="nav-link" id="drawer-contact">Contact</a>
+  <a href="#hero"       class="nav-link" id="drawer-home">Home</a>
+  <a href="#services"   class="nav-link" id="drawer-services">Services</a>
+  <a href="#packages"   class="nav-link" id="drawer-packages">Pricing</a>
+  <a href="#about"      class="nav-link" id="drawer-about">About</a>
+  <a href="#contact"    class="nav-link" id="drawer-contact">Contact</a>
   <button class="nav-link settings-link" id="drawer-settings" style="width:100%;text-align:left;">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="3"/>
@@ -84,48 +86,46 @@
 
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      AI-Powered Digital Services
+      Digital Solutions Agency
     </div>
 
     <h1 class="hero-title">
-      Build Your <span class="gradient-text">Digital Future</span><br>with NeuralWorks
+      We build digital products<br>
+      that help <span class="gradient-text">businesses grow.</span>
     </h1>
 
-    <p class="hero-subtitle">Try Our AI Models</p>
+    <p class="hero-subtitle">
+      We design and develop modern websites, web applications and AI-powered digital solutions for businesses and creators.
+    </p>
 
     <div class="hero-cta-group">
-      <a href="https://adam-portfolio-henna.vercel.app/"
-         target="_blank"
-         rel="noopener noreferrer"
-         class="btn btn-hero"
-         id="hero-enter-btn"
-         aria-label="Enter NeuralWorks AI Models">
-        Enter
+      <a href="#contact" class="btn btn-hero" id="hero-start-btn" aria-label="Start a project with NeuralWorks">
+        Start a Project
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </a>
-      <a href="#services" class="btn btn-outline" id="hero-services-btn">
-        Explore Services
+      <a href="#packages" class="btn btn-outline" id="hero-pricing-btn">
+        View Pricing
       </a>
     </div>
 
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-value" data-count="9">9+</div>
-        <div class="hero-stat-label">Services Offered</div>
+    <div class="hero-trust-badges">
+      <div class="trust-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Fast Delivery
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-value" data-count="500">500+</div>
-        <div class="hero-stat-label">Projects Delivered</div>
+      <div class="trust-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Secure Payment
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-value" data-count="98">98%</div>
-        <div class="hero-stat-label">Client Satisfaction</div>
+      <div class="trust-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Free Revisions
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-value" data-count="24">24/7</div>
-        <div class="hero-stat-label">Support Available</div>
+      <div class="trust-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        PayPal & Payoneer
       </div>
     </div>
   </div>
@@ -137,21 +137,324 @@
 </section>
 
 <!-- ==========================================
-     SERVICES SECTION
+     WHAT WE BUILD SECTION
      ========================================== -->
 <section id="services" class="section" aria-label="Services">
   <div class="container">
     <div class="section-header reveal">
       <span class="section-tag">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-        What We Offer
+        What We Build
       </span>
-      <h2 class="section-title">Our Premium <span class="gradient-text">Services</span></h2>
-      <p class="section-subtitle">End-to-end digital solutions crafted with precision, innovation, and a passion for excellence.</p>
+      <h2 class="section-title">Digital solutions for <span class="gradient-text">ambitious businesses</span></h2>
+      <p class="section-subtitle">From landing pages to complex platforms — we turn your ideas into polished digital products.</p>
     </div>
 
-    <div class="services-grid" id="services-grid" aria-live="polite">
-      <!-- Dynamically populated by JS from data/services.json -->
+    <div class="services-what-grid">
+
+      <div class="what-card reveal" id="service-websites">
+        <div class="what-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <div class="what-card-content">
+          <h3>Website Development</h3>
+          <p>Business websites, landing pages, and portfolios — responsive, fast, and professionally designed to convert visitors into clients.</p>
+          <div class="what-card-tags">
+            <span>Landing Pages</span>
+            <span>Business Sites</span>
+            <span>Portfolios</span>
+          </div>
+        </div>
+        <a href="#packages" class="what-card-cta">View Packages →</a>
+      </div>
+
+      <div class="what-card reveal reveal-delay-1" id="service-webapps">
+        <div class="what-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+            <path d="M7 8l3 3-3 3M13 14h4"/>
+          </svg>
+        </div>
+        <div class="what-card-content">
+          <h3>Web Applications</h3>
+          <p>Custom dashboards, platforms, and internal tools — built for real business workflows and scalable from day one.</p>
+          <div class="what-card-tags">
+            <span>Dashboards</span>
+            <span>Platforms</span>
+            <span>Custom Systems</span>
+          </div>
+        </div>
+        <a href="#contact" class="what-card-cta">Get a Quote →</a>
+      </div>
+
+      <div class="what-card reveal reveal-delay-2" id="service-ai">
+        <div class="what-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 3"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="what-card-content">
+          <h3>AI Solutions</h3>
+          <p>Integrate AI into your product — chatbots, automation workflows, content generation tools, and smart data processing systems.</p>
+          <div class="what-card-tags">
+            <span>AI Chatbots</span>
+            <span>Automation</span>
+            <span>Smart Tools</span>
+          </div>
+        </div>
+        <a href="#contact" class="what-card-cta">Get a Quote →</a>
+      </div>
+
+      <div class="what-card reveal reveal-delay-3" id="service-software">
+        <div class="what-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <div class="what-card-content">
+          <h3>Custom Software</h3>
+          <p>End-to-end software development — from architecture to deployment. Built exactly around your requirements.</p>
+          <div class="what-card-tags">
+            <span>SaaS</span>
+            <span>APIs</span>
+            <span>Integrations</span>
+          </div>
+        </div>
+        <a href="#contact" class="what-card-cta">Get a Quote →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     WEBSITE PACKAGES SECTION
+     ========================================== -->
+<section id="packages" class="section packages-section" aria-label="Website Packages">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+        Website Development
+      </span>
+      <h2 class="section-title">Transparent <span class="gradient-text">Pricing</span></h2>
+      <p class="section-subtitle">Pick the package that fits your project. All packages include responsive design, modern UI, and ongoing communication.</p>
+    </div>
+
+    <div class="packages-grid">
+
+      <!-- LAUNCH -->
+      <div class="package-card reveal" id="package-launch">
+        <div class="package-header">
+          <div class="package-name">Launch</div>
+          <div class="package-tagline">For a strong first impression online</div>
+          <div class="package-price">
+            <span class="price-from">from</span>
+            <span class="price-value">$79</span>
+          </div>
+        </div>
+        <ul class="package-features">
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>1–2 pages</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Responsive design</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Contact form</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Social links</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Basic SEO</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>3–5 day delivery</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline package-btn" id="pkg-launch-btn">Get Started</a>
+      </div>
+
+      <!-- BUSINESS -->
+      <div class="package-card package-featured reveal reveal-delay-1" id="package-business">
+        <div class="package-popular-badge">Most Popular</div>
+        <div class="package-header">
+          <div class="package-name">Business</div>
+          <div class="package-tagline">For a growing small business</div>
+          <div class="package-price">
+            <span class="price-from">from</span>
+            <span class="price-value">$149</span>
+          </div>
+        </div>
+        <ul class="package-features">
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Up to 5 pages</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Responsive + modern UI</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Contact form + WhatsApp</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Speed optimization</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>SEO setup</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Hosting setup</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>2 revisions</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>5–7 day delivery</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary package-btn" id="pkg-business-btn">Get Started</a>
+      </div>
+
+      <!-- PROFESSIONAL -->
+      <div class="package-card reveal reveal-delay-2" id="package-professional">
+        <div class="package-header">
+          <div class="package-name">Professional</div>
+          <div class="package-tagline">For a stronger digital presence</div>
+          <div class="package-price">
+            <span class="price-from">from</span>
+            <span class="price-value">$299</span>
+          </div>
+        </div>
+        <ul class="package-features">
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Up to 10 pages</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Custom design</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>CMS integration</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Advanced forms</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Analytics setup</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Performance optimization</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>3 revisions</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>10–14 day delivery</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline package-btn" id="pkg-professional-btn">Get Started</a>
+      </div>
+
+      <!-- CUSTOM -->
+      <div class="package-card package-custom reveal reveal-delay-3" id="package-custom">
+        <div class="package-header">
+          <div class="package-name">Custom</div>
+          <div class="package-tagline">Web apps, e-commerce &amp; complex systems</div>
+          <div class="package-price">
+            <span class="price-from">starting from</span>
+            <span class="price-value">$500<span class="price-plus">+</span></span>
+          </div>
+        </div>
+        <ul class="package-features">
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Full custom scope</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Web applications</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>E-commerce platforms</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>API & backend development</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Milestone-based payment</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Dedicated support</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary package-btn" id="pkg-custom-btn">Tell Us What You Need</a>
+      </div>
+
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="payment-methods reveal">
+      <p class="payment-label">Secure payment via</p>
+      <div class="payment-badges">
+        <div class="payment-badge" id="pay-paypal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 6.5C19.5 9.1 17.6 11.3 15 11.8L14.3 15.8C14.2 16.4 13.7 16.8 13.1 16.8H10.4C9.9 16.8 9.5 16.4 9.6 15.9L11 7.2C11.1 6.7 11.5 6.3 12 6.3H17C18.4 6.3 19.5 7.2 19.5 8.5V6.5Z"/><path d="M8 18.8L8.7 14.8H5.9C5.4 14.8 5 14.4 5.1 13.9L6.5 5.2C6.6 4.7 7 4.3 7.5 4.3H13.5C15.9 4.3 17.8 5.9 18.1 8.1C18.4 6.3 17.1 4.8 14.5 4.8H8.5C8 4.8 7.6 5.2 7.5 5.7L6 14.8H8.6L7.9 18.8H8Z"/></svg>
+          PayPal Business
+        </div>
+        <div class="payment-badge" id="pay-payoneer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3h4l-4 4-4-4h4z"/><path d="M8 3H4l4 4 4-4H8z"/></svg>
+          Payoneer
+        </div>
+        <div class="payment-badge" id="pay-bank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Bank Transfer
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     HOW IT WORKS SECTION
+     ========================================== -->
+<section id="how-it-works" class="section" aria-label="How it works">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+        The Process
+      </span>
+      <h2 class="section-title">How it <span class="gradient-text">works</span></h2>
+      <p class="section-subtitle">A simple, transparent process from first contact to final delivery.</p>
+    </div>
+
+    <div class="steps-grid">
+
+      <div class="step-card reveal" id="step-1">
+        <div class="step-number">01</div>
+        <div class="step-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+        </div>
+        <h3>Tell us what you need</h3>
+        <p>Fill out the project request form. We'll understand your requirements, goals, and budget before anything else.</p>
+      </div>
+
+      <div class="step-connector reveal reveal-delay-1" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+
+      <div class="step-card reveal reveal-delay-1" id="step-2">
+        <div class="step-number">02</div>
+        <div class="step-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+        </div>
+        <h3>Receive your proposal</h3>
+        <p>We review your project and send you a detailed proposal with timeline, scope, and final pricing within 24 hours.</p>
+      </div>
+
+      <div class="step-connector reveal reveal-delay-2" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+
+      <div class="step-card reveal reveal-delay-2" id="step-3">
+        <div class="step-number">03</div>
+        <div class="step-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+          </svg>
+        </div>
+        <h3>Pay the deposit</h3>
+        <p>A deposit secures your project slot. We accept PayPal, Payoneer, and bank transfer for your convenience.</p>
+      </div>
+
+      <div class="step-connector reveal reveal-delay-3" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+
+      <div class="step-card reveal reveal-delay-3" id="step-4">
+        <div class="step-number">04</div>
+        <div class="step-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <h3>We build it</h3>
+        <p>We design and develop your project with regular updates. You're always in the loop throughout the entire process.</p>
+      </div>
+
+      <div class="step-connector reveal reveal-delay-4" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+
+      <div class="step-card reveal reveal-delay-4" id="step-5">
+        <div class="step-number">05</div>
+        <div class="step-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <h3>Review &amp; Launch</h3>
+        <p>You review the final product, we apply your feedback, and then we launch. Final payment is made before delivery.</p>
+      </div>
+
+    </div>
+
+    <div class="steps-cta reveal">
+      <a href="#contact" class="btn btn-primary" id="steps-cta-btn">
+        Start Your Project
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
     </div>
   </div>
 </section>
@@ -162,15 +465,9 @@
 <section id="about" class="section" aria-label="About NeuralWorks">
   <div class="container">
     <div class="about-grid">
+
       <!-- Visual Side -->
       <div class="about-visual reveal">
-        <div class="about-logo-wrap">
-          <img src="https://i.postimg.cc/4Nc6kcV0/file-00000000b61871f4b423d0cf70eb6f37.png"
-               alt="NeuralWorks Logo"
-               width="56" height="56"
-               loading="lazy" />
-        </div>
-
         <div class="about-owner-card">
           <img src="https://i.postimg.cc/sxQrwdXf/IMG-20260625-WA0000.jpg"
                alt="Adam EL Bahlouli — Founder of NeuralWorks"
@@ -178,7 +475,7 @@
                width="100" height="100"
                loading="lazy" />
           <div class="owner-name">Adam EL Bahlouli</div>
-          <div class="owner-role">Founder &amp; Developer</div>
+          <div class="owner-role">Founder &amp; Lead Developer</div>
 
           <div class="owner-socials">
             <a href="https://x.com/EL_Bahlouli77"
@@ -187,7 +484,7 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
               X
             </a>
-            <a href="https://www.linkedin.com/in/adam-el-bahlouli-4b8435385?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+            <a href="https://www.linkedin.com/in/adam-el-bahlouli-4b8435385"
                target="_blank" rel="noopener noreferrer"
                class="social-btn" aria-label="Connect on LinkedIn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
@@ -199,12 +496,6 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               WhatsApp
             </a>
-            <a href="https://noxtary.vercel.app/"
-               target="_blank" rel="noopener noreferrer"
-               class="social-btn" aria-label="Visit Noxtary website">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-              Noxtary
-            </a>
           </div>
         </div>
       </div>
@@ -215,9 +506,12 @@
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
           About Us
         </span>
-        <h2>The Team Behind <span class="gradient-text">NeuralWorks</span></h2>
+        <h2>The agency behind <span class="gradient-text">NeuralWorks</span></h2>
         <p class="about-description">
-          NeuralWorks is your all-in-one digital services hub. We specialize in website development, mobile applications, software solutions, AI services, game modding, graphic design, video production, music creation, and technical support. Our goal is to turn your ideas into powerful digital experiences through innovation, quality, and expertise.
+          NeuralWorks is a digital agency built around one simple goal: helping businesses build a strong, professional online presence that actually works. We don't just write code — we understand your problem, design the right solution, and deliver a product that helps your business grow.
+        </p>
+        <p class="about-description">
+          We specialize in website development as our core service, and extend into web applications, AI integrations, and custom software for clients who need more. Whether you're starting from scratch or upgrading an existing product, we treat your project as if it were our own.
         </p>
 
         <div class="about-highlights">
@@ -237,13 +531,7 @@
             <div class="highlight-icon" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            Premium Quality
-          </div>
-          <div class="highlight-item">
-            <div class="highlight-icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            24/7 Support
+            Transparent Pricing
           </div>
           <div class="highlight-item">
             <div class="highlight-icon" aria-hidden="true">
@@ -255,13 +543,19 @@
             <div class="highlight-icon" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            Satisfaction Guarantee
+            Dedicated Communication
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            Client Satisfaction Guaranteed
           </div>
         </div>
 
         <div style="display:flex;gap:16px;flex-wrap:wrap;">
-          <a href="#services" class="btn btn-primary">View Services</a>
-          <a href="#contact"  class="btn btn-outline">Contact Us</a>
+          <a href="#packages" class="btn btn-primary" id="about-pricing-btn">View Pricing</a>
+          <a href="#contact" class="btn btn-outline" id="about-contact-btn">Start a Project</a>
         </div>
       </div>
     </div>
@@ -269,29 +563,40 @@
 </section>
 
 <!-- ==========================================
-     CONTACT SECTION
+     CONTACT SECTION — MULTI-STEP FORM
      ========================================== -->
-<section id="contact" class="section" aria-label="Contact">
+<section id="contact" class="section contact-section" aria-label="Start a Project">
   <div class="container">
     <div class="section-header reveal">
       <span class="section-tag">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-        Get In Touch
+        Start a Project
       </span>
       <h2 class="section-title">Let's <span class="gradient-text">Work Together</span></h2>
-      <p class="section-subtitle">Have a project in mind? Reach out and let's build something extraordinary.</p>
+      <p class="section-subtitle">Tell us about your project. We'll review your request and send you a proposal within 24 hours.</p>
     </div>
 
     <div class="contact-grid">
       <!-- Contact Info -->
       <div class="contact-info reveal">
         <h3>Contact Information</h3>
-        <p>We're available around the clock to help you with your digital projects. Choose the channel that works best for you.</p>
+        <p>Prefer to reach out directly? Use any of these channels and we'll get back to you quickly.</p>
 
         <div class="contact-channels">
+          <a href="mailto:adambahlouli5@gmail.com"
+             class="contact-channel" aria-label="Send an email" id="contact-email-link">
+            <div class="contact-channel-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">Email</div>
+              <div>adambahlouli5@gmail.com</div>
+            </div>
+          </a>
+
           <a href="https://wa.me/212625164763"
              target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Chat on WhatsApp">
+             class="contact-channel" aria-label="Chat on WhatsApp" id="contact-whatsapp-link">
             <div class="contact-channel-icon" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </div>
@@ -303,7 +608,7 @@
 
           <a href="https://x.com/EL_Bahlouli77"
              target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Follow on X Twitter">
+             class="contact-channel" aria-label="Follow on X Twitter" id="contact-x-link">
             <div class="contact-channel-icon" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </div>
@@ -313,9 +618,9 @@
             </div>
           </a>
 
-          <a href="https://www.linkedin.com/in/adam-el-bahlouli-4b8435385?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+          <a href="https://www.linkedin.com/in/adam-el-bahlouli-4b8435385"
              target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Connect on LinkedIn">
+             class="contact-channel" aria-label="Connect on LinkedIn" id="contact-linkedin-link">
             <div class="contact-channel-icon" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             </div>
@@ -324,86 +629,198 @@
               <div>Adam EL Bahlouli</div>
             </div>
           </a>
+        </div>
 
-          <a href="https://noxtary.vercel.app/"
-             target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Visit Noxtary website">
-            <div class="contact-channel-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            </div>
-            <div>
-              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">Official Website</div>
-              <div>noxtary.vercel.app</div>
-            </div>
-          </a>
-
-          <a href="https://www.instagram.com/noxtary_?igsh=MXEybzZpZWI3OTBxYQ=="
-             target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Follow Noxtary on Instagram">
-            <div class="contact-channel-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </div>
-            <div>
-              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">Instagram</div>
-              <div>@noxtary_</div>
-            </div>
-          </a>
+        <div class="response-time-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Typical response time: within 24 hours
         </div>
       </div>
 
-      <!-- Contact Form -->
+      <!-- Multi-Step Project Form -->
       <div class="reveal reveal-delay-2">
-        <form class="contact-form" id="contact-form" novalidate aria-label="Contact form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="contact-name" class="form-label">Your Name</label>
-              <input type="text" id="contact-name" name="name" class="form-input"
-                     placeholder="John Doe" required autocomplete="name" />
+        <form class="contact-form multi-step-form" id="contact-form" novalidate aria-label="Project request form">
+
+          <!-- Step Progress -->
+          <div class="form-progress" aria-label="Form progress">
+            <div class="form-progress-bar" id="form-progress-bar" style="width: 25%"></div>
+          </div>
+          <div class="form-step-indicator" id="form-step-indicator" aria-live="polite">Step 1 of 4</div>
+
+          <!-- STEP 1: Basic Info -->
+          <div class="form-step active" id="step-1-form" data-step="1">
+            <div class="form-step-title">
+              <span class="step-pill">1</span>
+              Tell us about yourself
             </div>
-            <div class="form-group">
-              <label for="contact-email" class="form-label">Email Address</label>
-              <input type="email" id="contact-email" name="email" class="form-input"
-                     placeholder="john@example.com" required autocomplete="email" />
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contact-name" class="form-label">Your Name <span class="required">*</span></label>
+                <input type="text" id="contact-name" name="name" class="form-input"
+                       placeholder="John Doe" required autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="contact-email" class="form-label">Email Address <span class="required">*</span></label>
+                <input type="email" id="contact-email" name="email" class="form-input"
+                       placeholder="john@example.com" required autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <div></div>
+              <button type="button" class="btn btn-primary form-next" id="step1-next" data-next="2">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="contact-service" class="form-label">Service Interested In</label>
-            <select id="contact-service" name="service" class="form-select form-input">
-              <option value="">Select a service…</option>
-              <option value="website">Create Professional Website</option>
-              <option value="research">Research Writing</option>
-              <option value="mobile">Mobile App Development</option>
-              <option value="css">Professional CSS Design</option>
-              <option value="bugfix">Bug Fixing &amp; Security Audit</option>
-              <option value="support">Technical Support</option>
-              <option value="gamemod">Game Mod Development</option>
-              <option value="prowriting">Professional Research Writing</option>
-              <option value="music">Music &amp; Song Production</option>
-            </select>
+          <!-- STEP 2: Project Type & Budget -->
+          <div class="form-step" id="step-2-form" data-step="2">
+            <div class="form-step-title">
+              <span class="step-pill">2</span>
+              Project details
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">What type of project do you need? <span class="required">*</span></label>
+              <div class="option-grid" id="project-type-grid" role="group" aria-label="Project type">
+                <button type="button" class="option-btn" data-value="Landing Page" id="opt-landing">Landing Page</button>
+                <button type="button" class="option-btn" data-value="Business Website" id="opt-business">Business Website</button>
+                <button type="button" class="option-btn" data-value="Portfolio" id="opt-portfolio">Portfolio</button>
+                <button type="button" class="option-btn" data-value="E-commerce" id="opt-ecommerce">E-commerce</button>
+                <button type="button" class="option-btn" data-value="Web Application" id="opt-webapp">Web Application</button>
+                <button type="button" class="option-btn" data-value="Other" id="opt-other">Other</button>
+              </div>
+              <input type="hidden" id="project-type" name="project_type" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">What is your budget? <span class="required">*</span></label>
+              <div class="option-grid" id="budget-grid" role="group" aria-label="Budget range">
+                <button type="button" class="option-btn" data-value="$50–$100" id="opt-budget1">$50 – $100</button>
+                <button type="button" class="option-btn" data-value="$100–$200" id="opt-budget2">$100 – $200</button>
+                <button type="button" class="option-btn" data-value="$200–$500" id="opt-budget3">$200 – $500</button>
+                <button type="button" class="option-btn" data-value="$500+" id="opt-budget4">$500+</button>
+              </div>
+              <input type="hidden" id="budget" name="budget" />
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline form-prev" id="step2-prev" data-prev="1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back
+              </button>
+              <button type="button" class="btn btn-primary form-next" id="step2-next" data-next="3">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="contact-message" class="form-label">Your Message</label>
-            <textarea id="contact-message" name="message" class="form-textarea"
-                      placeholder="Tell us about your project…" required></textarea>
+          <!-- STEP 3: Existing Assets -->
+          <div class="form-step" id="step-3-form" data-step="3">
+            <div class="form-step-title">
+              <span class="step-pill">3</span>
+              Do you already have…
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Select everything that applies:</label>
+              <div class="checkbox-grid">
+                <label class="checkbox-option" id="chk-domain">
+                  <input type="checkbox" name="assets" value="Domain" id="asset-domain" />
+                  <span class="checkbox-custom"></span>
+                  <span class="checkbox-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                    Domain Name
+                  </span>
+                </label>
+                <label class="checkbox-option" id="chk-hosting">
+                  <input type="checkbox" name="assets" value="Hosting" id="asset-hosting" />
+                  <span class="checkbox-custom"></span>
+                  <span class="checkbox-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                    Web Hosting
+                  </span>
+                </label>
+                <label class="checkbox-option" id="chk-logo">
+                  <input type="checkbox" name="assets" value="Logo" id="asset-logo" />
+                  <span class="checkbox-custom"></span>
+                  <span class="checkbox-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83"/></svg>
+                    Logo / Brand
+                  </span>
+                </label>
+                <label class="checkbox-option" id="chk-content">
+                  <input type="checkbox" name="assets" value="Content" id="asset-content" />
+                  <span class="checkbox-custom"></span>
+                  <span class="checkbox-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+                    Website Content
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline form-prev" id="step3-prev" data-prev="2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back
+              </button>
+              <button type="button" class="btn btn-primary form-next" id="step3-next" data-next="4">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
           </div>
 
-          <button type="submit" class="btn btn-primary form-submit" id="contact-submit">
-            Send Message
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-          </button>
+          <!-- STEP 4: Project Description -->
+          <div class="form-step" id="step-4-form" data-step="4">
+            <div class="form-step-title">
+              <span class="step-pill">4</span>
+              Describe your project
+            </div>
 
-          <div class="form-success" id="form-success" role="status" aria-live="polite">
-            ✅ Message sent! We'll get back to you shortly.
+            <div class="form-group">
+              <label for="contact-message" class="form-label">Tell us more about your project <span class="required">*</span></label>
+              <textarea id="contact-message" name="message" class="form-textarea"
+                        placeholder="Describe your project, goals, inspiration, or any specific requirements you have in mind…" required></textarea>
+            </div>
+
+            <div class="form-summary" id="form-summary" aria-live="polite">
+              <!-- Summary of previous answers will be injected here -->
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline form-prev" id="step4-prev" data-prev="3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back
+              </button>
+              <button type="submit" class="btn btn-primary form-submit" id="contact-submit">
+                Send Request
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </button>
+            </div>
           </div>
-          <div class="form-error" id="form-error" role="alert" aria-live="assertive">
-            ❌ Failed to send message. Please try again or contact us directly.
+
+          <!-- SUCCESS STATE -->
+          <div class="form-success-state" id="form-success-state" aria-live="polite" role="status" hidden>
+            <div class="success-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3>Project request sent!</h3>
+            <p>Thank you! We've received your request and will send you a personalized proposal within 24 hours.</p>
           </div>
+
+          <!-- ERROR STATE -->
+          <div class="form-error" id="form-error" role="alert" aria-live="assertive" hidden>
+            ❌ Failed to send your request. Please try again or contact us directly.
+          </div>
+
         </form>
       </div>
     </div>
@@ -422,25 +839,29 @@
              class="footer-logo"
              width="36" height="36"
              loading="lazy" />
-        <span class="footer-brand-name">NeuralWorks</span>
+        <div>
+          <span class="footer-brand-name">NeuralWorks</span>
+          <div class="footer-tagline">Digital Solutions Agency</div>
+        </div>
       </div>
 
       <nav class="footer-nav" aria-label="Footer navigation">
-        <a href="#hero">Home</a>
-        <a href="#services">Services</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+        <a href="#hero" id="footer-home">Home</a>
+        <a href="#services" id="footer-services">Services</a>
+        <a href="#packages" id="footer-packages">Pricing</a>
+        <a href="#about" id="footer-about">About</a>
+        <a href="#contact" id="footer-contact">Contact</a>
       </nav>
     </div>
 
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copy">© 2026 NeuralWorks. All rights reserved.</span>
+      <span class="footer-copy">© 2026 NeuralWorks. All rights reserved. Built by Adam EL Bahlouli.</span>
       <a href="https://noxtary.vercel.app/"
          target="_blank" rel="noopener noreferrer"
-         class="footer-powered" aria-label="Powered by Noxtary">
-        Powered by
+         class="footer-powered" id="footer-noxtary" aria-label="Visit Noxtary">
+        Also visit
         <img src="https://i.postimg.cc/P5BdcqZL/1000105011.png"
              alt="Noxtary Logo"
              width="22" height="22"
@@ -489,13 +910,13 @@
            loading="lazy" />
       <div class="dev-info">
         <div class="dev-name">Adam EL Bahlouli</div>
-        <div class="dev-role">Founder &amp; Developer</div>
+        <div class="dev-role">Founder &amp; Lead Developer</div>
         <div class="dev-links">
           <a href="https://x.com/EL_Bahlouli77" target="_blank" rel="noopener noreferrer" class="dev-link" aria-label="X Twitter">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             X
           </a>
-          <a href="https://www.linkedin.com/in/adam-el-bahlouli-4b8435385?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="dev-link" aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/in/adam-el-bahlouli-4b8435385" target="_blank" rel="noopener noreferrer" class="dev-link" aria-label="LinkedIn">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             LinkedIn
           </a>
@@ -519,11 +940,9 @@
 <!-- ==========================================
      SCRIPTS
      ========================================== -->
-<!-- EmailJS: loaded synchronously so it is available before main.js runs -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="js/particles.js" defer></script>
 <script src="js/theme.js" defer></script>
-<script src="js/services.js" defer></script>
 <script src="js/main.js" defer></script>
 
 </body>

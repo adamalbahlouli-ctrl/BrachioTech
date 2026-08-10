@@ -1,6 +1,6 @@
 /**
  * NeuralWorks — Main Application Script
- * Navigation, settings panel, scroll reveal, contact form, toast notifications
+ * Navigation, settings panel, scroll reveal, multi-step contact form, toast notifications
  */
 
 (function () {
@@ -114,16 +114,12 @@
     var panel    = document.getElementById('settings-panel');
     var closeBtn = document.getElementById('settings-close');
 
-    // Collect ALL trigger buttons (navbar + drawer)
     var triggers = [
       document.getElementById('settings-trigger'),
       document.getElementById('drawer-settings')
     ].filter(Boolean);
 
-    if (!overlay || !panel) {
-      console.warn('[NeuralWorks] Settings panel elements not found.');
-      return;
-    }
+    if (!overlay || !panel) return;
 
     function openSettings() {
       overlay.classList.add('open');
@@ -149,13 +145,9 @@
       });
     });
 
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeSettings);
-    }
-
+    if (closeBtn) closeBtn.addEventListener('click', closeSettings);
     overlay.addEventListener('click', closeSettings);
 
-    // Keyboard escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && panel.classList.contains('open')) {
         closeSettings();
@@ -206,15 +198,13 @@
 
     elements.forEach(function (el) { observer.observe(el); });
 
-    // Fallback: after 1.5s force-show all remaining hidden reveals
-    // (handles cases where IntersectionObserver misses off-screen elements)
     setTimeout(function () {
       elements.forEach(function (el) { el.classList.add('visible'); });
     }, 1500);
   }
 
   // ============================================================
-  // CONTACT FORM — EmailJS Integration
+  // EMAILJS INIT
   // ============================================================
   var EMAILJS_PUBLIC_KEY  = 'LQnmFTXdf1e3jfTU0';
   var EMAILJS_SERVICE_ID  = 'service_AdamNoxtary20085';
@@ -228,91 +218,309 @@
     emailjs.init(EMAILJS_PUBLIC_KEY);
   }
 
+  // ============================================================
+  // MULTI-STEP CONTACT FORM
+  // ============================================================
   function initContactForm() {
-    var form      = document.getElementById('contact-form');
-    var submitBtn = document.getElementById('contact-submit');
-    var success   = document.getElementById('form-success');
-    var errorBox  = document.getElementById('form-error');
+    var form            = document.getElementById('contact-form');
+    var progressBar     = document.getElementById('form-progress-bar');
+    var stepIndicator   = document.getElementById('form-step-indicator');
+    var successState    = document.getElementById('form-success-state');
+    var errorBox        = document.getElementById('form-error');
+    var submitBtn       = document.getElementById('contact-submit');
 
     if (!form) return;
 
-    var SUBMIT_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+    var currentStep = 1;
+    var totalSteps  = 4;
 
-    function showSuccess() {
-      if (success)  { success.style.display  = 'block'; }
-      if (errorBox) { errorBox.style.display  = 'none';  }
+    // Track user selections
+    var selections = {
+      projectType: '',
+      budget: ''
+    };
+
+    // ---- Progress update ----
+    function updateProgress(step) {
+      var pct = Math.round((step / totalSteps) * 100);
+      if (progressBar) progressBar.style.width = pct + '%';
+      if (stepIndicator) stepIndicator.textContent = 'Step ' + step + ' of ' + totalSteps;
     }
 
-    function showError() {
-      if (errorBox) { errorBox.style.display  = 'block'; }
-      if (success)  { success.style.display   = 'none';  }
+    // ---- Show/hide steps ----
+    function goToStep(n) {
+      var current = form.querySelector('.form-step.active');
+      var next    = form.querySelector('#step-' + n + '-form');
+      if (!next) return;
+
+      if (current) {
+        current.classList.remove('active');
+      }
+
+      // Force browser reflow so animation re-triggers on each step
+      next.style.animation = 'none';
+      next.offsetHeight; // trigger reflow
+      next.style.animation = '';
+
+      next.classList.add('active');
+      currentStep = n;
+      updateProgress(n);
+
+      // If going to step 4, render summary
+      if (n === 4) renderSummary();
     }
 
-    function hideMessages() {
-      if (success)  success.style.display  = 'none';
-      if (errorBox) errorBox.style.display = 'none';
+    // ---- Step 1 validation ----
+    function validateStep1() {
+      var name  = form.elements['name']  ? form.elements['name'].value.trim()  : '';
+      var email = form.elements['email'] ? form.elements['email'].value.trim() : '';
+
+      var nameInput  = document.getElementById('contact-name');
+      var emailInput = document.getElementById('contact-email');
+
+      var valid = true;
+
+      if (!name) {
+        if (nameInput) nameInput.classList.add('error');
+        valid = false;
+      } else {
+        if (nameInput) nameInput.classList.remove('error');
+      }
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (emailInput) emailInput.classList.add('error');
+        valid = false;
+      } else {
+        if (emailInput) emailInput.classList.remove('error');
+      }
+
+      if (!valid) {
+        showToast('Please fill in your name and a valid email address.', 'error');
+      }
+
+      return valid;
     }
 
+    // ---- Step 2 validation ----
+    function validateStep2() {
+      var type   = document.getElementById('project-type')  ? document.getElementById('project-type').value  : '';
+      var budget = document.getElementById('budget')         ? document.getElementById('budget').value         : '';
+
+      if (!type || !budget) {
+        showToast('Please select a project type and a budget range.', 'error');
+        return false;
+      }
+      return true;
+    }
+
+    // ---- Step 4 validation ----
+    function validateStep4() {
+      var message = form.elements['message'] ? form.elements['message'].value.trim() : '';
+      var msgInput = document.getElementById('contact-message');
+
+      if (!message) {
+        if (msgInput) msgInput.classList.add('error');
+        showToast('Please describe your project.', 'error');
+        return false;
+      }
+      if (msgInput) msgInput.classList.remove('error');
+      return true;
+    }
+
+    // ---- Option button groups ----
+    function initOptionGroup(gridId, hiddenId) {
+      var grid   = document.getElementById(gridId);
+      var hidden = document.getElementById(hiddenId);
+      if (!grid || !hidden) return;
+
+      $$('.option-btn', grid).forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          $$('.option-btn', grid).forEach(function (b) { b.classList.remove('selected'); });
+          btn.classList.add('selected');
+          hidden.value = btn.getAttribute('data-value') || btn.textContent.trim();
+          if (hiddenId === 'project-type') selections.projectType = hidden.value;
+          if (hiddenId === 'budget')       selections.budget       = hidden.value;
+        });
+      });
+    }
+
+    initOptionGroup('project-type-grid', 'project-type');
+    initOptionGroup('budget-grid', 'budget');
+
+    // ---- Checkbox: add/remove .checked class for CSS fallback ----
+    $$('.checkbox-option', form).forEach(function (label) {
+      var checkbox = label.querySelector('input[type="checkbox"]');
+      if (!checkbox) return;
+      checkbox.addEventListener('change', function () {
+        label.classList.toggle('checked', checkbox.checked);
+      });
+    });
+
+    // ---- Render summary on step 4 ----
+    function renderSummary() {
+      var summaryEl = document.getElementById('form-summary');
+      if (!summaryEl) return;
+
+      var name    = form.elements['name']    ? form.elements['name'].value.trim()    : '—';
+      var type    = document.getElementById('project-type') ? document.getElementById('project-type').value || '—' : '—';
+      var budget  = document.getElementById('budget')       ? document.getElementById('budget').value       || '—' : '—';
+
+      // Collect checked assets
+      var assets = [];
+      $$('input[name="assets"]:checked', form).forEach(function (cb) {
+        assets.push(cb.value);
+      });
+      var assetStr = assets.length > 0 ? assets.join(', ') : 'None selected';
+
+      summaryEl.innerHTML =
+        '<div class="summary-item"><span class="summary-label">Name:</span><span class="summary-value">' + escapeHtml(name) + '</span></div>' +
+        '<div class="summary-item"><span class="summary-label">Project type:</span><span class="summary-value">' + escapeHtml(type) + '</span></div>' +
+        '<div class="summary-item"><span class="summary-label">Budget:</span><span class="summary-value">' + escapeHtml(budget) + '</span></div>' +
+        '<div class="summary-item"><span class="summary-label">Already have:</span><span class="summary-value">' + escapeHtml(assetStr) + '</span></div>';
+    }
+
+    // ---- HTML escape helper ----
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // ---- Next/Prev button wiring ----
+    $$('.form-next', form).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var next = parseInt(btn.getAttribute('data-next'), 10);
+        if (!next) return;
+
+        // Validate current step before proceeding
+        var ok = true;
+        if (currentStep === 1) ok = validateStep1();
+        if (currentStep === 2) ok = validateStep2();
+
+        if (ok) goToStep(next);
+      });
+    });
+
+    $$('.form-prev', form).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var prev = parseInt(btn.getAttribute('data-prev'), 10);
+        if (!prev) return;
+        goToStep(prev);
+      });
+    });
+
+    // ---- Real-time clear error on input ----
+    $$('.form-input, .form-textarea', form).forEach(function (el) {
+      el.addEventListener('input', function () {
+        el.classList.remove('error');
+      });
+    });
+
+    // ---- Form submit ----
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      hideMessages();
 
+      if (!validateStep4()) return;
+
+      // Collect all data
       var name    = form.elements['name']    ? form.elements['name'].value.trim()    : '';
       var email   = form.elements['email']   ? form.elements['email'].value.trim()   : '';
-      var service = form.elements['service'] ? form.elements['service'].value        : '';
+      var type    = document.getElementById('project-type') ? document.getElementById('project-type').value : '';
+      var budget  = document.getElementById('budget')       ? document.getElementById('budget').value       : '';
       var message = form.elements['message'] ? form.elements['message'].value.trim() : '';
 
-      // Validation
-      if (!name || !email || !message) {
-        showToast('Please fill in all required fields.', 'error');
-        return;
+      var assets = [];
+      $$('input[name="assets"]:checked', form).forEach(function (cb) {
+        assets.push(cb.value);
+      });
+
+      // Build formatted message body
+      var formattedMessage =
+        '=== PROJECT REQUEST ===\n\n' +
+        'Name: ' + name + '\n' +
+        'Email: ' + email + '\n\n' +
+        '--- Project Details ---\n' +
+        'Project Type: ' + (type || 'Not specified') + '\n' +
+        'Budget Range: ' + (budget || 'Not specified') + '\n' +
+        'Already Have: ' + (assets.length > 0 ? assets.join(', ') : 'Nothing selected') + '\n\n' +
+        '--- Project Description ---\n' +
+        message;
+
+      // Disable submit
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
       }
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showToast('Please enter a valid email address.', 'error');
-        return;
-      }
+      if (errorBox) errorBox.hidden = true;
 
-      // Loading state
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending…';
-
-      // EmailJS not loaded check
+      // EmailJS not loaded
       if (typeof emailjs === 'undefined') {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Send Message ' + SUBMIT_ICON;
-        showError();
-        showToast('Email service unavailable. Please try again later.', 'error');
+        restoreSubmitBtn();
+        showFormError();
+        showToast('Email service unavailable. Please contact us directly.', 'error');
         return;
       }
 
       var templateParams = {
         name:    name,
         email:   email,
-        service: service || 'Not specified',
-        message: message
+        service: type || 'Not specified',
+        message: formattedMessage
       };
 
       emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
         .then(function (result) {
           console.log('[NeuralWorks] Email sent:', result);
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Send Message ' + SUBMIT_ICON;
-          showSuccess();
-          showToast("Message sent! We'll get back to you shortly.", 'success');
+          showFormSuccess();
+          showToast('Project request sent! We\'ll get back to you within 24 hours.', 'success', 6000);
           form.reset();
-          setTimeout(function () {
-            if (success) success.style.display = 'none';
-          }, 6000);
+          resetFormState();
         })
         .catch(function (err) {
           console.error('[NeuralWorks] Email failed:', err);
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Send Message ' + SUBMIT_ICON;
-          showError();
-          showToast('Failed to send message. Please try again.', 'error');
+          restoreSubmitBtn();
+          showFormError();
+          showToast('Failed to send. Please try again or contact us directly.', 'error');
         });
     });
+
+    function resetFormState() {
+      // Clear option selections
+      $$('.option-btn', form).forEach(function (b) { b.classList.remove('selected'); });
+      var ptInput = document.getElementById('project-type');
+      var bgInput = document.getElementById('budget');
+      if (ptInput) ptInput.value = '';
+      if (bgInput) bgInput.value = '';
+      selections.projectType = '';
+      selections.budget = '';
+    }
+
+    function restoreSubmitBtn() {
+      if (!submitBtn) return;
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Send Request <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+    }
+
+    function showFormSuccess() {
+      // Hide the form steps content
+      $$('.form-step', form).forEach(function (s) { s.style.display = 'none'; });
+      var progress = form.querySelector('.form-progress');
+      var indicator = form.querySelector('.form-step-indicator');
+      if (progress) progress.style.display = 'none';
+      if (indicator) indicator.style.display = 'none';
+
+      if (successState) successState.hidden = false;
+    }
+
+    function showFormError() {
+      if (errorBox) errorBox.hidden = false;
+    }
+
+    // Init progress
+    updateProgress(1);
   }
 
   // ============================================================
@@ -337,48 +545,14 @@
   }
 
   // ============================================================
-  // COUNTER ANIMATION
-  // ============================================================
-  function initCounters() {
-    var stats = $$('.hero-stat-value');
-    if (stats.length === 0) return;
-
-    if (typeof IntersectionObserver === 'undefined') {
-      stats.forEach(function (el) {
-        var target  = parseInt(el.getAttribute('data-count')) || 0;
-        var suffix  = el.textContent.replace(/[0-9]/g, '').replace(String(target), '');
-        el.textContent = target + suffix;
-      });
-      return;
-    }
-
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var el      = entry.target;
-        var target  = parseInt(el.getAttribute('data-count')) || 0;
-        var suffix  = el.textContent.replace(/[0-9]/g, '').replace(String(target), '');
-        var current = 0;
-        var step    = Math.ceil(target / 60);
-        var timer   = setInterval(function () {
-          current = Math.min(current + step, target);
-          el.textContent = current + suffix;
-          if (current >= target) clearInterval(timer);
-        }, 16);
-        observer.unobserve(el);
-      });
-    }, { threshold: 0.5 });
-
-    stats.forEach(function (stat) { observer.observe(stat); });
-  }
-
-  // ============================================================
-  // IMAGE LAZY LOAD WITH FADE-IN
+  // LAZY IMAGES
   // ============================================================
   function initLazyImages() {
     if ('loading' in HTMLImageElement.prototype) return;
 
     var images = $$('img[loading="lazy"]');
+    if (typeof IntersectionObserver === 'undefined') return;
+
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -401,18 +575,66 @@
   }
 
   // ============================================================
+  // PACKAGE BUTTON PRE-FILL
+  // ============================================================
+  function initPackageButtons() {
+    var packageMap = {
+      'pkg-launch-btn':       'Landing Page',
+      'pkg-business-btn':     'Business Website',
+      'pkg-professional-btn': 'Business Website',
+      'pkg-custom-btn':       'Web Application'
+    };
+
+    var budgetMap = {
+      'pkg-launch-btn':       '$50–$100',
+      'pkg-business-btn':     '$100–$200',
+      'pkg-professional-btn': '$200–$500',
+      'pkg-custom-btn':       '$500+'
+    };
+
+    Object.keys(packageMap).forEach(function (btnId) {
+      var btn = document.getElementById(btnId);
+      if (!btn) return;
+
+      btn.addEventListener('click', function (e) {
+        // Pre-select the matching options after the form is in view
+        setTimeout(function () {
+          var typeVal   = packageMap[btnId];
+          var budgetVal = budgetMap[btnId];
+
+          // Select project type option
+          $$('#project-type-grid .option-btn').forEach(function (ob) {
+            var match = ob.getAttribute('data-value') === typeVal;
+            ob.classList.toggle('selected', match);
+          });
+          var ptInput = document.getElementById('project-type');
+          if (ptInput) ptInput.value = typeVal;
+
+          // Select budget option
+          $$('#budget-grid .option-btn').forEach(function (ob) {
+            var match = ob.getAttribute('data-value') === budgetVal;
+            ob.classList.toggle('selected', match);
+          });
+          var bgInput = document.getElementById('budget');
+          if (bgInput) bgInput.value = budgetVal;
+        }, 600);
+      });
+    });
+  }
+
+  // ============================================================
   // MAIN INIT
   // ============================================================
   function init() {
     var modules = [
-      { name: 'EmailJS', fn: initEmailJS },
-      { name: 'Navbar', fn: initNavbar },
-      { name: 'Settings', fn: initSettings },
-      { name: 'ScrollReveal', fn: initScrollReveal },
-      { name: 'ContactForm', fn: initContactForm },
-      { name: 'SmoothScroll', fn: initSmoothScroll },
-      { name: 'Counters', fn: initCounters },
-      { name: 'LazyImages', fn: initLazyImages }
+      { name: 'EmailJS',        fn: initEmailJS },
+      { name: 'Navbar',         fn: initNavbar },
+      { name: 'Settings',       fn: initSettings },
+      { name: 'ScrollReveal',   fn: initScrollReveal },
+      { name: 'ContactForm',    fn: initContactForm },
+      { name: 'SmoothScroll',   fn: initSmoothScroll },
+      { name: 'LazyImages',     fn: initLazyImages },
+      { name: 'PackageButtons', fn: initPackageButtons }
     ];
 
     modules.forEach(function (mod) {
@@ -423,7 +645,6 @@
       }
     });
 
-    // Global error handler for unhandled promise rejections
     window.addEventListener('unhandledrejection', function (event) {
       console.warn('[NeuralWorks] Unhandled rejection:', event.reason);
     });
