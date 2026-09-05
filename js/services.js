@@ -1,5 +1,5 @@
 /**
- * NeuralWorks — Services Loader
+ * BrachioTech — Services Loader
  * Dynamically fetches and renders service cards from data/services.json
  * All product data is managed exclusively through the JSON file.
  */
@@ -89,7 +89,7 @@
           loading="lazy"
           width="600"
           height="338"
-          onerror="this.src='https://via.placeholder.com/600x338/0a0f2e/6c63ff?text=NeuralWorks'"
+          onerror="this.src='https://via.placeholder.com/600x338/0a0f2e/6c63ff?text=BrachioTech'"
         />
         ${badgeHTML}
       </div>

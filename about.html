@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About BrachioTech — The Curated Marketplace for World-Class Digital Services." />
+  <title>About Platform — BrachioTech Marketplace</title>
+  <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+    }
+  }
+  </script>
+  <style>
+    .about-hero {
+      padding: calc(var(--nav-height) + 60px) 0 80px;
+      text-align: center;
+      position: relative;
+    }
+    .about-lead-title {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .about-lead-text {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin: 0 auto 36px;
+      line-height: 1.75;
+    }
+    .about-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .about-feature-box {
+      background: var(--bg-card);
+      border: var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      text-align: left;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .about-feature-box:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent-primary);
+    }
+    .about-feature-icon {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .about-feature-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+    .about-feature-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo" aria-label="BrachioTech Marketplace">
+      <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+           alt="BrachioTech Logo" width="40" height="40" loading="eager" />
+      <span class="nav-logo-text">BrachioTech</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="index.html"              class="nav-link" id="nav-home">Home</a></li>
+      <li><a href="index.html#services"     class="nav-link" id="nav-services">Explore Services</a></li>
+      <li><a href="index.html#custom-order" class="nav-link" id="nav-custom">Service Request</a></li>
+      <li><a href="about.html"              class="nav-link active" id="nav-about">About</a></li>
+      <li><a href="index.html#how-it-works" class="nav-link" id="nav-process">How It Works</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="index.html#services" class="btn btn-primary btn-sm nav-cta">Browse Services</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="nav-drawer" id="nav-drawer" aria-label="Mobile navigation">
+  <a href="index.html"              class="nav-link">Home</a>
+  <a href="index.html#services"     class="nav-link">Explore Services</a>
+  <a href="index.html#custom-order" class="nav-link">Service Request</a>
+  <a href="about.html"              class="nav-link active">About</a>
+  <a href="index.html#how-it-works" class="nav-link">How It Works</a>
+</div>
+
+<!-- Main Content -->
+<main>
+  <section class="about-hero">
+    <div class="container">
+      <div class="hero-badge" style="margin-bottom: 20px;">
+        <span class="hero-badge-dot"></span>
+        Platform Overview &amp; Mission
+      </div>
+
+      <h1 class="about-lead-title">
+        Find world-class <span class="gradient-text">digital services</span><br>
+        crafted for ambitious goals.
+      </h1>
+
+      <p class="about-lead-text">
+        BrachioTech is a next-generation curated digital services marketplace connecting clients with specialized talents across software engineering, creative design, AI automations, and modern multimedia.
+      </p>
+
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="index.html#services" class="btn btn-primary">
+          Explore All Services
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="index.html#custom-order" class="btn btn-outline">
+          Submit Service Request
+        </a>
+      </div>
+
+      <!-- Feature Grid -->
+      <div class="about-features-grid">
+        <div class="about-feature-box">
+          <span class="about-feature-icon">✨</span>
+          <h3 class="about-feature-title">Verified Quality</h3>
+          <p class="about-feature-desc">Every service listing is reviewed and approved by platform managers to ensure high execution standards, clear deliverables, and reliable timelines.</p>
+        </div>
+
+        <div class="about-feature-box">
+          <span class="about-feature-icon">💬</span>
+          <h3 class="about-feature-title">Direct Communication</h3>
+          <p class="about-feature-desc">Connect directly with service providers via WhatsApp, Telegram, or social channels. No artificial communication hurdles or hidden friction.</p>
+        </div>
+
+        <div class="about-feature-box">
+          <span class="about-feature-icon">⚡</span>
+          <h3 class="about-feature-title">10 Core Disciplines</h3>
+          <p class="about-feature-desc">From web &amp; mobile development to UI/UX, AI pipelines, video editing, translation, and audio production — all under one unified roof.</p>
+        </div>
+
+        <div class="about-feature-box">
+          <span class="about-feature-icon">🎯</span>
+          <h3 class="about-feature-title">Bespoke Custom Orders</h3>
+          <p class="about-feature-desc">Have unique enterprise specifications? Submit a custom service request directly to platform management for a dedicated proposal within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+             alt="BrachioTech Logo" class="footer-logo" width="36" height="36" loading="lazy" />
+        <div>
+          <span class="footer-brand-name">BrachioTech</span>
+          <div class="footer-tagline">Digital Services Marketplace</div>
+        </div>
+      </div>
+
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html#services">Services</a>
+        <a href="index.html#custom-order">Service Request</a>
+        <a href="about.html">About</a>
+        <a href="index.html#how-it-works">How It Works</a>
+        <a href="admin-login.html" style="color: var(--accent-primary);">Admin Portal ↗</a>
+      </nav>
+    </div>
+
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 BrachioTech Marketplace. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/theme.js"></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>

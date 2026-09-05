@@ -3,12 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="NeuralWorks — Service Details. Premium digital services built with expertise and innovation." />
-  <meta name="author" content="Adam EL Bahlouli" />
-  <title>Service Details — NeuralWorks</title>
-  <link rel="icon" href="https://i.postimg.cc/4Nc6kcV0/file-00000000b61871f4b423d0cf70eb6f37.png" type="image/png" />
+  <meta name="description" content="BrachioTech — Service Details. Premium digital services built with expertise and innovation." />
+  <meta name="author" content="BrachioTech" />
+  <title>Service Details — BrachioTech</title>
+  <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/jpeg" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/product.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -17,30 +24,53 @@
      ========================================== -->
 <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
   <div class="container">
-    <a href="index.html" class="nav-logo" aria-label="NeuralWorks Home">
-      <img src="https://i.postimg.cc/4Nc6kcV0/file-00000000b61871f4b423d0cf70eb6f37.png"
-           alt="NeuralWorks Logo" width="40" height="40" loading="eager" />
-      <span class="nav-logo-text">NeuralWorks</span>
+    <a href="index.html" class="nav-logo" aria-label="BrachioTech Home">
+      <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+           alt="BrachioTech Logo" width="40" height="40" loading="eager" />
+      <span class="nav-logo-text">BrachioTech</span>
     </a>
 
     <ul class="nav-links" role="list">
-      <li><a href="index.html#hero"     class="nav-link" id="nav-home">Home</a></li>
-      <li><a href="index.html#services" class="nav-link" id="nav-services">Services</a></li>
-      <li><a href="index.html#about"    class="nav-link" id="nav-about">About</a></li>
-      <li><a href="index.html#contact"  class="nav-link" id="nav-contact">Contact</a></li>
-      <li>
-        <button class="nav-link settings-link" id="settings-trigger" aria-haspopup="dialog" aria-expanded="false">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-          </svg>
-          Settings
-        </button>
-      </li>
+      <li><a href="index.html"              class="nav-link" id="nav-home">Home</a></li>
+      <li><a href="index.html#services"     class="nav-link" id="nav-services">Explore Services</a></li>
+      <li><a href="index.html#custom-order" class="nav-link" id="nav-custom">Service Request</a></li>
+      <li><a href="about.html"              class="nav-link" id="nav-about">About</a></li>
+      <li><a href="index.html#how-it-works" class="nav-link" id="nav-process">How It Works</a></li>
     </ul>
 
     <div class="nav-actions">
-      <a href="#contact" class="btn btn-primary btn-sm nav-cta">Get Started</a>
+      <!-- Auth Container (Desktop) -->
+      <div class="auth-container" id="nav-auth-container">
+        <button type="button" class="btn btn-outline btn-sm auth-login-btn" id="google-login-btn" aria-label="Sign in with Google">
+          <svg class="google-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Sign In</span>
+        </button>
+
+        <div class="auth-user-menu" style="display: none;">
+          <a href="upload.html" class="auth-admin-link btn btn-outline btn-sm" style="display: none;" title="Admin Dashboard">
+            ⚙️ Admin
+          </a>
+          <div class="auth-user-badge">
+            <img class="auth-user-avatar" src="" alt="User" width="28" height="28" />
+            <span class="auth-user-name">User</span>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm auth-logout-btn" title="Sign Out">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+
+      <a href="index.html#services" class="btn btn-primary btn-sm nav-cta">Browse Services</a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -50,17 +80,41 @@
 
 <!-- Mobile Drawer -->
 <div class="nav-drawer" id="nav-drawer">
-  <a href="index.html#hero"     class="nav-link">Home</a>
-  <a href="index.html#services" class="nav-link">Services</a>
-  <a href="index.html#about"    class="nav-link">About</a>
-  <a href="index.html#contact"  class="nav-link">Contact</a>
-  <button class="nav-link settings-link" id="drawer-settings" style="width:100%;text-align:left;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-    </svg>
-    Settings
-  </button>
+  <a href="index.html"              class="nav-link">Home</a>
+  <a href="index.html#services"     class="nav-link">Explore Services</a>
+  <a href="index.html#custom-order" class="nav-link">Service Request</a>
+  <a href="about.html"              class="nav-link">About</a>
+  <a href="index.html#how-it-works" class="nav-link">How It Works</a>
+  <div class="drawer-auth-box" style="padding-top: 12px; border-top: 1px solid var(--border-subtle); margin-top: 8px;">
+    <div class="auth-container" id="drawer-auth-container">
+      <button type="button" class="btn btn-outline btn-sm auth-login-btn" style="width:100%; justify-content:center;">
+        <svg class="google-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+      <div class="auth-user-menu" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+        <div class="auth-user-badge" style="width: 100%; justify-content: flex-start;">
+          <img class="auth-user-avatar" src="" alt="User" width="28" height="28" />
+          <span class="auth-user-name">User</span>
+        </div>
+        <a href="upload.html" class="auth-admin-link btn btn-outline btn-sm" style="display: none; width: 100%; justify-content: center;">
+          ⚙️ Admin Panel
+        </a>
+        <button type="button" class="btn btn-outline btn-sm auth-logout-btn" style="width: 100%; justify-content: center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ==========================================
@@ -118,14 +172,23 @@
 
       <!-- Hero Section -->
       <div class="product-hero">
-        <!-- Main Image -->
-        <div class="product-image-wrap reveal">
-          <img id="product-main-image"
-               src=""
-               alt=""
-               class="product-main-image"
-               loading="lazy"
-               width="800" height="450" />
+        <!-- Main Image / Gallery -->
+        <div class="product-image-wrap reveal" id="product-gallery-wrap">
+          <div class="product-gallery-main">
+            <img id="product-main-image"
+                 src=""
+                 alt=""
+                 class="product-main-image"
+                 loading="lazy"
+                 width="800" height="450" />
+            <div class="product-gallery-nav" id="product-gallery-nav" style="display:none;">
+              <button type="button" class="gallery-arrow gallery-prev" id="gallery-prev" aria-label="Previous image">‹</button>
+              <button type="button" class="gallery-arrow gallery-next" id="gallery-next" aria-label="Next image">›</button>
+            </div>
+          </div>
+
+          <!-- Thumbnails Strip -->
+          <div class="product-gallery-thumbs" id="product-gallery-thumbs" style="display:none;"></div>
 
           <!-- Badges -->
           <div class="product-image-badges" id="product-image-badges"></div>
@@ -162,23 +225,29 @@
             <p class="product-description" id="product-description"></p>
           </div>
 
+          <!-- Social & Platform Links (Supabase service_links) -->
+          <div class="product-social-links-wrap" id="product-social-links-wrap" style="display:none;">
+            <h3 class="product-social-label">Available On &amp; Contact:</h3>
+            <div class="product-social-buttons" id="product-social-buttons"></div>
+          </div>
+
           <!-- CTA Buttons -->
           <div class="product-cta">
             <a href="#contact"
                class="btn btn-primary product-cta-primary"
                id="product-order-btn">
-              Order Now
+              Order / Inquire
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </a>
-            <a href="https://wa.me/212625164763"
-               target="_blank" rel="noopener noreferrer"
-               class="btn btn-outline product-cta-secondary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            <a href="#contact"
+               class="btn btn-outline product-cta-secondary"
+               id="product-whatsapp-cta">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
-              WhatsApp
+              Contact Provider
             </a>
           </div>
         </div>
@@ -209,6 +278,28 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- Client Reviews Section (Supabase Integration) -->
+      <div class="product-reviews-section reveal" id="product-reviews-section">
+        <div class="reviews-section-header">
+          <div>
+            <h2 class="product-panel-title">
+              <span class="product-panel-icon" aria-hidden="true">⭐</span>
+              Client Reviews &amp; Ratings
+            </h2>
+            <p class="reviews-subtitle" id="reviews-subtitle">Verified feedback and ratings for this service</p>
+          </div>
+          <div class="reviews-aggregate" id="reviews-aggregate"></div>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="reviews-list" id="reviews-list" aria-live="polite">
+          <div class="reviews-loading">
+            <div class="skeleton" style="height:90px; border-radius:var(--radius-md); margin-bottom:14px;"></div>
+            <div class="skeleton" style="height:90px; border-radius:var(--radius-md);"></div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -249,53 +340,27 @@
         <p>We're available around the clock to help you with your digital projects. Choose the channel that works best for you.</p>
 
         <div class="contact-channels">
-          <a href="https://wa.me/212625164763"
-             target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Chat on WhatsApp">
+          <div class="contact-channel" style="pointer-events: none;">
             <div class="contact-channel-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
             </div>
             <div>
-              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">WhatsApp</div>
-              <div>+212 625 164 763</div>
+              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">Direct Inquiries</div>
+              <div>Use the form or check service links above</div>
             </div>
-          </a>
+          </div>
 
-          <a href="https://x.com/EL_Bahlouli77"
-             target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Follow on X Twitter">
+          <div class="contact-channel" style="pointer-events: none;">
             <div class="contact-channel-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
             </div>
             <div>
-              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">X (Twitter)</div>
-              <div>@EL_Bahlouli77</div>
+              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">Response Time</div>
+              <div>Usually within 24 hours</div>
             </div>
-          </a>
-
-          <a href="https://www.linkedin.com/in/adam-el-bahlouli-4b8435385"
-             target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Connect on LinkedIn">
-            <div class="contact-channel-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            </div>
-            <div>
-              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">LinkedIn</div>
-              <div>Adam EL Bahlouli</div>
-            </div>
-          </a>
-
-          <a href="https://noxtary.vercel.app/"
-             target="_blank" rel="noopener noreferrer"
-             class="contact-channel" aria-label="Visit Noxtary website">
-            <div class="contact-channel-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            </div>
-            <div>
-              <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">Official Website</div>
-              <div>noxtary.vercel.app</div>
-            </div>
-          </a>
+          </div>
         </div>
       </div>
 
@@ -363,20 +428,23 @@
   <div class="container">
     <div class="footer-main">
       <div class="footer-brand">
-        <img src="https://i.postimg.cc/4Nc6kcV0/file-00000000b61871f4b423d0cf70eb6f37.png"
-             alt="NeuralWorks Logo" class="footer-logo" width="36" height="36" loading="lazy" />
-        <span class="footer-brand-name">NeuralWorks</span>
+        <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+             alt="BrachioTech Logo" class="footer-logo" width="36" height="36" loading="lazy" />
+        <span class="footer-brand-name">BrachioTech</span>
       </div>
+<!-- Footer Nav Link update -->
       <nav class="footer-nav" aria-label="Footer navigation">
         <a href="index.html#hero">Home</a>
         <a href="index.html#services">Services</a>
-        <a href="index.html#about">About</a>
-        <a href="index.html#contact">Contact</a>
+        <a href="index.html#categories">Categories</a>
+        <a href="index.html#how-it-works">How It Works</a>
+        <a href="index.html#custom-order">Custom Request</a>
+        <a href="admin-login.html" style="color: var(--accent-primary);">Admin Portal ↗</a>
       </nav>
     </div>
     <div class="footer-divider"></div>
     <div class="footer-bottom">
-      <span class="footer-copy">© 2026 NeuralWorks. All rights reserved.</span>
+      <span class="footer-copy">© 2026 BrachioTech. All rights reserved.</span>
       <a href="https://noxtary.vercel.app/" target="_blank" rel="noopener noreferrer"
          class="footer-powered" aria-label="Powered by Noxtary">
         Powered by
@@ -388,49 +456,6 @@
   </div>
 </footer>
 
-<!-- Settings Panel -->
-<div class="settings-overlay" id="settings-overlay" aria-hidden="true"></div>
-<div class="settings-panel" id="settings-panel" role="dialog" aria-modal="true" aria-label="Settings">
-  <div class="settings-header">
-    <h2 class="settings-title">Settings</h2>
-    <button class="settings-close" id="settings-close" aria-label="Close settings">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-  </div>
-  <div class="settings-section">
-    <div class="settings-section-title">Appearance</div>
-    <div class="theme-toggle-group" role="radiogroup">
-      <button class="theme-option active" id="theme-dark" role="radio" aria-checked="true">
-        <span class="theme-icon" aria-hidden="true">🌙</span>
-        Dark Mode
-      </button>
-      <button class="theme-option" id="theme-light" role="radio" aria-checked="false">
-        <span class="theme-icon" aria-hidden="true">☀️</span>
-        Light Mode
-      </button>
-    </div>
-  </div>
-  <div class="settings-section">
-    <div class="settings-section-title">Developer</div>
-    <div class="dev-card">
-      <img src="https://i.postimg.cc/sxQrwdXf/IMG-20260625-WA0000.jpg"
-           alt="Adam EL Bahlouli" class="dev-avatar" width="56" height="56" loading="lazy" />
-      <div class="dev-info">
-        <div class="dev-name">Adam EL Bahlouli</div>
-        <div class="dev-role">Founder & Developer</div>
-        <div class="dev-links">
-          <a href="https://x.com/EL_Bahlouli77" target="_blank" rel="noopener noreferrer" class="dev-link">X</a>
-          <a href="https://www.linkedin.com/in/adam-el-bahlouli-4b8435385?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="dev-link">LinkedIn</a>
-          <a href="https://wa.me/212625164763" target="_blank" rel="noopener noreferrer" class="dev-link">WhatsApp</a>
-          <a href="https://noxtary.vercel.app/" target="_blank" rel="noopener noreferrer" class="dev-link">Noxtary</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
 <!-- Scripts -->
@@ -438,7 +463,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="js/theme.js" defer></script>
 <script src="js/main.js" defer></script>
-<script src="js/product.js" defer></script>
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/product.js"></script>
 
 </body>
 </html>

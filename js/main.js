@@ -1,5 +1,5 @@
 /**
- * NeuralWorks — Main Application Script
+ * BrachioTech — Main Application Script
  * Navigation, settings panel, scroll reveal, multi-step contact form, toast notifications
  */
 
@@ -46,12 +46,24 @@
 
     if (!navbar) return;
 
-    // Scroll effect
+    // Smart scroll effect: hide on scroll down, reveal immediately on scroll up
+    var lastScrollY = window.scrollY;
     var ticking = false;
+    var scrollThreshold = 8;
+
     window.addEventListener('scroll', function () {
       if (!ticking) {
         requestAnimationFrame(function () {
-          navbar.classList.toggle('scrolled', window.scrollY > 20);
+          var currentScrollY = window.scrollY;
+          navbar.classList.toggle('scrolled', currentScrollY > 20);
+
+          if (currentScrollY > 90 && currentScrollY - lastScrollY > scrollThreshold) {
+            navbar.classList.add('navbar-hidden');
+          } else if (lastScrollY - currentScrollY > scrollThreshold || currentScrollY <= 90) {
+            navbar.classList.remove('navbar-hidden');
+          }
+
+          lastScrollY = currentScrollY;
           ticking = false;
         });
         ticking = true;
@@ -623,6 +635,60 @@
   }
 
   // ============================================================
+  // ============================================================
+  // INTRO WELCOME MODAL (10% PROBABILITY POPUP ON HOME)
+  // ============================================================
+  function initIntroModal() {
+    var modalOverlay = document.getElementById('intro-modal-overlay');
+    var closeBtn     = document.getElementById('intro-modal-close');
+    var startedBtn   = document.getElementById('intro-modal-started-btn');
+    if (!modalOverlay) return;
+
+    function getStorageKey() {
+      var user = window.currentAuthUser;
+      if (user && user.id) {
+        return 'bt_intro_seen_' + user.id;
+      }
+      return 'bt_intro_seen_guest';
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove('show');
+      modalOverlay.setAttribute('aria-hidden', 'true');
+      try {
+        localStorage.setItem(getStorageKey(), 'true');
+        localStorage.setItem('bt_intro_seen', 'true');
+      } catch (e) {}
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+    if (startedBtn) {
+      startedBtn.addEventListener('click', closeModal);
+    }
+
+    modalOverlay.addEventListener('click', function (e) {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('show')) {
+        closeModal();
+      }
+    });
+
+    // Exactly 10% probability for the popup to appear on an eligible Home-page visit
+    // (90% of visits -> popup does NOT appear; 10% of visits -> popup appears)
+    if (Math.random() < 0.10) {
+      setTimeout(function () {
+        modalOverlay.classList.add('show');
+        modalOverlay.setAttribute('aria-hidden', 'false');
+      }, 500);
+    }
+  }
+
+  // ============================================================
   // MAIN INIT
   // ============================================================
   function init() {
@@ -634,7 +700,8 @@
       { name: 'ContactForm',    fn: initContactForm },
       { name: 'SmoothScroll',   fn: initSmoothScroll },
       { name: 'LazyImages',     fn: initLazyImages },
-      { name: 'PackageButtons', fn: initPackageButtons }
+      { name: 'PackageButtons', fn: initPackageButtons },
+      { name: 'IntroModal',     fn: initIntroModal }
     ];
 
     modules.forEach(function (mod) {
