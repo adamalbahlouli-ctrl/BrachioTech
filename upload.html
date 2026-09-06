@@ -732,6 +732,107 @@
       }
     }
 
+    async function loadPendingFreelancerServices() {
+      const container = document.getElementById('pending-freelancer-services');
+      if (!container) return;
+
+      container.innerHTML = '<div class="admin-pending-empty">Loading pending freelancer services...</div>';
+      const { data: services, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        container.innerHTML = `<div class="admin-alert visible admin-alert-error">Failed to load pending services: ${escapeHtml(error.message)}</div>`;
+        return;
+      }
+
+      if (!services || services.length === 0) {
+        container.innerHTML = '<div class="admin-pending-empty">No pending freelancer services right now.</div>';
+        return;
+      }
+
+      const serviceIds = services.map(service => service.id);
+      const [{ data: images }, { data: links }] = await Promise.all([
+        supabase.from('service_images').select('*').in('service_id', serviceIds).order('display_order', { ascending: true }),
+        supabase.from('service_links').select('*').in('service_id', serviceIds)
+      ]);
+      const imageMap = {};
+      const linkMap = {};
+      (images || []).forEach(image => {
+        if (!imageMap[image.service_id]) imageMap[image.service_id] = [];
+        imageMap[image.service_id].push(image.image_url);
+      });
+      (links || []).forEach(link => {
+        if (!linkMap[link.service_id]) linkMap[link.service_id] = [];
+        linkMap[link.service_id].push(link);
+      });
+
+      container.innerHTML = services.map(service => {
+        const serviceImages = imageMap[service.id] || [];
+        const serviceLinks = linkMap[service.id] || [];
+        const price = service.price === null || service.price === undefined || service.price === ''
+          ? 'Contact for pricing'
+          : `${escapeHtml(service.price)} ${escapeHtml(service.currency || 'USD')}`;
+        return `
+          <article class="admin-pending-card" data-pending-service="${escapeHtml(service.id)}">
+            <div class="admin-pending-header">
+              <div>
+                <span class="service-admin-category">${escapeHtml(service.category || 'General')}</span>
+                <h3 class="admin-pending-title">${escapeHtml(service.title)}</h3>
+              </div>
+              <span class="admin-pending-status">Pending review</span>
+            </div>
+            <div class="admin-pending-owner"><strong>Owner ID:</strong> ${escapeHtml(service.owner_id || 'Unavailable')}</div>
+            <div class="admin-pending-details">
+              <div><strong>Description</strong><p>${escapeHtml(service.description || 'No description provided.')}</p></div>
+              <div><strong>Price</strong><p>${price}</p></div>
+              <div><strong>Provider</strong><p>${escapeHtml(service.freelancer_name || 'Not provided')}</p></div>
+              <div><strong>Bio</strong><p>${escapeHtml(service.freelancer_bio || 'Not provided')}</p></div>
+            </div>
+            ${serviceImages.length ? `<div class="admin-pending-images">${serviceImages.map(url => `<img src="${escapeHtml(url)}" alt="${escapeHtml(service.title)} image" loading="lazy">`).join('')}</div>` : '<p class="admin-pending-muted">No images provided.</p>'}
+            ${serviceLinks.length ? `<div class="admin-pending-links"><strong>Contact links</strong>${serviceLinks.map(link => `<a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.platform)} ↗</a>`).join('')}</div>` : '<p class="admin-pending-muted">No contact links provided.</p>'}
+            <div class="admin-pending-actions">
+              <button type="button" class="admin-btn admin-btn-success admin-btn-sm" data-review-action="approved" data-service-id="${escapeHtml(service.id)}">Approve</button>
+              <button type="button" class="admin-btn admin-btn-danger admin-btn-sm" data-review-action="rejected" data-service-id="${escapeHtml(service.id)}">Reject</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      container.querySelectorAll('[data-review-action]').forEach(button => {
+        button.addEventListener('click', () => reviewFreelancerService(button.dataset.serviceId, button.dataset.reviewAction));
+      });
+    }
+
+    async function reviewFreelancerService(serviceId, status) {
+      const label = status === 'approved' ? 'approve' : 'reject';
+      if (!window.confirm(`Are you sure you want to ${label} this freelancer service?`)) return;
+      const card = [...document.querySelectorAll('[data-pending-service]')].find(item => item.dataset.pendingService === serviceId);
+      const actionButtons = card?.querySelectorAll('[data-review-action]');
+      actionButtons?.forEach(actionButton => { actionButton.disabled = true; });
+
+      const { error } = await supabase
+        .from('services')
+        .update({ status })
+        .eq('id', serviceId)
+        .eq('status', 'pending');
+
+      if (error) {
+        actionButtons?.forEach(actionButton => { actionButton.disabled = false; });
+        showBanner('error', `Failed to update service status: ${error.message}`);
+        return;
+      }
+
+      card?.remove();
+      const container = document.getElementById('pending-freelancer-services');
+      if (container && !container.querySelector('.admin-pending-card')) {
+        container.innerHTML = '<div class="admin-pending-empty">No pending freelancer services right now.</div>';
+      }
+      showBanner('success', status === 'approved' ? 'Freelancer service approved.' : 'Freelancer service rejected.');
+    }
+
     // Sign Out
     async function handleSignOut() {
       try {
@@ -758,6 +859,7 @@
       document.getElementById('announcement-latest-preview')?.addEventListener('click', (event) => {
         if (event.target.closest('.announcement-delete-btn')) deleteLatestAnnouncement();
       });
+      document.getElementById('refresh-pending-services')?.addEventListener('click', loadPendingFreelancerServices);
       loadLatestAnnouncement();
 
       // Add link button
@@ -847,6 +949,7 @@
 
       // Load initial list
       loadServices();
+      loadPendingFreelancerServices();
     }
   </script>
 </head>
@@ -902,6 +1005,18 @@
         <div class="services-grid" id="services-grid">
           <!-- Populated by JS -->
         </div>
+
+        <section class="admin-pending-section" aria-labelledby="pending-freelancer-title">
+          <div class="admin-pending-divider"></div>
+          <div class="admin-pending-section-header">
+            <div>
+              <h2 class="admin-section-title" id="pending-freelancer-title"><span>🕒</span> Pending Freelancer Services</h2>
+              <p class="admin-pending-description">Review freelancer submissions before they become visible to clients.</p>
+            </div>
+            <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" id="refresh-pending-services">Refresh</button>
+          </div>
+          <div class="admin-pending-list" id="pending-freelancer-services"></div>
+        </section>
 
         <section class="admin-announcement-section" aria-labelledby="announcement-admin-title">
           <div class="admin-announcement-divider"></div>

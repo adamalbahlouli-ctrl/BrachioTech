@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Activate your BrachioTech freelancer account." />
+  <title>Become a Freelancer - BrachioTech</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/png" />
+  <script src="js/theme.js"></script>
+  <script type="importmap">
+  {"imports":{"@supabase/supabase-js":"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"}}
+  </script>
+  <style>
+    .freelancer-page { min-height: 100vh; padding: calc(var(--nav-height) + 48px) 16px 72px; }
+    .freelancer-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 10; height: var(--nav-height); display: flex; align-items: center; background: var(--bg-primary); border-bottom: 1px solid var(--border-subtle); }
+    .freelancer-topbar-inner { width: min(100% - 32px, 1200px); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .freelancer-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text-primary); font-weight: 800; text-decoration: none; }
+    .freelancer-brand img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+    .freelancer-back { color: var(--text-secondary); font-size: .88rem; text-decoration: none; }
+    .freelancer-back:hover { color: var(--accent-primary); }
+    .freelancer-card { max-width: 720px; margin: 0 auto; padding: 42px; background: var(--bg-card); border: var(--border-glass); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+    .freelancer-kicker { color: var(--accent-primary); font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .freelancer-card h1 { margin: 10px 0 14px; color: var(--text-primary); font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; }
+    .freelancer-card > p { color: var(--text-secondary); line-height: 1.7; }
+    .freelancer-rules { display: grid; gap: 12px; margin: 28px 0; padding: 0; list-style: none; }
+    .freelancer-rules li { padding: 14px 16px; color: var(--text-secondary); background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); line-height: 1.5; }
+    .freelancer-rules li::before { content: '\2713'; display: inline-block; margin-right: 10px; color: var(--accent-secondary); font-weight: 800; }
+    .freelancer-consent { margin: 24px 0; color: var(--text-muted); font-size: .9rem; line-height: 1.6; }
+    .freelancer-consent a { color: #60a5fa; text-decoration: underline; }
+    .freelancer-error { display: none; margin: 16px 0; padding: 12px 14px; color: #fca5a5; background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: var(--radius-md); }
+    @media (max-width: 600px) { .freelancer-page { padding-top: calc(var(--nav-height) + 28px); } .freelancer-card { padding: 28px 22px; } }
+  </style>
+</head>
+<body>
+  <header class="freelancer-topbar">
+    <div class="freelancer-topbar-inner">
+      <a class="freelancer-brand" href="index.html"><img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" alt="BrachioTech" /> BrachioTech</a>
+      <a class="freelancer-back" href="index.html">Back to marketplace</a>
+    </div>
+  </header>
+  <main class="freelancer-page">
+    <section class="freelancer-card" aria-labelledby="freelancer-title">
+      <span class="freelancer-kicker">BrachioTech Freelancer</span>
+      <h1 id="freelancer-title">Become a service provider</h1>
+      <p>Activate your freelancer account to publish your own digital services on BrachioTech. You will be able to manage your services from your personal dashboard.</p>
+      <ul class="freelancer-rules">
+        <li>Up to 5 published services at the same time per account.</li>
+        <li>Every new or edited service is reviewed by administration before it becomes public.</li>
+        <li>Expected review time: up to 24 hours.</li>
+        <li>You can manage only your own services, not other users' services.</li>
+      </ul>
+      <p class="freelancer-consent">By clicking Confirm &amp; Activate, you agree to our <a href="privacy-policy.html">Privacy Policy</a> and <a href="terms-of-use.html">Terms of Use</a>.</p>
+      <div class="freelancer-error" id="freelancer-error" role="alert"></div>
+      <button type="button" class="btn btn-primary" id="activate-freelancer-btn">Confirm &amp; Activate</button>
+    </section>
+  </main>
+  <script type="module">
+    import { supabase } from './js/supabaseClient.js';
+
+    const button = document.getElementById('activate-freelancer-btn');
+    const errorBox = document.getElementById('freelancer-error');
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = 'block';
+    }
+
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.replace('index.html');
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from('freelancer_profiles')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (profile) window.location.replace('freelancer-services.html');
+    }
+
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      errorBox.style.display = 'none';
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          window.location.replace('index.html');
+          return;
+        }
+        const { error } = await supabase.from('freelancer_profiles').insert({ user_id: user.id });
+        if (error) throw error;
+        window.location.replace('freelancer-services.html');
+      } catch (error) {
+        showError(error.message || 'Activation failed. Please try again.');
+        button.disabled = false;
+      }
+    });
+
+    init().catch(() => window.location.replace('index.html'));
+  </script>
+</body>
+</html>

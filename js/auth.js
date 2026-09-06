@@ -80,6 +80,7 @@ export function updateAuthUI(user) {
       // User is logged in
       if (loginBtn) loginBtn.style.display = 'none';
       if (userMenu) userMenu.style.display = 'flex';
+      setupFreelancerLink(userMenu, user);
 
       const metadata = user.user_metadata || {};
       const displayName = metadata.full_name || metadata.name || user.email?.split('@')[0] || 'User';
@@ -116,8 +117,40 @@ export function updateAuthUI(user) {
       if (loginBtn) loginBtn.style.display = 'inline-flex';
       if (userMenu) userMenu.style.display = 'none';
       if (adminLink) adminLink.style.display = 'none';
+      const freelancerLink = userMenu?.querySelector('.auth-freelancer-link');
+      if (freelancerLink) freelancerLink.remove();
     }
   });
+}
+
+async function setupFreelancerLink(userMenu, user) {
+  if (!userMenu) return;
+
+  let link = userMenu.querySelector('.auth-freelancer-link');
+  if (!link) {
+    link = document.createElement('a');
+    link.className = 'auth-freelancer-link btn btn-outline btn-sm';
+    link.textContent = 'Freelancer';
+    link.href = 'freelancer-activate.html';
+    link.title = 'Freelancer account';
+
+    const logoutButton = userMenu.querySelector('.auth-logout-btn');
+    if (logoutButton) userMenu.insertBefore(link, logoutButton);
+    else userMenu.appendChild(link);
+  }
+
+  const { data: profile, error } = await supabase
+    .from('freelancer_profiles')
+    .select('user_id')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (error) {
+    console.warn('[BrachioTech Auth] Freelancer profile check failed:', error.message);
+    return;
+  }
+
+  link.href = profile ? 'freelancer-services.html' : 'freelancer-activate.html';
 }
 
 /**
