@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About BrachioTech — The Curated Marketplace for World-Class Digital Services." />
+  <title>About Platform — BrachioTech Marketplace</title>
+  <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+    }
+  }
+  </script>
+  <style>
+    .about-hero {
+      padding: calc(var(--nav-height) + 50px) 0 60px;
+      text-align: center;
+      position: relative;
+    }
+    .about-lead-title {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .about-lead-text {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin: 0 auto 36px;
+      line-height: 1.75;
+    }
+    .about-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .about-feature-box {
+      background: var(--bg-card);
+      border: var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      text-align: left;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .about-feature-box:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent-primary);
+    }
+    .about-feature-icon {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .about-feature-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+    .about-feature-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo" aria-label="BrachioTech Marketplace">
+      <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+           alt="BrachioTech Logo" width="40" height="40" loading="eager" />
+      <span class="nav-logo-text">BrachioTech</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="index.html"           class="nav-link" id="nav-home">Home</a></li>
+      <li><a href="service-request.html" class="nav-link" id="nav-custom">Service Request</a></li>
+      <li><a href="about.html"           class="nav-link active" id="nav-about">About</a></li>
+      <li><a href="how-it-works.html"    class="nav-link" id="nav-how">How It Works</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Auth Container (Desktop) -->
+      <div class="auth-container" id="nav-auth-container">
+        <button type="button" class="btn btn-outline btn-sm auth-login-btn" id="google-login-btn" aria-label="Sign in with Google">
+          <svg class="google-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Sign In</span>
+        </button>
+
+        <div class="auth-user-menu" style="display: none;">
+          <a href="upload.html" class="auth-admin-link btn btn-outline btn-sm" style="display: none;" title="Admin Dashboard">
+            ⚙️ Admin
+          </a>
+          <div class="auth-user-badge">
+            <img class="auth-user-avatar" src="" alt="User" width="28" height="28" />
+            <span class="auth-user-name">User</span>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm auth-logout-btn" title="Sign Out">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="nav-drawer" id="nav-drawer" aria-label="Mobile navigation">
+  <a href="index.html"           class="nav-link" id="drawer-home">Home</a>
+  <a href="service-request.html" class="nav-link" id="drawer-custom">Service Request</a>
+  <a href="about.html"           class="nav-link active" id="drawer-about">About</a>
+  <a href="how-it-works.html"    class="nav-link" id="drawer-how">How It Works</a>
+
+  <div class="drawer-auth-box" style="padding-top: 14px; border-top: 1px solid var(--border-subtle); margin-top: 8px;">
+    <div class="auth-container" id="drawer-auth-container">
+      <button type="button" class="btn btn-outline btn-sm auth-login-btn" style="width:100%; justify-content:center;">
+        <svg class="google-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+      <div class="auth-user-menu" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+        <div class="auth-user-badge" style="width: 100%; justify-content: flex-start;">
+          <img class="auth-user-avatar" src="" alt="User" width="28" height="28" />
+          <span class="auth-user-name">User</span>
+        </div>
+        <a href="upload.html" class="auth-admin-link btn btn-outline btn-sm" style="display: none; width: 100%; justify-content: center;">
+          ⚙️ Admin Panel
+        </a>
+        <button type="button" class="btn btn-outline btn-sm auth-logout-btn" style="width: 100%; justify-content: center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main>
+  <section class="about-hero">
+    <div class="container">
+      <div class="hero-badge" style="margin-bottom: 20px; display: inline-flex;">
+        <span class="hero-badge-dot"></span>
+        Platform Overview &amp; Mission
+      </div>
+
+      <h1 class="about-lead-title">
+        Find world-class <span class="gradient-text">digital services</span><br>
+        crafted for ambitious goals.
+      </h1>
+
+      <p class="about-lead-text">
+        BrachioTech is a next-generation curated digital services marketplace connecting clients with specialized talents across software engineering, creative design, AI automations, and modern multimedia.
+      </p>
+
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="services.html" class="btn btn-primary">
+          Explore All Services
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="service-request.html" class="btn btn-outline">
+          Submit Service Request
+        </a>
+      </div>
+
+      <!-- Feature Grid -->
+      <div class="about-features-grid">
+        <div class="about-feature-box">
+          <span class="about-feature-icon">✨</span>
+          <h3 class="about-feature-title">Verified Quality</h3>
+          <p class="about-feature-desc">Every service listing is reviewed and approved by platform managers to ensure high execution standards, clear deliverables, and reliable timelines.</p>
+        </div>
+
+        <div class="about-feature-box">
+          <span class="about-feature-icon">💬</span>
+          <h3 class="about-feature-title">Direct Communication</h3>
+          <p class="about-feature-desc">Connect directly with service providers via WhatsApp, Telegram, or social channels. No artificial communication hurdles or hidden friction.</p>
+        </div>
+
+        <div class="about-feature-box">
+          <span class="about-feature-icon">⚡</span>
+          <h3 class="about-feature-title">10 Core Disciplines</h3>
+          <p class="about-feature-desc">From web &amp; mobile development to UI/UX, AI pipelines, video editing, translation, and audio production — all under one unified roof.</p>
+        </div>
+
+        <div class="about-feature-box">
+          <span class="about-feature-icon">🎯</span>
+          <h3 class="about-feature-title">Bespoke Custom Orders</h3>
+          <p class="about-feature-desc">Have unique enterprise specifications? Submit a custom service request directly to platform management for a dedicated proposal within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+             alt="BrachioTech Logo" class="footer-logo" width="36" height="36" loading="lazy" />
+        <div>
+          <span class="footer-brand-name">BrachioTech</span>
+          <div class="footer-tagline">Digital Services Marketplace</div>
+        </div>
+      </div>
+
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <a href="service-request.html">Service Request</a>
+        <a href="about.html">About</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="admin-login.html" style="color: var(--accent-primary);">Admin Portal ↗</a>
+      </nav>
+    </div>
+
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 BrachioTech. All rights reserved.</span>
+      <a href="https://noxtary.vercel.app/"
+         target="_blank" rel="noopener noreferrer"
+         class="footer-powered" aria-label="Visit Noxtary">
+        Powered by
+        <img src="https://i.postimg.cc/P5BdcqZL/1000105011.png"
+             alt="Noxtary Logo"
+             width="22" height="22"
+             loading="lazy" />
+        Noxtary
+      </a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="js/theme.js"></script>
+<script src="js/main.js" defer></script>
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/announcements.js"></script>
+</body>
+</html>

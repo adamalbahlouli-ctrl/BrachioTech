@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="BrachioTech — Services Administration Panel" />
+  <title>Admin Dashboard — BrachioTech</title>
+  <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/jpeg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+
+  <!-- ZERO-FLASH SECURITY: Hide body immediately until admin session is validated -->
+  <style>
+    body:not(.auth-verified) {
+      display: none !important;
+    }
+  </style>
+
+  <!-- Import map for Supabase client -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+    }
+  }
+  </script>
+
+  <!-- ADMIN PROTECTION & DASHBOARD LOGIC -->
+  <script type="module">
+    import { supabase } from './js/supabaseClient.js';
+    import { ADMIN_EMAIL } from './js/auth.js';
+
+    // Fixed categories (10 items)
+    const CATEGORIES = [
+      'Web & Software Development',
+      'Graphic Design & UI/UX',
+      'Video Editing & Animation',
+      'Writing & Translation',
+      'AI & Automation',
+      'Mobile Apps & Games',
+      'Digital Marketing & Social Media',
+      'Audio & Music',
+      'Business & Data',
+      'Photography & Image Editing'
+    ];
+
+    // Fixed platforms (10 items)
+    const PLATFORMS = [
+      'WhatsApp',
+      'Instagram',
+      'X',
+      'Facebook',
+      'TikTok',
+      'LinkedIn',
+      'YouTube',
+      'Telegram',
+      'Snapchat',
+      'Behance',
+      'Gmail'
+    ];
+
+    // State
+    let currentServices = [];
+    let editingServiceId = null;
+    let currentImages = []; // array of { id, image_url, display_order, isNewFile, file }
+    let deleteTargetId = null;
+
+    // Zero-flash session validation
+    async function verifyAdminAuth() {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+
+        if (error || !user || user.email !== ADMIN_EMAIL) {
+          window.location.replace('admin-login.html');
+          return;
+        }
+
+        // Revealed when authorized
+        if (document.body) {
+          document.body.classList.add('auth-verified');
+        } else {
+          document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('auth-verified');
+          });
+        }
+
+        const userEmailEl = document.getElementById('admin-topbar-email');
+        if (userEmailEl) userEmailEl.textContent = user.email;
+
+        // Initialize dashboard
+        initDashboard();
+      } catch (err) {
+        console.error('[Admin Protection] Check failed:', err);
+        window.location.replace('admin-login.html');
+      }
+    }
+
+    verifyAdminAuth();
+
+    // Notification helpers
+    function showBanner(type, message) {
+      const banner = document.getElementById('admin-global-alert');
+      if (!banner) return;
+      banner.className = `admin-alert visible admin-alert-${type}`;
+      banner.innerHTML = `
+        <span style="font-size:1.1rem;">${type === 'success' ? '✅' : '⚠️'}</span>
+        <span>${escapeHtml(message)}</span>
+      `;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        banner.className = 'admin-alert';
+      }, 5000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+    }
+
+    async function loadLatestAnnouncement() {
+      const preview = document.getElementById('announcement-latest-preview');
+      if (!preview) return;
+
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('id, content, created_at')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error || !data) {
+        preview.innerHTML = '<span class="announcement-admin-empty">No announcement published currently.</span>';
+        return;
+      }
+
+      const publishedDate = new Date(data.created_at).toLocaleString();
+      preview.innerHTML = `
+        <strong>Latest announcement</strong>
+        <time datetime="${escapeHtml(data.created_at)}">${escapeHtml(publishedDate)}</time>
+        <p>${escapeHtml(data.content)}</p>
+        <button type="button" class="admin-btn admin-btn-danger admin-btn-sm announcement-delete-btn" data-announcement-id="${escapeHtml(data.id)}">Delete Announcement</button>
+      `;
+    }
+
+    async function deleteLatestAnnouncement() {
+      const button = document.querySelector('.announcement-delete-btn');
+      const announcementId = button?.dataset.announcementId;
+      if (!announcementId) return;
+      if (!window.confirm('Are you sure you want to delete the latest announcement?')) return;
+
+      button.disabled = true;
+      try {
+        const { error } = await supabase
+          .from('announcements')
+          .delete()
+          .eq('id', announcementId);
+        if (error) throw error;
+        showBanner('success', 'The latest announcement was deleted.');
+        await loadLatestAnnouncement();
+      } catch (err) {
+        button.disabled = false;
+        showBanner('error', `Failed to delete announcement: ${err.message}`);
+      }
+    }
+
+    async function publishAnnouncement() {
+      const input = document.getElementById('announcement-content-input');
+      const button = document.getElementById('publish-announcement-btn');
+      const content = input?.value.trim();
+      if (!content) {
+        showBanner('error', 'Please write an announcement before publishing.');
+        return;
+      }
+
+      button.disabled = true;
+      try {
+        const { error } = await supabase.from('announcements').insert({ content });
+        if (error) throw error;
+        input.value = '';
+        showBanner('success', 'Published. It will appear to users once.');
+        await loadLatestAnnouncement();
+      } catch (err) {
+        showBanner('error', `Failed to publish announcement: ${err.message}`);
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    // View Switching
+    function switchView(viewName) {
+      document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Populate category dropdown in form
+    function populateCategories() {
+      const select = document.getElementById('service-category');
+      if (!select) return;
+      select.innerHTML = '<option value="">Select a category...</option>' +
+        CATEGORIES.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    }
+
+    // Fetch and render services
+    async function loadServices() {
+      const grid = document.getElementById('services-grid');
+      const countEl = document.getElementById('services-count');
+      if (!grid) return;
+
+      grid.innerHTML = `
+        <div class="admin-loading" style="grid-column: 1 / -1;">
+          <div class="admin-spinner"></div>
+          <div>Loading services...</div>
+        </div>
+      `;
+
+      try {
+        // Fetch services
+        const { data: services, error: servError } = await supabase
+          .from('services')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (servError) throw servError;
+
+        currentServices = services || [];
+
+        // Fetch primary thumbnails
+        const { data: images } = await supabase
+          .from('service_images')
+          .select('service_id, image_url, display_order')
+          .order('display_order', { ascending: true });
+
+        const imageMap = {};
+        if (images) {
+          images.forEach(img => {
+            if (!imageMap[img.service_id]) {
+              imageMap[img.service_id] = img.image_url;
+            }
+          });
+        }
+
+        if (countEl) countEl.textContent = `(${currentServices.length})`;
+
+        if (currentServices.length === 0) {
+          grid.innerHTML = `
+            <div class="admin-empty" style="grid-column: 1 / -1;">
+              <div class="admin-empty-icon">📦</div>
+              <h3 style="color:var(--text-primary);">No Services Yet</h3>
+              <p class="admin-empty-text">Click the "+ Add New Service" button above to publish your first service.</p>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = currentServices.map(svc => {
+          const thumb = imageMap[svc.id];
+          return `
+            <div class="service-admin-card" data-id="${svc.id}">
+              ${thumb 
+                ? `<img src="${escapeHtml(thumb)}" alt="${escapeHtml(svc.title)}" class="service-admin-thumb" loading="lazy" />`
+                : `<div class="service-admin-thumb-placeholder">⚡</div>`
+              }
+              <div class="service-admin-body">
+                <span class="service-admin-category">${escapeHtml(svc.category || 'General')}</span>
+                <h3 class="service-admin-title" title="${escapeHtml(svc.title)}">${escapeHtml(svc.title)}</h3>
+                <div class="service-admin-actions">
+                  <button class="admin-btn admin-btn-outline admin-btn-sm btn-edit-service" data-id="${svc.id}">
+                    ✏️ Edit
+                  </button>
+                  <button class="admin-btn admin-btn-danger admin-btn-sm btn-delete-service" data-id="${svc.id}">
+                    🗑️ Delete
+                  </button>
+                  <a href="Product.html?service=${svc.id}" target="_blank" class="admin-btn admin-btn-outline admin-btn-sm" style="margin-left:auto;" title="View Live Page">
+                    ↗️ Live
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Attach listeners
+        grid.querySelectorAll('.btn-edit-service').forEach(btn => {
+          btn.addEventListener('click', () => openEditForm(btn.dataset.id));
+        });
+        grid.querySelectorAll('.btn-delete-service').forEach(btn => {
+          btn.addEventListener('click', () => confirmDeleteService(btn.dataset.id));
+        });
+
+      } catch (err) {
+        console.error('[Admin] loadServices error:', err);
+        grid.innerHTML = `
+          <div class="admin-alert visible admin-alert-error" style="grid-column:1 / -1;">
+            Failed to load services: ${escapeHtml(err.message)}
+          </div>
+        `;
+      }
+    }
+
+    // Freelancer photo preview helper
+    function setFreelancerPhoto(url) {
+      const urlInput = document.getElementById('freelancer-photo-url');
+      const imgEl = document.getElementById('freelancer-photo-img');
+      const placeholderEl = document.getElementById('freelancer-photo-placeholder');
+      const removeBtn = document.getElementById('btn-remove-freelancer-photo');
+
+      if (urlInput) urlInput.value = url || '';
+      if (url) {
+        if (imgEl) {
+          imgEl.src = url;
+          imgEl.style.display = 'block';
+        }
+        if (placeholderEl) placeholderEl.style.display = 'none';
+        if (removeBtn) removeBtn.style.display = 'inline-flex';
+      } else {
+        if (imgEl) {
+          imgEl.src = '';
+          imgEl.style.display = 'none';
+        }
+        if (placeholderEl) placeholderEl.style.display = 'block';
+        if (removeBtn) removeBtn.style.display = 'none';
+      }
+    }
+
+    // Open Form in Add mode
+    function openAddForm() {
+      editingServiceId = null;
+      currentImages = [];
+      document.getElementById('form-view-title').textContent = 'Add New Service';
+      document.getElementById('service-form').reset();
+      document.getElementById('service-id').value = '';
+      document.getElementById('image-previews').innerHTML = '';
+      document.getElementById('links-list').innerHTML = '';
+
+      // Reset price & currency
+      const priceEl = document.getElementById('service-price');
+      if (priceEl) priceEl.value = '';
+      const currEl = document.getElementById('service-currency');
+      if (currEl) currEl.value = 'USD';
+      const currNotice = document.getElementById('currency-notice');
+      if (currNotice) currNotice.style.display = 'none';
+
+      // Reset freelancer info
+      const fNameEl = document.getElementById('freelancer-name');
+      if (fNameEl) fNameEl.value = '';
+      const fBioEl = document.getElementById('freelancer-bio');
+      if (fBioEl) fBioEl.value = '';
+      setFreelancerPhoto('');
+      const fStatus = document.getElementById('freelancer-photo-status');
+      if (fStatus) fStatus.textContent = 'Upload a professional headshot (JPG, PNG, WebP)';
+
+      addLinkRow('', ''); // default 1 empty row
+      switchView('form');
+    }
+
+    // Open Form in Edit mode
+    async function openEditForm(serviceId) {
+      editingServiceId = serviceId;
+      document.getElementById('form-view-title').textContent = 'Edit Service';
+      document.getElementById('service-form').reset();
+      document.getElementById('service-id').value = serviceId;
+      document.getElementById('image-previews').innerHTML = '<div class="admin-spinner" style="width:24px;height:24px;"></div>';
+      document.getElementById('links-list').innerHTML = '<div class="admin-spinner" style="width:24px;height:24px;"></div>';
+
+      switchView('form');
+
+      try {
+        // Fetch service details
+        const { data: svc, error: svcErr } = await supabase
+          .from('services')
+          .select('*')
+          .eq('id', serviceId)
+          .single();
+
+        if (svcErr) throw svcErr;
+
+        document.getElementById('service-title').value = svc.title || '';
+        document.getElementById('service-category').value = svc.category || '';
+        document.getElementById('service-description').value = svc.description || '';
+
+        // Load price & currency
+        const priceEl = document.getElementById('service-price');
+        if (priceEl) priceEl.value = svc.price !== null && svc.price !== undefined ? svc.price : '';
+        const currEl = document.getElementById('service-currency');
+        if (currEl) currEl.value = svc.currency || 'USD';
+        const currNotice = document.getElementById('currency-notice');
+        if (currNotice) {
+          currNotice.style.display = (svc.currency && svc.currency !== 'USD') ? 'block' : 'none';
+        }
+
+        // Load freelancer info
+        const fNameEl = document.getElementById('freelancer-name');
+        if (fNameEl) fNameEl.value = svc.freelancer_name || '';
+        const fBioEl = document.getElementById('freelancer-bio');
+        if (fBioEl) fBioEl.value = svc.freelancer_bio || '';
+        setFreelancerPhoto(svc.freelancer_photo_url || '');
+        const fStatus = document.getElementById('freelancer-photo-status');
+        if (fStatus) fStatus.textContent = svc.freelancer_photo_url ? 'Current photo loaded' : 'Upload a professional headshot (JPG, PNG, WebP)';
+
+        // Fetch images
+        const { data: images, error: imgErr } = await supabase
+          .from('service_images')
+          .select('*')
+          .eq('service_id', serviceId)
+          .order('display_order', { ascending: true });
+
+        if (imgErr) console.warn('[Admin] image fetch error:', imgErr);
+
+        currentImages = (images || []).map(img => ({
+          id: img.id,
+          image_url: img.image_url,
+          display_order: img.display_order,
+          isNewFile: false
+        }));
+        renderImagePreviews();
+
+        // Fetch links
+        const { data: links, error: linkErr } = await supabase
+          .from('service_links')
+          .select('*')
+          .eq('service_id', serviceId);
+
+        if (linkErr) console.warn('[Admin] link fetch error:', linkErr);
+
+        const linksList = document.getElementById('links-list');
+        linksList.innerHTML = '';
+        if (links && links.length > 0) {
+          links.forEach(l => addLinkRow(l.platform, l.url));
+        } else {
+          addLinkRow('', '');
+        }
+
+      } catch (err) {
+        console.error('[Admin] openEditForm error:', err);
+        showBanner('error', `Failed to load service details: ${err.message}`);
+        switchView('list');
+      }
+    }
+
+    // Image previews rendering
+    function renderImagePreviews() {
+      const container = document.getElementById('image-previews');
+      if (!container) return;
+      container.innerHTML = '';
+
+      currentImages.forEach((img, index) => {
+        const item = document.createElement('div');
+        item.className = 'image-preview-item';
+        item.innerHTML = `
+          <img src="${escapeHtml(img.image_url)}" alt="Preview ${index + 1}" />
+          <button type="button" class="image-preview-delete" title="Remove image" data-index="${index}">✕</button>
+          <span class="image-preview-order">#${index + 1}</span>
+        `;
+        container.appendChild(item);
+      });
+
+      // Attach delete click
+      container.querySelectorAll('.image-preview-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const idx = parseInt(btn.dataset.index, 10);
+          currentImages.splice(idx, 1);
+          renderImagePreviews();
+        });
+      });
+    }
+
+    // Handle Image file selection & immediate upload to Supabase Storage
+    async function handleFileSelect(files) {
+      if (!files || files.length === 0) return;
+
+      const saveStatus = document.getElementById('form-save-status');
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.startsWith('image/')) continue;
+
+        const previewContainer = document.getElementById('image-previews');
+        const tempItem = document.createElement('div');
+        tempItem.className = 'image-preview-item';
+        tempItem.innerHTML = `
+          <div class="image-preview-uploading">
+            <div class="image-preview-spinner"></div>
+          </div>
+        `;
+        previewContainer.appendChild(tempItem);
+
+        try {
+          if (saveStatus) saveStatus.textContent = `Uploading ${file.name}...`;
+
+          // Generate clean unique filename
+          const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          const filePath = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}_${cleanName}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('service-images')
+            .upload(filePath, file, {
+              cacheControl: '3600',
+              upsert: false
+            });
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('service-images')
+            .getPublicUrl(filePath);
+
+          currentImages.push({
+            id: null,
+            image_url: publicUrl,
+            display_order: currentImages.length + 1,
+            isNewFile: true
+          });
+
+        } catch (err) {
+          console.error('[Admin] Storage upload error:', err);
+          showBanner('error', `Failed to upload image ${file.name}: ${err.message}`);
+        } finally {
+          tempItem.remove();
+          renderImagePreviews();
+          if (saveStatus) saveStatus.textContent = '';
+        }
+      }
+    }
+
+    // Social Links Repeater Rows
+    function addLinkRow(platform = '', url = '') {
+      const list = document.getElementById('links-list');
+      if (!list) return;
+
+      const row = document.createElement('div');
+      row.className = 'link-row';
+
+      const platformOptions = PLATFORMS.map(p => 
+        `<option value="${escapeHtml(p)}" ${p === platform ? 'selected' : ''}>${escapeHtml(p)}</option>`
+      ).join('');
+
+      row.innerHTML = `
+        <select class="admin-form-select link-platform" required>
+          <option value="">Choose Platform</option>
+          ${platformOptions}
+        </select>
+        <input type="text" class="admin-form-input link-url" placeholder="https://... or email@gmail.com" value="${escapeHtml(url)}" required />
+        <button type="button" class="link-delete-btn" title="Remove Link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      `;
+
+      row.querySelector('.link-delete-btn').addEventListener('click', () => {
+        row.remove();
+      });
+
+      list.appendChild(row);
+    }
+
+    // Save Service (Create or Update)
+    async function saveService(e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('btn-save-service');
+      const saveStatus = document.getElementById('form-save-status');
+
+      const title = document.getElementById('service-title').value.trim();
+      const category = document.getElementById('service-category').value.trim();
+      const description = document.getElementById('service-description').value.trim();
+
+      const priceVal = document.getElementById('service-price').value.trim();
+      const currencyVal = document.getElementById('service-currency').value.trim() || 'USD';
+      const freelancerName = document.getElementById('freelancer-name').value.trim();
+      const freelancerPhotoUrl = document.getElementById('freelancer-photo-url').value.trim();
+      const freelancerBio = document.getElementById('freelancer-bio').value.trim();
+
+      if (!title || !category) {
+        showBanner('error', 'Please fill in both the Title and Category.');
+        return;
+      }
+
+      const servicePayload = {
+        title,
+        category,
+        description,
+        price: priceVal ? parseFloat(priceVal) : null,
+        currency: currencyVal || 'USD',
+        freelancer_name: freelancerName || null,
+        freelancer_photo_url: freelancerPhotoUrl || null,
+        freelancer_bio: freelancerBio || null
+      };
+
+      saveBtn.disabled = true;
+      const originalBtnText = saveBtn.innerHTML;
+      saveBtn.innerHTML = `
+        <span class="admin-spinner" style="width:16px;height:16px;border-width:2px;"></span>
+        <span>Saving...</span>
+      `;
+      if (saveStatus) saveStatus.textContent = 'Saving service to database...';
+
+      try {
+        let serviceId = editingServiceId;
+
+        if (!serviceId) {
+          // INSERT new service
+          const { data: newSvc, error: createErr } = await supabase
+            .from('services')
+            .insert([servicePayload])
+            .select('id')
+            .single();
+
+          if (createErr) throw createErr;
+          serviceId = newSvc.id;
+        } else {
+          // UPDATE existing service
+          const { error: updateErr } = await supabase
+            .from('services')
+            .update({
+              ...servicePayload,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', serviceId);
+
+          if (updateErr) throw updateErr;
+
+          // Remove old images & links to re-insert current state
+          await supabase.from('service_images').delete().eq('service_id', serviceId);
+          await supabase.from('service_links').delete().eq('service_id', serviceId);
+        }
+
+        // Insert Images
+        if (currentImages.length > 0) {
+          const imageInserts = currentImages.map((img, idx) => ({
+            service_id: serviceId,
+            image_url: img.image_url,
+            display_order: idx + 1
+          }));
+
+          const { error: imgInsErr } = await supabase
+            .from('service_images')
+            .insert(imageInserts);
+
+          if (imgInsErr) console.warn('[Admin] image insertion issue:', imgInsErr);
+        }
+
+        // Collect and Insert Social Links
+        const linkRows = document.querySelectorAll('#links-list .link-row');
+        const linkInserts = [];
+        linkRows.forEach(row => {
+          const plat = row.querySelector('.link-platform').value.trim();
+          const u = row.querySelector('.link-url').value.trim();
+          if (plat && u) {
+            linkInserts.push({
+              service_id: serviceId,
+              platform: plat,
+              url: u
+            });
+          }
+        });
+
+        if (linkInserts.length > 0) {
+          const { error: linkInsErr } = await supabase
+            .from('service_links')
+            .insert(linkInserts);
+
+          if (linkInsErr) console.warn('[Admin] link insertion issue:', linkInsErr);
+        }
+
+        showBanner('success', editingServiceId ? 'Service updated successfully!' : 'Service created successfully!');
+        switchView('list');
+        await loadServices();
+
+      } catch (err) {
+        console.error('[Admin] saveService error:', err);
+        showBanner('error', `Failed to save service: ${err.message}`);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalBtnText;
+        if (saveStatus) saveStatus.textContent = '';
+      }
+    }
+
+    // Delete Confirmation
+    function confirmDeleteService(serviceId) {
+      deleteTargetId = serviceId;
+      const modal = document.getElementById('confirm-delete-dialog');
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeDeleteModal() {
+      deleteTargetId = null;
+      const modal = document.getElementById('confirm-delete-dialog');
+      if (modal) modal.classList.remove('open');
+    }
+
+    async function executeDelete() {
+      if (!deleteTargetId) return;
+      const confirmBtn = document.getElementById('confirm-delete-btn');
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = 'Deleting...';
+
+      try {
+        // Delete related images & links first
+        await supabase.from('service_images').delete().eq('service_id', deleteTargetId);
+        await supabase.from('service_links').delete().eq('service_id', deleteTargetId);
+
+        // Delete service
+        const { error } = await supabase
+          .from('services')
+          .delete()
+          .eq('id', deleteTargetId);
+
+        if (error) throw error;
+
+        closeDeleteModal();
+        showBanner('success', 'Service deleted successfully.');
+        await loadServices();
+      } catch (err) {
+        console.error('[Admin] Delete error:', err);
+        showBanner('error', `Failed to delete service: ${err.message}`);
+      } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Delete Service';
+      }
+    }
+
+    async function loadPendingFreelancerServices() {
+      const container = document.getElementById('pending-freelancer-services');
+      if (!container) return;
+
+      container.innerHTML = '<div class="admin-pending-empty">Loading pending freelancer services...</div>';
+      const { data: services, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        container.innerHTML = `<div class="admin-alert visible admin-alert-error">Failed to load pending services: ${escapeHtml(error.message)}</div>`;
+        return;
+      }
+
+      if (!services || services.length === 0) {
+        container.innerHTML = '<div class="admin-pending-empty">No pending freelancer services right now.</div>';
+        return;
+      }
+
+      const serviceIds = services.map(service => service.id);
+      const [{ data: images }, { data: links }] = await Promise.all([
+        supabase.from('service_images').select('*').in('service_id', serviceIds).order('display_order', { ascending: true }),
+        supabase.from('service_links').select('*').in('service_id', serviceIds)
+      ]);
+      const imageMap = {};
+      const linkMap = {};
+      (images || []).forEach(image => {
+        if (!imageMap[image.service_id]) imageMap[image.service_id] = [];
+        imageMap[image.service_id].push(image.image_url);
+      });
+      (links || []).forEach(link => {
+        if (!linkMap[link.service_id]) linkMap[link.service_id] = [];
+        linkMap[link.service_id].push(link);
+      });
+
+      container.innerHTML = services.map(service => {
+        const serviceImages = imageMap[service.id] || [];
+        const serviceLinks = linkMap[service.id] || [];
+        const price = service.price === null || service.price === undefined || service.price === ''
+          ? 'Contact for pricing'
+          : `${escapeHtml(service.price)} ${escapeHtml(service.currency || 'USD')}`;
+        return `
+          <article class="admin-pending-card" data-pending-service="${escapeHtml(service.id)}">
+            <div class="admin-pending-header">
+              <div>
+                <span class="service-admin-category">${escapeHtml(service.category || 'General')}</span>
+                <h3 class="admin-pending-title">${escapeHtml(service.title)}</h3>
+              </div>
+              <span class="admin-pending-status">Pending review</span>
+            </div>
+            <div class="admin-pending-owner"><strong>Owner ID:</strong> ${escapeHtml(service.owner_id || 'Unavailable')}</div>
+            <div class="admin-pending-details">
+              <div><strong>Description</strong><p>${escapeHtml(service.description || 'No description provided.')}</p></div>
+              <div><strong>Price</strong><p>${price}</p></div>
+              <div><strong>Provider</strong><p>${escapeHtml(service.freelancer_name || 'Not provided')}</p></div>
+              <div><strong>Bio</strong><p>${escapeHtml(service.freelancer_bio || 'Not provided')}</p></div>
+            </div>
+            ${serviceImages.length ? `<div class="admin-pending-images">${serviceImages.map(url => `<img src="${escapeHtml(url)}" alt="${escapeHtml(service.title)} image" loading="lazy">`).join('')}</div>` : '<p class="admin-pending-muted">No images provided.</p>'}
+            ${serviceLinks.length ? `<div class="admin-pending-links"><strong>Contact links</strong>${serviceLinks.map(link => `<a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.platform)} ↗</a>`).join('')}</div>` : '<p class="admin-pending-muted">No contact links provided.</p>'}
+            <div class="admin-pending-actions">
+              <button type="button" class="admin-btn admin-btn-success admin-btn-sm" data-review-action="approved" data-service-id="${escapeHtml(service.id)}">Approve</button>
+              <button type="button" class="admin-btn admin-btn-danger admin-btn-sm" data-review-action="rejected" data-service-id="${escapeHtml(service.id)}">Reject</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      container.querySelectorAll('[data-review-action]').forEach(button => {
+        button.addEventListener('click', () => reviewFreelancerService(button.dataset.serviceId, button.dataset.reviewAction));
+      });
+    }
+
+    async function reviewFreelancerService(serviceId, status) {
+      const label = status === 'approved' ? 'approve' : 'reject';
+      if (!window.confirm(`Are you sure you want to ${label} this freelancer service?`)) return;
+      const card = [...document.querySelectorAll('[data-pending-service]')].find(item => item.dataset.pendingService === serviceId);
+      const actionButtons = card?.querySelectorAll('[data-review-action]');
+      actionButtons?.forEach(actionButton => { actionButton.disabled = true; });
+
+      const { error } = await supabase
+        .from('services')
+        .update({ status })
+        .eq('id', serviceId)
+        .eq('status', 'pending');
+
+      if (error) {
+        actionButtons?.forEach(actionButton => { actionButton.disabled = false; });
+        showBanner('error', `Failed to update service status: ${error.message}`);
+        return;
+      }
+
+      card?.remove();
+      const container = document.getElementById('pending-freelancer-services');
+      if (container && !container.querySelector('.admin-pending-card')) {
+        container.innerHTML = '<div class="admin-pending-empty">No pending freelancer services right now.</div>';
+      }
+      showBanner('success', status === 'approved' ? 'Freelancer service approved.' : 'Freelancer service rejected.');
+    }
+
+    // Sign Out
+    async function handleSignOut() {
+      try {
+        await supabase.auth.signOut();
+        window.location.replace('admin-login.html');
+      } catch (err) {
+        console.error('[Admin] Logout error:', err);
+        window.location.replace('admin-login.html');
+      }
+    }
+
+    // Init All Listeners
+    function initDashboard() {
+      populateCategories();
+
+      // Top action buttons
+      document.getElementById('btn-add-service')?.addEventListener('click', openAddForm);
+      document.getElementById('btn-back-to-list')?.addEventListener('click', () => switchView('list'));
+      document.getElementById('btn-cancel-edit')?.addEventListener('click', () => switchView('list'));
+
+      // Form save
+      document.getElementById('service-form')?.addEventListener('submit', saveService);
+      document.getElementById('publish-announcement-btn')?.addEventListener('click', publishAnnouncement);
+      document.getElementById('announcement-latest-preview')?.addEventListener('click', (event) => {
+        if (event.target.closest('.announcement-delete-btn')) deleteLatestAnnouncement();
+      });
+      document.getElementById('refresh-pending-services')?.addEventListener('click', loadPendingFreelancerServices);
+      loadLatestAnnouncement();
+
+      // Add link button
+      document.getElementById('btn-add-link')?.addEventListener('click', () => addLinkRow('', ''));
+
+      // Image upload listeners
+      const uploadArea = document.getElementById('image-upload-area');
+      const fileInput = document.getElementById('image-file-input');
+
+      if (uploadArea && fileInput) {
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', (e) => {
+          e.preventDefault();
+          uploadArea.classList.remove('dragover');
+          handleFileSelect(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', () => {
+          handleFileSelect(fileInput.files);
+          fileInput.value = ''; // reset so same file can be chosen again
+        });
+      }
+
+      // Currency notice toggle
+      const currencySelect = document.getElementById('service-currency');
+      const currencyNotice = document.getElementById('currency-notice');
+      currencySelect?.addEventListener('change', () => {
+        if (currencyNotice) {
+          currencyNotice.style.display = (currencySelect.value !== 'USD') ? 'block' : 'none';
+        }
+      });
+
+      // Freelancer photo upload listeners
+      const freelancerPhotoInput = document.getElementById('freelancer-photo-input');
+      const freelancerPhotoStatus = document.getElementById('freelancer-photo-status');
+      const btnRemoveFreelancerPhoto = document.getElementById('btn-remove-freelancer-photo');
+
+      freelancerPhotoInput?.addEventListener('change', async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+
+        try {
+          if (freelancerPhotoStatus) freelancerPhotoStatus.textContent = 'Uploading photo...';
+          const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          const filePath = `freelancers/${Date.now()}_${Math.random().toString(36).substring(2, 8)}_${cleanName}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('service-images')
+            .upload(filePath, file, {
+              cacheControl: '3600',
+              upsert: false
+            });
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('service-images')
+            .getPublicUrl(filePath);
+
+          setFreelancerPhoto(publicUrl);
+          if (freelancerPhotoStatus) freelancerPhotoStatus.textContent = 'Photo uploaded successfully!';
+        } catch (err) {
+          console.error('[Admin] Freelancer photo upload failed:', err);
+          if (freelancerPhotoStatus) freelancerPhotoStatus.textContent = 'Upload failed: ' + err.message;
+          showBanner('error', 'Failed to upload freelancer photo: ' + err.message);
+        }
+      });
+
+      btnRemoveFreelancerPhoto?.addEventListener('click', () => {
+        setFreelancerPhoto('');
+        if (freelancerPhotoInput) freelancerPhotoInput.value = '';
+        if (freelancerPhotoStatus) freelancerPhotoStatus.textContent = 'Photo removed.';
+      });
+
+      // Delete confirmation modal listeners
+      document.getElementById('cancel-delete-btn')?.addEventListener('click', closeDeleteModal);
+      document.getElementById('confirm-delete-btn')?.addEventListener('click', executeDelete);
+
+      // Sign out
+      document.querySelectorAll('.btn-admin-logout').forEach(btn => {
+        btn.addEventListener('click', handleSignOut);
+      });
+
+      // Load initial list
+      loadServices();
+      loadPendingFreelancerServices();
+    }
+  </script>
+</head>
+<body>
+
+  <div class="admin-wrap">
+    <!-- Top Navigation Bar -->
+    <header class="admin-topbar">
+      <a href="index.html" class="admin-topbar-logo" aria-label="BrachioTech Website">
+        <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+             alt="BrachioTech Logo" width="34" height="34" />
+        <span class="admin-topbar-logo-text">BrachioTech Admin</span>
+      </a>
+
+      <div class="admin-topbar-spacer"></div>
+
+      <div class="admin-topbar-actions">
+        <div class="admin-user-chip">
+          <span class="admin-user-dot">A</span>
+          <span id="admin-topbar-email">admin</span>
+        </div>
+
+        <a href="index.html" class="admin-btn admin-btn-outline admin-btn-sm" title="View Public Website">
+          Public Site
+        </a>
+
+        <button type="button" class="admin-btn admin-btn-danger admin-btn-sm btn-admin-logout" title="Sign Out">
+          Sign Out
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="admin-main">
+      <!-- Global Alert Banner -->
+      <div id="admin-global-alert" class="admin-alert" role="alert"></div>
+
+      <!-- VIEW 1: SERVICES LIST -->
+      <section id="view-list" class="admin-view active">
+        <div class="admin-view-header">
+          <h1 class="admin-view-title">
+            Services Management <span id="services-count"></span>
+          </h1>
+          <button type="button" class="admin-btn admin-btn-primary" id="btn-add-service">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            + Add New Service
+          </button>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="services-grid" id="services-grid">
+          <!-- Populated by JS -->
+        </div>
+
+        <section class="admin-pending-section" aria-labelledby="pending-freelancer-title">
+          <div class="admin-pending-divider"></div>
+          <div class="admin-pending-section-header">
+            <div>
+              <h2 class="admin-section-title" id="pending-freelancer-title"><span>🕒</span> Pending Freelancer Services</h2>
+              <p class="admin-pending-description">Review freelancer submissions before they become visible to clients.</p>
+            </div>
+            <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" id="refresh-pending-services">Refresh</button>
+          </div>
+          <div class="admin-pending-list" id="pending-freelancer-services"></div>
+        </section>
+
+        <section class="admin-announcement-section" aria-labelledby="announcement-admin-title">
+          <div class="admin-announcement-divider"></div>
+          <div class="admin-announcement-header">
+            <div>
+              <h2 class="admin-section-title" id="announcement-admin-title"><span>📣</span> Announcements</h2>
+              <p class="admin-announcement-description">Publish a new announcement for signed-in users.</p>
+            </div>
+            <div class="announcement-admin-latest" id="announcement-latest-preview">
+              <span class="announcement-admin-empty">Loading latest announcement...</span>
+            </div>
+          </div>
+          <textarea id="announcement-content-input" class="admin-form-textarea" rows="4" maxlength="2000" placeholder="Write an announcement for users..."></textarea>
+          <div class="admin-announcement-actions">
+            <span class="admin-announcement-note">Each publish creates a new announcement.</span>
+            <button type="button" class="admin-btn admin-btn-primary" id="publish-announcement-btn">📣 Publish Announcement</button>
+          </div>
+        </section>
+      </section>
+
+      <!-- VIEW 2: ADD / EDIT SERVICE FORM -->
+      <section id="view-form" class="admin-view">
+        <div class="admin-form-header">
+          <button type="button" class="admin-back-btn" id="btn-back-to-list">
+            ← Back to Services
+          </button>
+          <h1 class="admin-form-title" id="form-view-title">Add New Service</h1>
+        </div>
+
+        <form class="admin-form" id="service-form" novalidate>
+          <input type="hidden" id="service-id" />
+
+          <!-- Section 1: Basic Information -->
+          <div class="admin-form-section">
+            <h2 class="admin-section-title">
+              <span>📝</span> Basic Information
+            </h2>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="service-title">Service Title *</label>
+              <input
+                type="text"
+                id="service-title"
+                class="admin-form-input"
+                placeholder="e.g. Full-Stack Web Application Development"
+                required
+              />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="service-category">Category *</label>
+              <select id="service-category" class="admin-form-select" required>
+                <!-- Populated dynamically with exact 10 categories -->
+              </select>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="service-description">Detailed Description</label>
+              <textarea
+                id="service-description"
+                class="admin-form-textarea"
+                placeholder="Describe what the service includes, deliverables, client requirements..."
+              ></textarea>
+            </div>
+
+            <!-- Price & Currency -->
+            <div class="admin-form-grid-2">
+              <div class="admin-form-group">
+                <label class="admin-form-label" for="service-price">Price / السعر</label>
+                <input
+                  type="number"
+                  id="service-price"
+                  class="admin-form-input"
+                  placeholder="e.g. 50"
+                  step="any"
+                  min="0"
+                />
+              </div>
+
+              <div class="admin-form-group">
+                <label class="admin-form-label" for="service-currency">Currency / العملة</label>
+                <select id="service-currency" class="admin-form-select">
+                  <option value="USD" selected>USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="MAD">MAD (د.م.)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="JPY">JPY (¥)</option>
+                  <option value="CAD">CAD ($)</option>
+                  <option value="SAR">SAR (ر.س)</option>
+                  <option value="AED">AED (د.إ)</option>
+                  <option value="EGP">EGP (ج.م)</option>
+                  <option value="TND">TND (د.ت)</option>
+                  <option value="DZD">DZD (د.ج)</option>
+                  <option value="QAR">QAR (ر.ق)</option>
+                  <option value="KWD">KWD (د.ك)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Currency Guidance Notice -->
+            <div id="currency-notice" style="display:none; margin-top:-6px; margin-bottom:18px; padding:12px 16px; border-radius:var(--radius-md); background:rgba(251, 191, 36, 0.1); border:1px solid rgba(251, 191, 36, 0.3); color:#fbbf24; font-size:0.85rem; line-height:1.5;">
+              💡 <strong>تنبيه:</strong> ننصح بإبقاء الدولار الأمريكي كعملة، لأنه يساعد على جذب عملاء من مختلف أنحاء العالم.
+            </div>
+          </div>
+
+          <!-- Section 2: Freelancer Information -->
+          <div class="admin-form-section">
+            <h2 class="admin-section-title">
+              <span>👤</span> Freelancer Information (معلومات مقدّم الخدمة)
+            </h2>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="freelancer-name">Freelancer Name (اسم صاحب الخدمة)</label>
+              <input
+                type="text"
+                id="freelancer-name"
+                class="admin-form-input"
+                placeholder="e.g. Alex Morgan"
+              />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label">Freelancer Photo (صورة صاحب الخدمة)</label>
+              <input type="hidden" id="freelancer-photo-url" />
+              <div style="display:flex; align-items:center; gap:16px; margin-top:4px;">
+                <div id="freelancer-photo-preview-wrap" style="width:70px; height:70px; border-radius:50%; background:var(--bg-secondary); border:2px dashed var(--border-subtle); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+                  <img id="freelancer-photo-img" src="" alt="Freelancer Preview" style="width:100%; height:100%; object-fit:cover; display:none;" />
+                  <span id="freelancer-photo-placeholder" style="font-size:1.8rem; color:var(--text-muted);">👤</span>
+                </div>
+                <div>
+                  <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <label for="freelancer-photo-input" class="admin-btn admin-btn-outline admin-btn-sm" style="cursor:pointer; margin:0;">
+                      📷 Choose Photo
+                    </label>
+                    <input type="file" id="freelancer-photo-input" accept="image/*" style="display:none;" />
+                    <button type="button" id="btn-remove-freelancer-photo" class="admin-btn admin-btn-danger admin-btn-sm" style="display:none;">
+                      ✕ Remove Photo
+                    </button>
+                  </div>
+                  <span id="freelancer-photo-status" style="font-size:0.8rem; color:var(--text-muted); display:block; margin-top:6px;">Upload a professional headshot (JPG, PNG, WebP)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="freelancer-bio">Freelancer Bio (نبذة عن صاحب الخدمة)</label>
+              <textarea
+                id="freelancer-bio"
+                class="admin-form-textarea"
+                style="min-height:90px;"
+                placeholder="Short bio, experience, specialization..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Section 3: Media & Images -->
+          <div class="admin-form-section">
+            <h2 class="admin-section-title">
+              <span>🖼️</span> Service Images (Supabase Storage: service-images)
+            </h2>
+
+            <div class="image-upload-area" id="image-upload-area">
+              <div class="image-upload-icon">☁️</div>
+              <div class="image-upload-text">
+                <strong>Click to browse</strong> or drag & drop image files here<br />
+                <span style="font-size:0.75rem;">Supported formats: PNG, JPG, WebP, SVG</span>
+              </div>
+              <input
+                type="file"
+                id="image-file-input"
+                class="image-upload-input"
+                accept="image/*"
+                multiple
+              />
+            </div>
+
+            <div class="image-previews-grid" id="image-previews">
+              <!-- Uploaded thumbnail previews -->
+            </div>
+          </div>
+
+          <!-- Section 4: Social & Communication Links -->
+          <div class="admin-form-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+              <h2 class="admin-section-title" style="margin-bottom:0;padding-bottom:0;border:none;">
+                <span>🔗</span> Social & Contact Links
+              </h2>
+              <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" id="btn-add-link">
+                + Add Link
+              </button>
+            </div>
+
+            <div class="links-list" id="links-list">
+              <!-- Repeatable link rows -->
+            </div>
+          </div>
+
+          <!-- Form Action Footer -->
+          <div class="admin-form-footer">
+            <button type="submit" class="admin-btn admin-btn-primary" id="btn-save-service">
+              💾 Save Service
+            </button>
+            <button type="button" class="admin-btn admin-btn-outline" id="btn-cancel-edit">
+              Cancel
+            </button>
+            <span class="admin-form-save-status" id="form-save-status"></span>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="confirm-overlay" id="confirm-delete-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-del-title">
+    <div class="confirm-dialog">
+      <div class="confirm-icon">⚠️</div>
+      <h3 class="confirm-title" id="confirm-del-title">Delete Service?</h3>
+      <p class="confirm-text">
+        Are you sure you want to delete this service? This action will permanently remove the service, its images, and all social links from Supabase.
+      </p>
+      <div class="confirm-actions">
+        <button type="button" class="admin-btn admin-btn-outline" id="cancel-delete-btn">
+          Cancel
+        </button>
+        <button type="button" class="admin-btn admin-btn-danger" id="confirm-delete-btn">
+          Delete Service
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/theme.js" defer></script>
+</body>
+</html>

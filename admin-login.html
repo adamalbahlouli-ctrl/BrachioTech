@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="BrachioTech — Admin Login" />
+  <title>Admin Login — BrachioTech</title>
+  <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/jpeg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+
+  <!-- Import map for Supabase client -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import { supabase } from './js/supabaseClient.js';
+
+    // ============================================================
+    // CONFIGURATION: Admin Email (Set your admin email here)
+    // ============================================================
+    export const ADMIN_EMAIL = 'adamalbahlouli@gmail.com';
+
+    // Auto-redirect to dashboard if already logged in as Admin
+    async function checkExistingAdmin() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && user.email === ADMIN_EMAIL) {
+          window.location.replace('upload.html');
+        }
+      } catch (err) {
+        console.warn('[Admin Login] Session check error:', err);
+      }
+    }
+
+    checkExistingAdmin();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('admin-login-form');
+      const emailInput = document.getElementById('admin-email');
+      const passwordInput = document.getElementById('admin-password');
+      const submitBtn = document.getElementById('login-submit-btn');
+      const errorBox = document.getElementById('login-error-msg');
+      const errorText = document.getElementById('login-error-text');
+
+      function showError(msg) {
+        if (errorText) errorText.textContent = msg;
+        if (errorBox) errorBox.classList.add('visible');
+      }
+
+      function hideError() {
+        if (errorBox) errorBox.classList.remove('visible');
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          hideError();
+
+          const email = emailInput.value.trim();
+          const password = passwordInput.value;
+
+          if (!email || !password) {
+            showError('Please enter both email and password.');
+            return;
+          }
+
+          submitBtn.disabled = true;
+          const originalBtnHtml = submitBtn.innerHTML;
+          submitBtn.innerHTML = `
+            <span class="admin-spinner" style="width:16px;height:16px;border-width:2px;"></span>
+            <span>Signing in...</span>
+          `;
+
+          try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+              email,
+              password
+            });
+
+            if (error) {
+              showError(error.message || 'Invalid login credentials.');
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnHtml;
+              return;
+            }
+
+            if (!data?.user || data.user.email !== ADMIN_EMAIL) {
+              // Sign out immediately if not authorized admin
+              await supabase.auth.signOut();
+              showError('Access denied: This account does not have administrator privileges.');
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnHtml;
+              return;
+            }
+
+            // Success -> redirect to Admin Panel
+            window.location.replace('upload.html');
+          } catch (err) {
+            console.error('[Admin Login] Error:', err);
+            showError('An unexpected error occurred. Please try again.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+          }
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+
+  <div class="login-page-wrap">
+    <div class="login-card">
+      <a href="index.html" class="login-logo" aria-label="BrachioTech Home">
+        <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+             alt="BrachioTech Logo" width="40" height="40" />
+        <span class="login-logo-text">BrachioTech</span>
+      </a>
+
+      <h1 class="login-title">Admin Portal</h1>
+      <p class="login-subtitle">Sign in with administrator credentials to manage services and content.</p>
+
+      <div class="login-error" id="login-error-msg" role="alert">
+        <span aria-hidden="true" style="font-size: 1.1rem;">⚠️</span>
+        <span id="login-error-text">Invalid login credentials</span>
+      </div>
+
+      <form class="login-form" id="admin-login-form" novalidate>
+        <div class="login-field">
+          <label class="login-label" for="admin-email">Admin Email</label>
+          <input
+            type="email"
+            id="admin-email"
+            class="login-input"
+            placeholder="adamalbahlouli@gmail.com"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="login-field">
+          <label class="login-label" for="admin-password">Password</label>
+          <input
+            type="password"
+            id="admin-password"
+            class="login-input"
+            placeholder="••••••••••••"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button type="submit" class="login-submit" id="login-submit-btn">
+          <span>Sign In to Dashboard</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </form>
+
+      <a href="index.html" class="login-back">
+        ← Back to public website
+      </a>
+    </div>
+  </div>
+
+  <script src="js/theme.js" defer></script>
+</body>
+</html>

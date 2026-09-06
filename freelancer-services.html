@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Manage your BrachioTech freelancer services." />
+  <title>My Services - BrachioTech</title>
+  <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <script src="js/theme.js"></script>
+  <script type="importmap">
+  {"imports":{"@supabase/supabase-js":"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"}}
+  </script>
+  <style>
+    .freelancer-dashboard { min-height: 100vh; padding: calc(var(--nav-height) + 36px) 16px 80px; }
+    .freelancer-dashboard-inner { width: min(100%, 1100px); margin: 0 auto; }
+    .freelancer-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 10; height: var(--nav-height); display: flex; align-items: center; background: var(--bg-primary); border-bottom: 1px solid var(--border-subtle); }
+    .freelancer-topbar-inner { width: min(100% - 32px, 1200px); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .freelancer-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text-primary); font-weight: 800; text-decoration: none; }
+    .freelancer-brand img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+    .freelancer-back { color: var(--text-secondary); font-size: .88rem; text-decoration: none; }
+    .freelancer-back:hover { color: var(--accent-primary); }
+    .freelancer-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 26px; }
+    .freelancer-heading h1 { margin: 0 0 8px; color: var(--text-primary); font-size: clamp(1.8rem, 4vw, 2.5rem); }
+    .freelancer-heading p { margin: 0; color: var(--text-secondary); }
+    .freelancer-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .freelancer-count { padding: 10px 14px; color: var(--text-primary); background: var(--bg-card); border: var(--border-glass); border-radius: var(--radius-md); font-weight: 700; white-space: nowrap; }
+    .freelancer-subscribe { color: #60a5fa; border-color: rgba(96,165,250,.4); }
+    .freelancer-alert { display: none; margin-bottom: 20px; padding: 13px 16px; border-radius: var(--radius-md); line-height: 1.5; }
+    .freelancer-alert.visible { display: block; }
+    .freelancer-alert-success { color: #4ade80; background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.3); }
+    .freelancer-alert-error { color: #fca5a5; background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); }
+    .freelancer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+    .freelancer-service-card { overflow: hidden; background: var(--bg-card); border: var(--border-glass); border-radius: var(--radius-lg); }
+    .freelancer-service-image { width: 100%; height: 150px; object-fit: cover; display: block; background: var(--bg-secondary); }
+    .freelancer-service-image-placeholder { height: 150px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); background: var(--bg-secondary); font-size: 2rem; }
+    .freelancer-service-body { padding: 18px; }
+    .freelancer-service-category { color: var(--accent-primary); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .freelancer-service-title { margin: 7px 0 12px; color: var(--text-primary); font-size: 1.05rem; line-height: 1.35; }
+    .freelancer-status { display: inline-flex; padding: 5px 9px; border-radius: var(--radius-full); font-size: .75rem; font-weight: 700; }
+    .freelancer-status-pending { color: #fbbf24; background: rgba(251,191,36,.12); }
+    .freelancer-status-approved, .freelancer-status-available { color: #4ade80; background: rgba(74,222,128,.12); }
+    .freelancer-status-rejected { color: #f87171; background: rgba(239,68,68,.12); }
+    .freelancer-card-actions { display: flex; gap: 8px; margin-top: 18px; }
+    .freelancer-empty { padding: 52px 20px; text-align: center; color: var(--text-secondary); background: var(--bg-card); border: var(--border-glass); border-radius: var(--radius-lg); }
+    .freelancer-empty strong { display: block; margin-bottom: 8px; color: var(--text-primary); font-size: 1.15rem; }
+    .freelancer-form-wrap { display: none; }
+    .freelancer-form-wrap.visible { display: block; }
+    .freelancer-form { max-width: 860px; display: grid; gap: 22px; }
+    .freelancer-form-section { padding: 26px; background: var(--bg-card); border: var(--border-glass); border-radius: var(--radius-lg); }
+    .freelancer-form-section h2 { margin: 0 0 20px; padding-bottom: 13px; border-bottom: 1px solid var(--border-subtle); color: var(--text-primary); font-size: 1rem; }
+    .freelancer-form-group { display: grid; gap: 7px; margin-bottom: 17px; }
+    .freelancer-form-group:last-child { margin-bottom: 0; }
+    .freelancer-form-label { color: var(--text-secondary); font-size: .85rem; font-weight: 600; }
+    .freelancer-input, .freelancer-select, .freelancer-textarea { width: 100%; padding: 11px 14px; color: var(--text-primary); background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font: inherit; outline: none; }
+    .freelancer-textarea { min-height: 125px; resize: vertical; line-height: 1.6; }
+    .freelancer-input:focus, .freelancer-select:focus, .freelancer-textarea:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(108,99,255,.15); }
+    .freelancer-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .freelancer-upload { padding: 24px; text-align: center; color: var(--text-muted); border: 2px dashed var(--border-subtle); border-radius: var(--radius-md); cursor: pointer; }
+    .freelancer-upload:hover { border-color: var(--accent-primary); }
+    .freelancer-upload input { display: none; }
+    .freelancer-previews { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .freelancer-preview { position: relative; width: 92px; height: 92px; overflow: hidden; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); }
+    .freelancer-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .freelancer-preview button { position: absolute; top: 4px; right: 4px; width: 23px; height: 23px; padding: 0; color: #fff; background: rgba(0,0,0,.75); border: 0; border-radius: 50%; cursor: pointer; }
+    .freelancer-links { display: grid; gap: 10px; }
+    .freelancer-link-row { display: grid; grid-template-columns: 180px 1fr auto; gap: 10px; align-items: center; }
+    .freelancer-form-footer { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .freelancer-limit-modal { display: none; position: fixed; inset: 0; z-index: 50; align-items: center; justify-content: center; padding: 20px; background: rgba(4,7,20,.72); backdrop-filter: blur(7px); }
+    .freelancer-limit-modal.visible { display: flex; }
+    .freelancer-limit-card { max-width: 500px; padding: 30px; background: var(--bg-card); border: var(--border-glass); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+    .freelancer-limit-card h2 { margin-top: 0; color: var(--text-primary); }
+    .freelancer-limit-card p { color: var(--text-secondary); line-height: 1.6; }
+    .freelancer-limit-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+    @media (max-width: 700px) { .freelancer-heading { align-items: stretch; flex-direction: column; } .freelancer-actions { flex-direction: column; align-items: stretch; } .freelancer-actions > * { justify-content: center; } .freelancer-form-grid, .freelancer-link-row { grid-template-columns: 1fr; } .freelancer-form-section { padding: 20px 16px; } }
+  </style>
+</head>
+<body>
+  <header class="freelancer-topbar">
+    <div class="freelancer-topbar-inner">
+      <a class="freelancer-brand" href="index.html"><img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" alt="BrachioTech" /> BrachioTech</a>
+      <a class="freelancer-back" href="index.html">Back to marketplace</a>
+    </div>
+  </header>
+
+  <main class="freelancer-dashboard">
+    <div class="freelancer-dashboard-inner">
+      <section id="dashboard-view">
+        <div class="freelancer-heading">
+          <div><h1>My Services</h1><p>Manage your services and track their review status.</p></div>
+          <div class="freelancer-actions">
+            <span class="freelancer-count" id="service-count">0 of 5 services</span>
+            <button type="button" class="btn btn-outline freelancer-subscribe" id="subscribe-btn">Subscribe for unlimited access</button>
+            <button type="button" class="btn btn-primary" id="add-service-btn">+ Add New Service</button>
+          </div>
+        </div>
+        <div class="freelancer-alert" id="dashboard-alert" role="status"></div>
+        <div class="freelancer-grid" id="services-grid"></div>
+      </section>
+
+      <section class="freelancer-form-wrap" id="form-view" aria-labelledby="form-title">
+        <div class="freelancer-heading"><div><button type="button" class="btn btn-outline" id="back-btn">Back to My Services</button><h1 id="form-title">Add New Service</h1></div></div>
+        <div class="freelancer-alert" id="form-alert" role="alert"></div>
+        <form class="freelancer-form" id="service-form">
+          <input type="hidden" id="editing-id" />
+          <section class="freelancer-form-section">
+            <h2>Basic Information</h2>
+            <div class="freelancer-form-group"><label class="freelancer-form-label" for="service-title">Service Title *</label><input class="freelancer-input" id="service-title" required /></div>
+            <div class="freelancer-form-group"><label class="freelancer-form-label" for="service-category">Category *</label><select class="freelancer-select" id="service-category" required></select></div>
+            <div class="freelancer-form-group"><label class="freelancer-form-label" for="service-description">Description</label><textarea class="freelancer-textarea" id="service-description"></textarea></div>
+            <div class="freelancer-form-grid"><div class="freelancer-form-group"><label class="freelancer-form-label" for="service-price">Price</label><input class="freelancer-input" id="service-price" type="number" min="0" step="any" /></div><div class="freelancer-form-group"><label class="freelancer-form-label" for="service-currency">Currency</label><select class="freelancer-select" id="service-currency"><option value="USD">USD ($)</option><option value="EUR">EUR (€)</option><option value="MAD">MAD</option><option value="GBP">GBP (£)</option><option value="JPY">JPY (¥)</option><option value="CAD">CAD ($)</option><option value="SAR">SAR</option><option value="AED">AED</option><option value="EGP">EGP</option><option value="TND">TND</option><option value="DZD">DZD</option><option value="QAR">QAR</option><option value="KWD">KWD</option></select></div></div>
+            <div id="currency-notice" style="display:none;color:#fbbf24;font-size:.84rem;line-height:1.5;">Changing the currency may affect how clients compare your service prices.</div>
+          </section>
+          <section class="freelancer-form-section"><h2>Service Images</h2><label class="freelancer-upload" for="image-input">Click to choose images (PNG, JPG, WebP)<input id="image-input" type="file" accept="image/*" multiple /></label><div class="freelancer-previews" id="image-previews"></div></section>
+          <section class="freelancer-form-section"><h2>Provider Information</h2><div class="freelancer-form-group"><label class="freelancer-form-label" for="freelancer-name">Freelancer Name</label><input class="freelancer-input" id="freelancer-name" /></div><div class="freelancer-form-group"><label class="freelancer-form-label" for="freelancer-photo-input">Profile Photo</label><input class="freelancer-input" id="freelancer-photo-input" type="file" accept="image/*" /><input id="freelancer-photo-url" type="hidden" /><div id="freelancer-photo-preview"></div></div><div class="freelancer-form-group"><label class="freelancer-form-label" for="freelancer-bio">Bio</label><textarea class="freelancer-textarea" id="freelancer-bio"></textarea></div></section>
+          <section class="freelancer-form-section"><h2>Communication Links</h2><div class="freelancer-links" id="links-list"></div><button type="button" class="btn btn-outline" id="add-link-btn" style="margin-top:14px;">+ Add Link</button></section>
+          <div class="freelancer-form-footer"><button type="submit" class="btn btn-primary" id="save-btn">Submit for Review</button><button type="button" class="btn btn-outline" id="cancel-btn">Cancel</button></div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <div class="freelancer-limit-modal" id="limit-modal" role="dialog" aria-modal="true" aria-labelledby="limit-title"><div class="freelancer-limit-card"><h2 id="limit-title">Service limit reached</h2><p>You have reached the maximum of 5 services. Delete one of your current services to add a new one, or subscribe for unlimited access.</p><div class="freelancer-limit-actions"><button type="button" class="btn btn-outline" id="limit-delete-btn">Delete a service</button><button type="button" class="btn btn-primary" id="limit-subscribe-btn">Subscribe now</button><button type="button" class="btn btn-outline" id="limit-close-btn">Close</button></div></div></div>
+
+  <script type="module">
+    import { supabase } from './js/supabaseClient.js';
+    import { ADMIN_EMAIL } from './js/auth.js';
+
+    const CATEGORIES = ['Web & Software Development', 'Graphic Design & UI/UX', 'Video Editing & Animation', 'Writing & Translation', 'AI & Automation', 'Mobile Apps & Games', 'Digital Marketing & Social Media', 'Audio & Music', 'Business & Data', 'Photography & Image Editing'];
+    const PLATFORMS = ['WhatsApp', 'Instagram', 'X', 'Facebook', 'TikTok', 'LinkedIn', 'YouTube', 'Telegram', 'Snapchat', 'Behance', 'Gmail'];
+    const MAX_SERVICES = 5;
+    let currentUser = null;
+    let services = [];
+    let currentImages = [];
+    let currentLinks = [];
+    let freelancerPhotoUrl = '';
+
+    const $ = id => document.getElementById(id);
+    const escapeHtml = value => String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;');
+
+    function showAlert(id, message, type = 'success') { const alert = $(id); alert.textContent = message; alert.className = `freelancer-alert visible freelancer-alert-${type}`; }
+    function hideAlert(id) { $(id).className = 'freelancer-alert'; }
+    function statusInfo(status) { const value = String(status || 'pending').toLowerCase(); const map = { pending: ['Pending review', 'pending'], approved: ['Published', 'approved'], available: ['Published', 'available'], rejected: ['Rejected', 'rejected'] }; return map[value] || [value, 'pending']; }
+    function openSubscribe() { window.alert('The payment and subscription system is coming soon. Stay tuned!'); }
+
+    async function loadServices() {
+      const grid = $('services-grid');
+      grid.innerHTML = '<div class="freelancer-empty">Loading your services...</div>';
+      const { data, error } = await supabase.from('services').select('*').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
+      if (error) { showAlert('dashboard-alert', error.message || 'Unable to load your services.', 'error'); grid.innerHTML = ''; return; }
+      services = data || [];
+      $('service-count').textContent = `${services.length} of ${MAX_SERVICES} services`;
+      if (!services.length) { grid.innerHTML = '<div class="freelancer-empty" style="grid-column:1/-1;"><strong>No services yet</strong>Create your first service to start building your freelancer profile.</div>'; return; }
+
+      const { data: images } = await supabase.from('service_images').select('service_id, image_url, display_order').in('service_id', services.map(service => service.id)).order('display_order', { ascending: true });
+      const imageMap = {};
+      (images || []).forEach(image => { if (!imageMap[image.service_id]) imageMap[image.service_id] = image.image_url; });
+      grid.innerHTML = services.map(service => {
+        const [label, className] = statusInfo(service.status);
+        const image = imageMap[service.id];
+        return `<article class="freelancer-service-card"><div>${image ? `<img class="freelancer-service-image" src="${escapeHtml(image)}" alt="${escapeHtml(service.title)}" loading="lazy">` : '<div class="freelancer-service-image-placeholder">⚡</div>'}</div><div class="freelancer-service-body"><span class="freelancer-service-category">${escapeHtml(service.category || 'Service')}</span><h2 class="freelancer-service-title">${escapeHtml(service.title)}</h2><span class="freelancer-status freelancer-status-${className}">${escapeHtml(label)}</span><div class="freelancer-card-actions"><button type="button" class="btn btn-outline btn-sm" data-edit="${escapeHtml(service.id)}">Edit</button><button type="button" class="btn btn-outline btn-sm" data-delete="${escapeHtml(service.id)}">Delete</button></div></div></article>`;
+      }).join('');
+      grid.querySelectorAll('[data-edit]').forEach(button => button.addEventListener('click', () => openEdit(button.dataset.edit)));
+      grid.querySelectorAll('[data-delete]').forEach(button => button.addEventListener('click', () => deleteService(button.dataset.delete)));
+    }
+
+    function populateCategories() { $('service-category').innerHTML = '<option value="">Choose a category...</option>' + CATEGORIES.map(category => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join(''); }
+    function resetForm() { $('service-form').reset(); $('editing-id').value = ''; $('service-currency').value = 'USD'; currentImages = []; currentLinks = []; freelancerPhotoUrl = ''; $('freelancer-photo-url').value = ''; $('freelancer-photo-preview').innerHTML = ''; renderImages(); renderLinks(); hideAlert('form-alert'); $('form-title').textContent = 'Add New Service'; }
+    function openForm() { $('dashboard-view').style.display = 'none'; $('form-view').classList.add('visible'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    function closeForm() { $('form-view').classList.remove('visible'); $('dashboard-view').style.display = ''; resetForm(); }
+
+    async function openEdit(id) {
+      const service = services.find(item => item.id === id);
+      if (!service) return;
+      resetForm(); $('editing-id').value = id; $('form-title').textContent = 'Edit Service'; $('service-title').value = service.title || ''; $('service-category').value = service.category || ''; $('service-description').value = service.description || ''; $('service-price').value = service.price ?? ''; $('service-currency').value = service.currency || 'USD'; $('freelancer-name').value = service.freelancer_name || ''; $('freelancer-bio').value = service.freelancer_bio || ''; freelancerPhotoUrl = service.freelancer_photo_url || ''; $('freelancer-photo-url').value = freelancerPhotoUrl; renderFreelancerPhoto();
+      const [{ data: images }, { data: links }] = await Promise.all([supabase.from('service_images').select('*').eq('service_id', id).order('display_order', { ascending: true }), supabase.from('service_links').select('*').eq('service_id', id)]);
+      currentImages = images || []; currentLinks = links || []; renderImages(); renderLinks(); openForm();
+    }
+
+    function renderImages() { $('image-previews').innerHTML = currentImages.map((image, index) => `<div class="freelancer-preview"><img src="${escapeHtml(image.image_url)}" alt="Image ${index + 1}"><button type="button" data-image-index="${index}" aria-label="Remove image">×</button></div>`).join(''); $('image-previews').querySelectorAll('[data-image-index]').forEach(button => button.addEventListener('click', () => { currentImages.splice(Number(button.dataset.imageIndex), 1); renderImages(); })); }
+    function renderLinks() { $('links-list').innerHTML = currentLinks.map((link, index) => `<div class="freelancer-link-row"><select class="freelancer-select" data-link-platform="${index}">${PLATFORMS.map(platform => `<option value="${escapeHtml(platform)}" ${platform === link.platform ? 'selected' : ''}>${escapeHtml(platform)}</option>`).join('')}</select><input class="freelancer-input" data-link-url="${index}" value="${escapeHtml(link.url)}" placeholder="https://..."><button type="button" class="btn btn-outline btn-sm" data-link-remove="${index}">Remove</button></div>`).join(''); $('links-list').querySelectorAll('[data-link-remove]').forEach(button => button.addEventListener('click', () => { currentLinks.splice(Number(button.dataset.linkRemove), 1); renderLinks(); })); }
+    function renderFreelancerPhoto() { $('freelancer-photo-preview').innerHTML = freelancerPhotoUrl ? `<img src="${escapeHtml(freelancerPhotoUrl)}" alt="Profile preview" style="width:72px;height:72px;margin-top:10px;border-radius:50%;object-fit:cover;border:2px solid var(--accent-primary);">` : ''; }
+    function readLinks() { return [...$('links-list').querySelectorAll('.freelancer-link-row')].map(row => ({ platform: row.querySelector('[data-link-platform]').value, url: row.querySelector('[data-link-url]').value.trim() })).filter(link => link.platform && link.url); }
+
+    async function uploadImages(files) {
+      for (const file of files) {
+        if (!file.type.startsWith('image/')) continue;
+        const path = `freelancers/${currentUser.id}/${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+        const { error } = await supabase.storage.from('service-images').upload(path, file, { cacheControl: '3600', upsert: false });
+        if (error) throw error;
+        const { data } = supabase.storage.from('service-images').getPublicUrl(path);
+        currentImages.push({ image_url: data.publicUrl });
+      }
+      renderImages();
+    }
+
+    async function saveService(event) {
+      event.preventDefault();
+      const saveButton = $('save-btn'); saveButton.disabled = true; hideAlert('form-alert');
+      const payload = { title: $('service-title').value.trim(), category: $('service-category').value, description: $('service-description').value.trim(), price: $('service-price').value ? Number($('service-price').value) : null, currency: $('service-currency').value, freelancer_name: $('freelancer-name').value.trim() || null, freelancer_photo_url: freelancerPhotoUrl || null, freelancer_bio: $('freelancer-bio').value.trim() || null };
+      if (!payload.title || !payload.category) { showAlert('form-alert', 'Please complete the title and category.', 'error'); saveButton.disabled = false; return; }
+      try {
+        const editingId = $('editing-id').value;
+        let serviceId = editingId;
+        if (editingId) {
+          const { error } = await supabase.from('services').update({
+            ...payload,
+            owner_id: currentUser.id,
+            status: 'pending'
+          }).eq('id', editingId).eq('owner_id', currentUser.id);
+          if (error) throw error;
+          await supabase.from('service_images').delete().eq('service_id', editingId);
+          await supabase.from('service_links').delete().eq('service_id', editingId);
+        } else {
+          if (services.length >= MAX_SERVICES) { showLimitModal(); saveButton.disabled = false; return; }
+          const { data, error } = await supabase.from('services').insert({
+            ...payload,
+            owner_id: currentUser.id,
+            status: 'pending'
+          }).select('id').single();
+          if (error) throw error;
+          serviceId = data.id;
+        }
+        if (currentImages.length) { const { error } = await supabase.from('service_images').insert(currentImages.map((image, index) => ({ service_id: serviceId, image_url: image.image_url, display_order: index + 1 }))); if (error) throw error; }
+        const links = readLinks(); if (links.length) { const { error } = await supabase.from('service_links').insert(links.map(link => ({ ...link, service_id: serviceId }))); if (error) throw error; }
+        closeForm(); showAlert('dashboard-alert', 'Your service was submitted for review and will appear publicly within 24 hours after approval.'); await loadServices();
+      } catch (error) { showAlert('form-alert', error.message || 'Unable to save the service.', 'error'); } finally { saveButton.disabled = false; }
+    }
+
+    async function deleteService(id) { if (!window.confirm('Delete this service? This action cannot be undone.')) return; const { error } = await supabase.from('services').delete().eq('id', id).eq('owner_id', currentUser.id); if (error) { showAlert('dashboard-alert', error.message || 'Unable to delete the service.', 'error'); return; } showAlert('dashboard-alert', 'Service deleted successfully.'); await loadServices(); }
+    function showLimitModal() { $('limit-modal').classList.add('visible'); }
+    function closeLimitModal() { $('limit-modal').classList.remove('visible'); }
+
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { window.location.replace('index.html'); return; }
+      if (user.email === ADMIN_EMAIL) { window.location.replace('upload.html'); return; }
+      currentUser = user;
+      const { data: profile, error } = await supabase.from('freelancer_profiles').select('user_id').eq('user_id', user.id).maybeSingle();
+      if (error || !profile) { window.location.replace('freelancer-activate.html'); return; }
+      populateCategories(); await loadServices();
+    }
+
+    $('add-service-btn').addEventListener('click', () => { if (services.length >= MAX_SERVICES) showLimitModal(); else { resetForm(); openForm(); } });
+    $('subscribe-btn').addEventListener('click', openSubscribe); $('limit-subscribe-btn').addEventListener('click', openSubscribe); $('limit-close-btn').addEventListener('click', closeLimitModal); $('limit-delete-btn').addEventListener('click', () => { closeLimitModal(); document.getElementById('services-grid').scrollIntoView({ behavior: 'smooth' }); }); $('back-btn').addEventListener('click', closeForm); $('cancel-btn').addEventListener('click', closeForm); $('service-form').addEventListener('submit', saveService); $('service-currency').addEventListener('change', event => { $('currency-notice').style.display = event.target.value === 'USD' ? 'none' : 'block'; }); $('image-input').addEventListener('change', event => uploadImages([...event.target.files]).catch(error => showAlert('form-alert', error.message, 'error'))); $('freelancer-photo-input').addEventListener('change', async event => { const file = event.target.files?.[0]; if (!file) return; try { const path = `freelancers/${currentUser.id}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`; const { error } = await supabase.storage.from('service-images').upload(path, file, { cacheControl: '3600', upsert: false }); if (error) throw error; freelancerPhotoUrl = supabase.storage.from('service-images').getPublicUrl(path).data.publicUrl; $('freelancer-photo-url').value = freelancerPhotoUrl; renderFreelancerPhoto(); } catch (error) { showAlert('form-alert', error.message || 'Unable to upload profile photo.', 'error'); } }); $('add-link-btn').addEventListener('click', () => { currentLinks.push({ platform: PLATFORMS[0], url: '' }); renderLinks(); });
+    init().catch(error => { console.error('[Freelancer Dashboard]', error); window.location.replace('index.html'); });
+  </script>
+</body>
+</html>

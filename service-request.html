@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Submit a custom service request to BrachioTech. Have custom technical or enterprise specifications? Receive a verified proposal within 24 hours." />
+  <meta name="keywords" content="BrachioTech service request, custom development, enterprise digital services, project inquiry" />
+  <meta property="og:title" content="Submit a Service Request — BrachioTech" />
+  <meta property="og:description" content="Submit your custom requirements directly to platform management for a dedicated proposal within 24 hours." />
+  <meta property="og:image" content="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" />
+  <title>Submit a Service Request — BrachioTech</title>
+  <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Import map for Supabase client -->
+  <script type="importmap">
+  {
+    "imports": {
+      "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<!-- ==========================================
+     GLOBAL NAVIGATION
+     ========================================== -->
+<nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo" aria-label="BrachioTech Marketplace">
+      <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+           alt="BrachioTech Logo"
+           width="40" height="40"
+           loading="eager" />
+      <span class="nav-logo-text">BrachioTech</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="index.html"           class="nav-link" id="nav-home">Home</a></li>
+      <li><a href="service-request.html" class="nav-link active" id="nav-custom">Service Request</a></li>
+      <li><a href="about.html"           class="nav-link" id="nav-about">About</a></li>
+      <li><a href="how-it-works.html"    class="nav-link" id="nav-how">How It Works</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Auth Container (Desktop) -->
+      <div class="auth-container" id="nav-auth-container">
+        <button type="button" class="btn btn-outline btn-sm auth-login-btn" id="google-login-btn" aria-label="Sign in with Google">
+          <svg class="google-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Sign In</span>
+        </button>
+
+        <div class="auth-user-menu" style="display: none;">
+          <a href="upload.html" class="auth-admin-link btn btn-outline btn-sm" style="display: none;" title="Admin Dashboard">
+            ⚙️ Admin
+          </a>
+          <div class="auth-user-badge">
+            <img class="auth-user-avatar" src="" alt="User" width="28" height="28" />
+            <span class="auth-user-name">User</span>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm auth-logout-btn" title="Sign Out">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="nav-drawer" id="nav-drawer" aria-label="Mobile navigation">
+  <a href="index.html"           class="nav-link" id="drawer-home">Home</a>
+  <a href="service-request.html" class="nav-link active" id="drawer-custom">Service Request</a>
+  <a href="about.html"           class="nav-link" id="drawer-about">About</a>
+  <a href="how-it-works.html"    class="nav-link" id="drawer-how">How It Works</a>
+
+  <div class="drawer-auth-box" style="padding-top: 14px; border-top: 1px solid var(--border-subtle); margin-top: 8px;">
+    <div class="auth-container" id="drawer-auth-container">
+      <button type="button" class="btn btn-outline btn-sm auth-login-btn" style="width:100%; justify-content:center;">
+        <svg class="google-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+      <div class="auth-user-menu" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+        <div class="auth-user-badge" style="width: 100%; justify-content: flex-start;">
+          <img class="auth-user-avatar" src="" alt="User" width="28" height="28" />
+          <span class="auth-user-name">User</span>
+        </div>
+        <a href="upload.html" class="auth-admin-link btn btn-outline btn-sm" style="display: none; width: 100%; justify-content: center;">
+          ⚙️ Admin Panel
+        </a>
+        <button type="button" class="btn btn-outline btn-sm auth-logout-btn" style="width: 100%; justify-content: center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SERVICE REQUEST MAIN CONTENT
+     ========================================== -->
+<main id="service-request-main" style="padding-top: calc(var(--nav-height) + 32px); padding-bottom: 80px;">
+  <div class="container">
+    <div class="custom-order-box" style="max-width: 960px; margin: 0 auto; background: var(--bg-card); border: var(--border-glass); border-radius: var(--radius-xl); padding: 48px 36px; box-shadow: var(--shadow-md);">
+      
+      <!-- Section Header -->
+      <div class="section-header" style="margin-bottom: 40px; text-align: center;">
+        <span class="section-tag" style="display: inline-flex; margin-bottom: 12px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+          Direct Platform Inquiries
+        </span>
+        <h1 class="section-title" style="font-size: clamp(2rem, 3.5vw, 2.6rem); font-weight: 800; margin-bottom: 12px;">
+          Submit a <span class="gradient-text">Service Request</span>
+        </h1>
+        <p class="section-subtitle" style="max-width: 680px; margin: 0 auto; color: var(--text-secondary); font-size: 1.05rem;">
+          Have an extensive custom project, enterprise specification, or complex digital requirement? Submit your project brief directly to BrachioTech platform management for a proposal within 24 hours.
+        </p>
+      </div>
+
+      <div class="contact-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 40px; align-items: start;">
+        <!-- Left Reassurances & Info -->
+        <div class="contact-info">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Bespoke Inquiries</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;">
+            We coordinate directly with senior engineering and design teams to provide formal technical proposals, milestone schedules, and transparent budgets.
+          </p>
+
+          <div class="contact-channels" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="contact-channel" style="display: flex; gap: 14px; align-items: center; padding: 14px; background: rgba(255,255,255,0.03); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+              <div class="contact-channel-icon" style="color: var(--accent-primary); font-size: 1.2rem;">⏱️</div>
+              <div>
+                <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">24-Hour Review</div>
+                <div style="font-size: 0.82rem; color: var(--text-muted);">Detailed proposal within 1 business day</div>
+              </div>
+            </div>
+
+            <div class="contact-channel" style="display: flex; gap: 14px; align-items: center; padding: 14px; background: rgba(255,255,255,0.03); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+              <div class="contact-channel-icon" style="color: var(--accent-secondary); font-size: 1.2rem;">🛡️</div>
+              <div>
+                <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Quality Assurance</div>
+                <div style="font-size: 0.82rem; color: var(--text-muted);">Verified deliverables with milestone releases</div>
+              </div>
+            </div>
+
+            <div class="contact-channel" style="display: flex; gap: 14px; align-items: center; padding: 14px; background: rgba(255,255,255,0.03); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+              <div class="contact-channel-icon" style="color: var(--accent-gold); font-size: 1.2rem;">🔒</div>
+              <div>
+                <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Confidentiality</div>
+                <div style="font-size: 0.82rem; color: var(--text-muted);">Non-disclosure and strict IP protection</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Multi-Step Form -->
+        <div>
+          <form class="contact-form multi-step-form" id="contact-form" novalidate aria-label="Project request form">
+            <div class="form-progress" aria-label="Form progress">
+              <div class="form-progress-bar" id="form-progress-bar" style="width: 25%"></div>
+            </div>
+            <div class="form-step-indicator" id="form-step-indicator" aria-live="polite">Step 1 of 4</div>
+
+            <!-- STEP 1 -->
+            <div class="form-step active" id="step-1-form" data-step="1">
+              <div class="form-step-title">
+                <span class="step-pill">1</span>
+                Your Details
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contact-name" class="form-label">Full Name <span class="required">*</span></label>
+                  <input type="text" id="contact-name" name="name" class="form-input" placeholder="Your Name" required autocomplete="name" />
+                </div>
+                <div class="form-group">
+                  <label for="contact-email" class="form-label">Email Address <span class="required">*</span></label>
+                  <input type="email" id="contact-email" name="email" class="form-input" placeholder="you@example.com" required autocomplete="email" />
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <div></div>
+                <button type="button" class="btn btn-primary form-next" id="step1-next" data-next="2">
+                  Next
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="form-step" id="step-2-form" data-step="2">
+              <div class="form-step-title">
+                <span class="step-pill">2</span>
+                Project Type &amp; Budget
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Domain Area <span class="required">*</span></label>
+                <div class="option-grid" id="project-type-grid" role="group" aria-label="Project type">
+                  <button type="button" class="option-btn" data-value="Web Application">Web Application</button>
+                  <button type="button" class="option-btn" data-value="Mobile App">Mobile App</button>
+                  <button type="button" class="option-btn" data-value="AI Automation">AI Automation</button>
+                  <button type="button" class="option-btn" data-value="Full Platform">Full Platform</button>
+                </div>
+                <input type="hidden" id="project-type" name="project_type" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Estimated Budget <span class="required">*</span></label>
+                <div class="option-grid" id="budget-grid" role="group" aria-label="Budget range">
+                  <button type="button" class="option-btn" data-value="$100–$300">$100 – $300</button>
+                  <button type="button" class="option-btn" data-value="$300–$700">$300 – $700</button>
+                  <button type="button" class="option-btn" data-value="$700–$1500">$700 – $1500</button>
+                  <button type="button" class="option-btn" data-value="$1500+">$1500+</button>
+                </div>
+                <input type="hidden" id="budget" name="budget" />
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline form-prev" id="step2-prev" data-prev="1">Back</button>
+                <button type="button" class="btn btn-primary form-next" id="step2-next" data-next="3">Next</button>
+              </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="form-step" id="step-3-form" data-step="3">
+              <div class="form-step-title">
+                <span class="step-pill">3</span>
+                Project Assets
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Available Assets:</label>
+                <div class="checkbox-grid">
+                  <label class="checkbox-option">
+                    <input type="checkbox" name="assets" value="Design Ready" />
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label">UI/UX Design Ready</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" name="assets" value="Specification Doc" />
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label">Detailed Spec Doc</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" name="assets" value="Brand / Logo" />
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label">Brand &amp; Logo</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" name="assets" value="Backend API" />
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-label">Existing Backend API</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline form-prev" id="step3-prev" data-prev="2">Back</button>
+                <button type="button" class="btn btn-primary form-next" id="step3-next" data-next="4">Next</button>
+              </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div class="form-step" id="step-4-form" data-step="4">
+              <div class="form-step-title">
+                <span class="step-pill">4</span>
+                Project Scope
+              </div>
+
+              <div class="form-group">
+                <label for="contact-message" class="form-label">Brief Description <span class="required">*</span></label>
+                <textarea id="contact-message" name="message" class="form-textarea" placeholder="Describe your custom project requirements, timeline, and goals..." required></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline form-prev" id="step4-prev" data-prev="3">Back</button>
+                <button type="submit" class="btn btn-primary form-submit" id="contact-submit">
+                  Send Custom Request
+                </button>
+              </div>
+            </div>
+
+            <!-- SUCCESS & ERROR STATES -->
+            <div class="form-success-state" id="form-success-state" aria-live="polite" role="status" hidden>
+              <div class="success-icon">✅</div>
+              <h3>Request Submitted!</h3>
+              <p>Thank you. Platform management will review your custom request and contact you shortly.</p>
+            </div>
+            <div class="form-error" id="form-error" role="alert" aria-live="assertive" hidden>
+              ❌ Failed to send request. Please try again or submit your details again.
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ==========================================
+     GLOBAL FOOTER
+     ========================================== -->
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
+             alt="BrachioTech Logo"
+             class="footer-logo"
+             width="36" height="36"
+             loading="lazy" />
+        <div>
+          <span class="footer-brand-name">BrachioTech</span>
+          <div class="footer-tagline">Digital Services Marketplace</div>
+        </div>
+      </div>
+
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <a href="service-request.html">Service Request</a>
+        <a href="about.html">About</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="admin-login.html" style="color: var(--accent-primary);">Admin Portal ↗</a>
+      </nav>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 BrachioTech. All rights reserved.</span>
+      <a href="https://noxtary.vercel.app/"
+         target="_blank" rel="noopener noreferrer"
+         class="footer-powered" aria-label="Visit Noxtary">
+        Powered by
+        <img src="https://i.postimg.cc/P5BdcqZL/1000105011.png"
+             alt="Noxtary Logo"
+             width="22" height="22"
+             loading="lazy" />
+        Noxtary
+      </a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/main.js" defer></script>
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/announcements.js"></script>
+
+</body>
+</html>
