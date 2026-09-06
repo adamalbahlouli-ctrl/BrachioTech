@@ -22,83 +22,7 @@ const CATEGORY_ICONS = {
   'Default': '⚡'
 };
 
-// Fallback image pool per category
-const CATEGORY_DEFAULT_IMAGES = {
-  'Web & Software Development': 'https://i.postimg.cc/ydL8G7V3/file-00000000d2c472468ac72117f2a0fe03.png',
-  'Graphic Design & UI/UX': 'https://i.postimg.cc/Bn5Lg917/file-00000000480072468e46a0d7d710e9c3.png',
-  'Video Editing & Animation': 'https://i.postimg.cc/X7sdS0vr/file-0000000032fc71f484618328d0b129e5.png',
-  'Writing & Translation': 'https://i.postimg.cc/Y9YxNyMm/file-00000000429871f4a6ff4446f56b4694.png',
-  'AI & Automation': 'https://i.postimg.cc/vTmkPsB4/file-00000000a21871f4b7a0488050ef5378.png',
-  'Mobile Apps & Games': 'https://i.postimg.cc/tgVcfkpM/file-00000000217c71f495aa63acf81082ea.png',
-  'Digital Marketing & Social Media': 'https://i.postimg.cc/bJqwwsCf/file-0000000057c07246b01cdc58bc37148e.png',
-  'Audio & Music': 'https://i.postimg.cc/BbKTTgrV/file-00000000d1fc71f4b6e25ced763d0ae5.png',
-  'Business & Data': 'https://i.postimg.cc/YqYZbbqM/file-00000000302471f4af9cb0b42211d742.png',
-  'Photography & Image Editing': 'https://i.postimg.cc/Bn5Lg917/file-00000000480072468e46a0d7d710e9c3.png'
-};
-
-// Curated seed data if Supabase table is newly initialized
-const MARKETPLACE_SEEDS = [
-  {
-    id: 'seed-1',
-    title: 'Custom High-Performance Website & Web Application',
-    category: 'Web & Software Development',
-    description: 'Fully responsive, modern web applications built with React, Next.js, and Node.js with ultra-fast loading speeds and SEO optimization.',
-    price: '79',
-    rating: null,
-    reviewsCount: 0,
-    image: 'https://i.postimg.cc/ydL8G7V3/file-00000000d2c472468ac72117f2a0fe03.png'
-  },
-  {
-    id: 'seed-2',
-    title: 'Modern UI/UX Product Design & Figma Prototyping',
-    category: 'Graphic Design & UI/UX',
-    description: 'Pixel-perfect mobile and web user interface design with complete design systems, interactive Figma prototypes, and developer handoff.',
-    price: '65',
-    rating: null,
-    reviewsCount: 0,
-    image: 'https://i.postimg.cc/Bn5Lg917/file-00000000480072468e46a0d7d710e9c3.png'
-  },
-  {
-    id: 'seed-3',
-    title: 'AI Automation Workflows & Intelligent Chatbots',
-    category: 'AI & Automation',
-    description: 'Integrate LLMs, AI customer support agents, automated CRM pipelines, and intelligent data extraction to scale your operations.',
-    price: '120',
-    rating: null,
-    reviewsCount: 0,
-    image: 'https://i.postimg.cc/vTmkPsB4/file-00000000a21871f4b7a0488050ef5378.png'
-  },
-  {
-    id: 'seed-4',
-    title: 'Native & Cross-Platform iOS & Android Mobile Apps',
-    category: 'Mobile Apps & Games',
-    description: 'Full-cycle mobile application development with Flutter or React Native, including offline storage, push notifications, and store release.',
-    price: '190',
-    rating: null,
-    reviewsCount: 0,
-    image: 'https://i.postimg.cc/tgVcfkpM/file-00000000217c71f495aa63acf81082ea.png'
-  },
-  {
-    id: 'seed-5',
-    title: 'High-Impact Social Media Video Editing & Motion Graphics',
-    category: 'Video Editing & Animation',
-    description: 'Engaging YouTube, TikTok, and commercial video editing with color grading, sound design, motion graphics, and subtitles.',
-    price: '45',
-    rating: null,
-    reviewsCount: 0,
-    image: 'https://i.postimg.cc/X7sdS0vr/file-0000000032fc71f484618328d0b129e5.png'
-  },
-  {
-    id: 'seed-6',
-    title: 'Professional Technical & Business Research Documentation',
-    category: 'Writing & Translation',
-    description: 'Meticulously researched industry reports, white papers, technical documentation, and market analysis with verified sources.',
-    price: '35',
-    rating: null,
-    reviewsCount: 0,
-    image: 'https://i.postimg.cc/Y9YxNyMm/file-00000000429871f4a6ff4446f56b4694.png'
-  }
-];
+const SERVICE_PLACEHOLDER_IMAGE = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="600" height="338" viewBox="0 0 600 338"%3E%3Crect width="600" height="338" fill="%23e5e7eb"/%3E%3Cpath d="M270 145h60v48h-60z" fill="none" stroke="%239ca3af" stroke-width="8"/%3E%3Ccircle cx="285" cy="158" r="6" fill="%239ca3af"/%3E%3Cpath d="m276 184 16-16 12 12 10-10 10 14" fill="none" stroke="%239ca3af" stroke-width="6"/%3E%3C/svg%3E';
 
 // State
 let allServices = [];
@@ -123,15 +47,16 @@ async function fetchMarketplaceServices() {
     const { data: supaServices, error: servError } = await supabase
       .from('services')
       .select('*')
+      .eq('status', 'approved')
       .order('created_at', { ascending: false });
 
     if (servError) {
-      console.warn('[BrachioTech Marketplace] Supabase fetch error, using seeds:', servError.message);
-      return MARKETPLACE_SEEDS;
+      console.warn('[BrachioTech Marketplace] Supabase fetch error:', servError.message);
+      return [];
     }
 
     if (!supaServices || supaServices.length === 0) {
-      return MARKETPLACE_SEEDS;
+      return [];
     }
 
     // 2. Fetch images
@@ -167,7 +92,7 @@ async function fetchMarketplaceServices() {
 
     // Map into unified service objects
     const mapped = supaServices.map((svc, idx) => {
-      const primaryImg = imageMap[svc.id] || CATEGORY_DEFAULT_IMAGES[svc.category] || CATEGORY_DEFAULT_IMAGES['Web & Software Development'];
+      const primaryImg = imageMap[svc.id] || SERVICE_PLACEHOLDER_IMAGE;
       const revData = reviewsMap[svc.id];
       const rating = revData && revData.count > 0 ? (revData.total / revData.count).toFixed(1) : null;
       const reviewsCount = revData ? revData.count : 0;
@@ -191,8 +116,8 @@ async function fetchMarketplaceServices() {
     return mapped;
 
   } catch (err) {
-    console.warn('[BrachioTech Marketplace] Unexpected error, using fallback:', err);
-    return MARKETPLACE_SEEDS;
+    console.warn('[BrachioTech Marketplace] Unexpected error:', err);
+    return [];
   }
 }
 
@@ -210,9 +135,9 @@ function renderServicesGrid(servicesToDisplay) {
     grid.innerHTML = `
       <div style="grid-column: 1 / -1; text-align: center; padding: 70px 20px;">
         <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
-        <h3 style="color:var(--text-primary); font-size: 1.3rem; margin-bottom: 8px;">No matching services found</h3>
-        <p style="color:var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">Try adjusting your search query or selecting a different category.</p>
-        <button type="button" class="btn btn-outline btn-sm" id="btn-reset-filters">Clear Filters</button>
+        <h3 style="color:var(--text-primary); font-size: 1.3rem; margin-bottom: 8px;">${allServices.length ? 'No matching services found' : 'No services available at the moment'}</h3>
+        <p style="color:var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">${allServices.length ? 'Try adjusting your search query or selecting a different category.' : 'Please check back later for available services.'}</p>
+        ${allServices.length ? '<button type="button" class="btn btn-outline btn-sm" id="btn-reset-filters">Clear Filters</button>' : ''}
       </div>
     `;
 
@@ -248,7 +173,7 @@ function renderServicesGrid(servicesToDisplay) {
             alt="${escapeHtml(svc.title)}"
             class="marketplace-card-thumb"
             loading="lazy"
-            onerror="this.src='https://via.placeholder.com/600x338/0a0f2e/6c63ff?text=BrachioTech'"
+            onerror="this.src='${SERVICE_PLACEHOLDER_IMAGE}'"
           />
           <span class="marketplace-card-badge-cat">
             ${catIcon} ${escapeHtml(svc.category)}
@@ -303,6 +228,10 @@ function renderFeaturedGrid(servicesToDisplay) {
   if (!grid) return;
 
   const topServices = servicesToDisplay.slice(0, 6);
+  if (topServices.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);">No services available at the moment.</div>';
+    return;
+  }
   grid.innerHTML = topServices.map(svc => {
     const catIcon = CATEGORY_ICONS[svc.category] || CATEGORY_ICONS['Default'];
     const priceDisplay = svc.price ? `$${svc.price}` : 'Quote';
@@ -315,7 +244,7 @@ function renderFeaturedGrid(servicesToDisplay) {
             alt="${escapeHtml(svc.title)}"
             class="marketplace-card-thumb"
             loading="lazy"
-            onerror="this.src='https://via.placeholder.com/600x338/0a0f2e/6c63ff?text=BrachioTech'"
+            onerror="this.src='${SERVICE_PLACEHOLDER_IMAGE}'"
           />
           <span class="marketplace-card-badge-cat">
             ${catIcon} ${escapeHtml(svc.category)}

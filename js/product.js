@@ -1,13 +1,13 @@
 /**
  * BrachioTech — Product Page Script
- * Supabase-first service loading with JSON fallback.
+ * Supabase-first service loading.
  * Renders title, category, description, image gallery/slider,
  * social links with platform icons, and verified reviews.
  */
 
 import { supabase } from './supabaseClient.js';
 
-const SERVICES_URL = 'data/services.json';
+const SERVICE_PLACEHOLDER_IMAGE = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450"%3E%3Crect width="800" height="450" fill="%23e5e7eb"/%3E%3Cpath d="M370 195h60v48h-60z" fill="none" stroke="%239ca3af" stroke-width="8"/%3E%3Ccircle cx="385" cy="208" r="6" fill="%239ca3af"/%3E%3Cpath d="m376 234 16-16 12 12 10-10 10 14" fill="none" stroke="%239ca3af" stroke-width="6"/%3E%3C/svg%3E';
 
 // Platform SVG Icons
 const PLATFORM_ICONS = {
@@ -23,19 +23,6 @@ const PLATFORM_ICONS = {
   Behance: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7v2h7V7zm1.726 10c-.442 1.297-2.029 3-4.976 3-3.401 0-5.75-2.422-5.75-5.719 0-3.375 2.375-5.781 5.625-5.781 3.562 0 5.375 2.594 5.375 5.719 0 .578-.078 1.172-.156 1.562h-8.25c.109 1.625 1.422 2.656 3.156 2.656 1.484 0 2.453-.656 2.922-1.438h2.054zm-2.5-3.5c-.094-1.344-.984-2.188-2.469-2.188-1.547 0-2.469.875-2.625 2.188h5.094zM7.228 11.238c.781-.469 1.312-1.281 1.312-2.344 0-2.25-1.75-3.894-4.5-3.894H0v15h4.406c2.812 0 4.875-1.688 4.875-4.125 0-1.438-.75-2.656-2.053-3.238v-.094zm-4.478-4.113h1.469c1.172 0 1.953.672 1.953 1.703 0 1.078-.781 1.766-1.953 1.766H2.75V7.125zm1.656 10.75H2.75v-4.078h1.656c1.375 0 2.297.797 2.297 2.031 0 1.266-.922 2.047-2.297 2.047z"/></svg>',
   Gmail: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>'
 };
-
-// Fallback services if Supabase or fetch unavailable
-const SERVICES_FALLBACK = [
-  { id:'1', slug:'create-professional-website', title:'Create Professional Website', subtitle:'Modern, Responsive & High-Performance', description:'We craft custom, fully responsive websites built with modern technologies. From landing pages to complex web applications, every pixel is designed with your brand in mind. We focus on performance, SEO, and user experience to ensure your online presence stands out.', price:'', currency:'USD', category:'Web Development', image:'https://i.postimg.cc/ydL8G7V3/file-00000000d2c472468ac72117f2a0fe03.png', features:['Custom responsive design','SEO optimized structure','Fast loading performance','Cross-browser compatibility','Modern animations & effects','CMS integration available'], technologies:['HTML5','CSS3','JavaScript','React','Next.js'], delivery_time:'5–10 business days', support:'30 days post-delivery', rating:'4.9', reviews:'128', status:'available', badge:'Best Seller', popular:true, recommended:true },
-  { id:'2', slug:'research-writing', title:'Research Writing', subtitle:'Academic & Technical Excellence', description:'Professional academic and technical research writing tailored to your needs. We produce well-structured, thoroughly researched, and properly cited content for reports, papers, theses, and technical documentation.', price:'10', currency:'USD', category:'Writing', image:'https://i.postimg.cc/Y9YxNyMm/file-00000000429871f4a6ff4446f56b4694.png', features:['Thorough research & sourcing','Proper academic citations','Plagiarism-free content','Multiple format support','Revision rounds included','On-time delivery'], technologies:['APA','MLA','Chicago','IEEE'], delivery_time:'3–7 business days', support:'Unlimited revisions for 14 days', rating:'4.8', reviews:'95', status:'available', badge:'Popular', popular:true, recommended:false },
-  { id:'3', slug:'mobile-app-development', title:'Mobile App Development', subtitle:'Native & Cross-Platform Applications', description:'We build native and cross-platform mobile applications for iOS and Android that deliver smooth, engaging experiences. From ideation to deployment, our apps are built for performance, scalability, and user delight.', price:'', currency:'USD', category:'Mobile Development', image:'https://i.postimg.cc/tgVcfkpM/file-00000000217c71f495aa63acf81082ea.png', features:['iOS & Android support','Cross-platform development','Native performance','Push notifications','Offline functionality','App store submission'], technologies:['React Native','Flutter','Swift','Kotlin'], delivery_time:'2–6 weeks', support:'60 days post-launch', rating:'4.9', reviews:'74', status:'available', badge:'Premium', popular:false, recommended:true },
-  { id:'4', slug:'professional-css-design', title:'Professional CSS Design', subtitle:'Modern UI Styling & Responsive Layouts', description:'Transform your web presence with modern UI styling and responsive CSS development. We create pixel-perfect designs that adapt beautifully across all devices and screen sizes, with smooth animations and premium visual polish.', price:'', currency:'USD', category:'Design', image:'https://i.postimg.cc/Bn5Lg917/file-00000000480072468e46a0d7d710e9c3.png', features:['Responsive layouts','CSS animations & transitions','Cross-browser support','Design system creation','Dark/Light theme support','Performance optimized'], technologies:['CSS3','SASS/SCSS','Tailwind','CSS Grid','Flexbox'], delivery_time:'2–5 business days', support:'14 days post-delivery', rating:'4.7', reviews:'88', status:'available', badge:'', popular:false, recommended:false },
-  { id:'5', slug:'website-bug-fixing-security-audit', title:'Website Bug Fixing & Security Audit', subtitle:'Debugging, Optimization & Security', description:'Comprehensive bug fixing, performance optimization, and security auditing for your existing website. We identify vulnerabilities, fix critical issues, and implement best practices to keep your site fast, secure, and reliable.', price:'', currency:'USD', category:'Maintenance', image:'https://i.postimg.cc/vTmkPsB4/file-00000000a21871f4b7a0488050ef5378.png', features:['Full bug diagnosis & fixes','Security vulnerability scanning','Performance optimization','Code refactoring','SSL & HTTPS setup','Detailed audit report'], technologies:['OWASP','Lighthouse','Chrome DevTools','Wireshark'], delivery_time:'1–3 business days', support:'30 days guarantee', rating:'5.0', reviews:'52', status:'available', badge:'Guaranteed', popular:false, recommended:false },
-  { id:'6', slug:'one-month-technical-support', title:'One Month Technical Support', subtitle:'30 Days of Continuous Assistance', description:'Get dedicated technical support for an entire month. Whether it\'s troubleshooting, updates, feature additions, or general assistance, our team is available to ensure your digital products run smoothly around the clock.', price:'', currency:'USD', category:'Support', image:'https://i.postimg.cc/YqYZbbqM/file-00000000302471f4af9cb0b42211d742.png', features:['30 days of continuous support','Priority response time','Bug fixes included','Minor feature updates','Progress reports','24/7 availability'], technologies:['Email','WhatsApp','Slack','GitHub'], delivery_time:'Starts immediately', support:'Full 30-day coverage', rating:'4.9', reviews:'41', status:'available', badge:'Value Pick', popular:false, recommended:false },
-  { id:'7', slug:'game-mod-development', title:'Game Mod Development', subtitle:'Custom Modifications for Popular Games', description:'Bring new life to your favorite games with custom mods designed and developed by experts. From gameplay tweaks to full conversion mods, we create high-quality modifications that enhance the gaming experience.', price:'', currency:'USD', category:'Gaming', image:'https://i.postimg.cc/X7sdS0vr/file-0000000032fc71f484618328d0b129e5.png', features:['Custom gameplay mechanics','New assets & textures','Compatibility testing','Mod documentation','Installation support','Updates & patches'], technologies:['Lua','C++','Python','Unity','Unreal Engine'], delivery_time:'1–4 weeks', support:'14 days post-delivery', rating:'4.8', reviews:'63', status:'available', badge:'Unique', popular:false, recommended:false },
-  { id:'8', slug:'professional-research-writing', title:'Professional Research Writing', subtitle:'Reports, Articles & Documentation', description:'Well-structured, meticulously written professional reports, articles, and technical documentation. Ideal for businesses, researchers, and organizations needing high-quality written content that communicates complex ideas clearly.', price:'', currency:'USD', category:'Writing', image:'https://i.postimg.cc/bJqwwsCf/file-0000000057c07246b01cdc58bc37148e.png', features:['Professional tone & structure','Data-driven insights','Executive summaries','Visual infographic support','Multiple delivery formats','Confidentiality guaranteed'], technologies:['Word','LaTeX','Google Docs','Notion'], delivery_time:'3–7 business days', support:'Revisions for 21 days', rating:'4.8', reviews:'79', status:'available', badge:'', popular:false, recommended:false },
-  { id:'9', slug:'music-song-production', title:'Music & Song Production', subtitle:'AI-Assisted & Professional Music Creation', description:'Professional music and song production combining human artistry with AI-assisted tools. Whether you need a full track, jingle, podcast intro, or custom soundtrack, we deliver broadcast-quality audio that resonates.', price:'', currency:'USD', category:'Music', image:'https://i.postimg.cc/BbKTTgrV/file-00000000d1fc71f4b6e25ced763d0ae5.png', features:['Original compositions','AI-enhanced production','Professional mixing & mastering','Multiple genre support','Stems & project files included','Full commercial rights'], technologies:['Ableton Live','FL Studio','Suno AI','Logic Pro'], delivery_time:'3–10 business days', support:'2 revision rounds', rating:'4.9', reviews:'57', status:'available', badge:'Creative', popular:false, recommended:false }
-];
 
 function getSlugFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -65,8 +52,8 @@ function setupGallery(images, fallbackImage, title) {
   let imageList = [];
   if (Array.isArray(images) && images.length > 0) {
     imageList = images.map(img => typeof img === 'string' ? img : img.image_url);
-  } else if (fallbackImage) {
-    imageList = [fallbackImage];
+  } else {
+    imageList = [fallbackImage || SERVICE_PLACEHOLDER_IMAGE];
   }
 
   if (imageList.length === 0) {
@@ -646,6 +633,7 @@ async function init() {
       query = query.ilike('title', `%${serviceParam.replace(/-/g, ' ')}%`);
     }
 
+    query = query.eq('status', 'approved');
     const { data: supaServices } = await query.limit(1);
 
     if (supaServices && supaServices.length > 0) {
@@ -669,24 +657,6 @@ async function init() {
     }
   } catch (err) {
     console.warn('[BrachioTech] Supabase service lookup failed:', err);
-  }
-
-  // 2. FALLBACK TO JSON IF NOT IN SUPABASE
-  if (!service) {
-    try {
-      const response = await fetch(SERVICES_URL, {
-        headers: { 'Accept': 'application/json' },
-        cache: 'no-cache',
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      if (Array.isArray(data)) {
-        service = data.find(s => s.slug === serviceParam || s.id === serviceParam);
-      }
-    } catch (err) {
-      console.warn('[BrachioTech] services.json fetch failed, using inline fallback:', err.message);
-      service = SERVICES_FALLBACK.find(s => s.slug === serviceParam || s.id === serviceParam);
-    }
   }
 
   if (!service) {

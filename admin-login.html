@@ -130,16 +130,16 @@
         <span id="login-error-text">Invalid login credentials</span>
       </div>
 
-      <form class="login-form" id="admin-login-form" novalidate>
+      <form class="login-form" id="admin-login-form" autocomplete="off" novalidate>
         <div class="login-field">
           <label class="login-label" for="admin-email">Admin Email</label>
           <input
             type="email"
             id="admin-email"
             class="login-input"
-            placeholder="adamalbahlouli@gmail.com"
+            placeholder="you@gmail.com"
             required
-            autocomplete="email"
+            autocomplete="off"
           />
         </div>
 
@@ -149,9 +149,9 @@
             type="password"
             id="admin-password"
             class="login-input"
-            placeholder="••••••••••••"
+            placeholder="Enter your password"
             required
-            autocomplete="current-password"
+            autocomplete="new-password"
           />
         </div>
 
