@@ -59,7 +59,8 @@
       'YouTube',
       'Telegram',
       'Snapchat',
-      'Behance'
+      'Behance',
+      'Gmail'
     ];
 
     // State
@@ -123,6 +124,75 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#x27;');
+    }
+
+    async function loadLatestAnnouncement() {
+      const preview = document.getElementById('announcement-latest-preview');
+      if (!preview) return;
+
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('id, content, created_at')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error || !data) {
+        preview.innerHTML = '<span class="announcement-admin-empty">No announcement published currently.</span>';
+        return;
+      }
+
+      const publishedDate = new Date(data.created_at).toLocaleString();
+      preview.innerHTML = `
+        <strong>Latest announcement</strong>
+        <time datetime="${escapeHtml(data.created_at)}">${escapeHtml(publishedDate)}</time>
+        <p>${escapeHtml(data.content)}</p>
+        <button type="button" class="admin-btn admin-btn-danger admin-btn-sm announcement-delete-btn" data-announcement-id="${escapeHtml(data.id)}">Delete Announcement</button>
+      `;
+    }
+
+    async function deleteLatestAnnouncement() {
+      const button = document.querySelector('.announcement-delete-btn');
+      const announcementId = button?.dataset.announcementId;
+      if (!announcementId) return;
+      if (!window.confirm('Are you sure you want to delete the latest announcement?')) return;
+
+      button.disabled = true;
+      try {
+        const { error } = await supabase
+          .from('announcements')
+          .delete()
+          .eq('id', announcementId);
+        if (error) throw error;
+        showBanner('success', 'The latest announcement was deleted.');
+        await loadLatestAnnouncement();
+      } catch (err) {
+        button.disabled = false;
+        showBanner('error', `Failed to delete announcement: ${err.message}`);
+      }
+    }
+
+    async function publishAnnouncement() {
+      const input = document.getElementById('announcement-content-input');
+      const button = document.getElementById('publish-announcement-btn');
+      const content = input?.value.trim();
+      if (!content) {
+        showBanner('error', 'Please write an announcement before publishing.');
+        return;
+      }
+
+      button.disabled = true;
+      try {
+        const { error } = await supabase.from('announcements').insert({ content });
+        if (error) throw error;
+        input.value = '';
+        showBanner('success', 'Published. It will appear to users once.');
+        await loadLatestAnnouncement();
+      } catch (err) {
+        showBanner('error', `Failed to publish announcement: ${err.message}`);
+      } finally {
+        button.disabled = false;
+      }
     }
 
     // View Switching
@@ -238,6 +308,31 @@
       }
     }
 
+    // Freelancer photo preview helper
+    function setFreelancerPhoto(url) {
+      const urlInput = document.getElementById('freelancer-photo-url');
+      const imgEl = document.getElementById('freelancer-photo-img');
+      const placeholderEl = document.getElementById('freelancer-photo-placeholder');
+      const removeBtn = document.getElementById('btn-remove-freelancer-photo');
+
+      if (urlInput) urlInput.value = url || '';
+      if (url) {
+        if (imgEl) {
+          imgEl.src = url;
+          imgEl.style.display = 'block';
+        }
+        if (placeholderEl) placeholderEl.style.display = 'none';
+        if (removeBtn) removeBtn.style.display = 'inline-flex';
+      } else {
+        if (imgEl) {
+          imgEl.src = '';
+          imgEl.style.display = 'none';
+        }
+        if (placeholderEl) placeholderEl.style.display = 'block';
+        if (removeBtn) removeBtn.style.display = 'none';
+      }
+    }
+
     // Open Form in Add mode
     function openAddForm() {
       editingServiceId = null;
@@ -247,6 +342,24 @@
       document.getElementById('service-id').value = '';
       document.getElementById('image-previews').innerHTML = '';
       document.getElementById('links-list').innerHTML = '';
+
+      // Reset price & currency
+      const priceEl = document.getElementById('service-price');
+      if (priceEl) priceEl.value = '';
+      const currEl = document.getElementById('service-currency');
+      if (currEl) currEl.value = 'USD';
+      const currNotice = document.getElementById('currency-notice');
+      if (currNotice) currNotice.style.display = 'none';
+
+      // Reset freelancer info
+      const fNameEl = document.getElementById('freelancer-name');
+      if (fNameEl) fNameEl.value = '';
+      const fBioEl = document.getElementById('freelancer-bio');
+      if (fBioEl) fBioEl.value = '';
+      setFreelancerPhoto('');
+      const fStatus = document.getElementById('freelancer-photo-status');
+      if (fStatus) fStatus.textContent = 'Upload a professional headshot (JPG, PNG, WebP)';
+
       addLinkRow('', ''); // default 1 empty row
       switchView('form');
     }
@@ -275,6 +388,25 @@
         document.getElementById('service-title').value = svc.title || '';
         document.getElementById('service-category').value = svc.category || '';
         document.getElementById('service-description').value = svc.description || '';
+
+        // Load price & currency
+        const priceEl = document.getElementById('service-price');
+        if (priceEl) priceEl.value = svc.price !== null && svc.price !== undefined ? svc.price : '';
+        const currEl = document.getElementById('service-currency');
+        if (currEl) currEl.value = svc.currency || 'USD';
+        const currNotice = document.getElementById('currency-notice');
+        if (currNotice) {
+          currNotice.style.display = (svc.currency && svc.currency !== 'USD') ? 'block' : 'none';
+        }
+
+        // Load freelancer info
+        const fNameEl = document.getElementById('freelancer-name');
+        if (fNameEl) fNameEl.value = svc.freelancer_name || '';
+        const fBioEl = document.getElementById('freelancer-bio');
+        if (fBioEl) fBioEl.value = svc.freelancer_bio || '';
+        setFreelancerPhoto(svc.freelancer_photo_url || '');
+        const fStatus = document.getElementById('freelancer-photo-status');
+        if (fStatus) fStatus.textContent = svc.freelancer_photo_url ? 'Current photo loaded' : 'Upload a professional headshot (JPG, PNG, WebP)';
 
         // Fetch images
         const { data: images, error: imgErr } = await supabase
@@ -419,7 +551,7 @@
           <option value="">Choose Platform</option>
           ${platformOptions}
         </select>
-        <input type="url" class="admin-form-input link-url" placeholder="https://..." value="${escapeHtml(url)}" required />
+        <input type="text" class="admin-form-input link-url" placeholder="https://... or email@gmail.com" value="${escapeHtml(url)}" required />
         <button type="button" class="link-delete-btn" title="Remove Link">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -444,10 +576,27 @@
       const category = document.getElementById('service-category').value.trim();
       const description = document.getElementById('service-description').value.trim();
 
+      const priceVal = document.getElementById('service-price').value.trim();
+      const currencyVal = document.getElementById('service-currency').value.trim() || 'USD';
+      const freelancerName = document.getElementById('freelancer-name').value.trim();
+      const freelancerPhotoUrl = document.getElementById('freelancer-photo-url').value.trim();
+      const freelancerBio = document.getElementById('freelancer-bio').value.trim();
+
       if (!title || !category) {
         showBanner('error', 'Please fill in both the Title and Category.');
         return;
       }
+
+      const servicePayload = {
+        title,
+        category,
+        description,
+        price: priceVal ? parseFloat(priceVal) : null,
+        currency: currencyVal || 'USD',
+        freelancer_name: freelancerName || null,
+        freelancer_photo_url: freelancerPhotoUrl || null,
+        freelancer_bio: freelancerBio || null
+      };
 
       saveBtn.disabled = true;
       const originalBtnText = saveBtn.innerHTML;
@@ -464,11 +613,7 @@
           // INSERT new service
           const { data: newSvc, error: createErr } = await supabase
             .from('services')
-            .insert([{
-              title,
-              category,
-              description
-            }])
+            .insert([servicePayload])
             .select('id')
             .single();
 
@@ -479,9 +624,7 @@
           const { error: updateErr } = await supabase
             .from('services')
             .update({
-              title,
-              category,
-              description,
+              ...servicePayload,
               updated_at: new Date().toISOString()
             })
             .eq('id', serviceId);
@@ -611,6 +754,11 @@
 
       // Form save
       document.getElementById('service-form')?.addEventListener('submit', saveService);
+      document.getElementById('publish-announcement-btn')?.addEventListener('click', publishAnnouncement);
+      document.getElementById('announcement-latest-preview')?.addEventListener('click', (event) => {
+        if (event.target.closest('.announcement-delete-btn')) deleteLatestAnnouncement();
+      });
+      loadLatestAnnouncement();
 
       // Add link button
       document.getElementById('btn-add-link')?.addEventListener('click', () => addLinkRow('', ''));
@@ -636,6 +784,57 @@
           fileInput.value = ''; // reset so same file can be chosen again
         });
       }
+
+      // Currency notice toggle
+      const currencySelect = document.getElementById('service-currency');
+      const currencyNotice = document.getElementById('currency-notice');
+      currencySelect?.addEventListener('change', () => {
+        if (currencyNotice) {
+          currencyNotice.style.display = (currencySelect.value !== 'USD') ? 'block' : 'none';
+        }
+      });
+
+      // Freelancer photo upload listeners
+      const freelancerPhotoInput = document.getElementById('freelancer-photo-input');
+      const freelancerPhotoStatus = document.getElementById('freelancer-photo-status');
+      const btnRemoveFreelancerPhoto = document.getElementById('btn-remove-freelancer-photo');
+
+      freelancerPhotoInput?.addEventListener('change', async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+
+        try {
+          if (freelancerPhotoStatus) freelancerPhotoStatus.textContent = 'Uploading photo...';
+          const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          const filePath = `freelancers/${Date.now()}_${Math.random().toString(36).substring(2, 8)}_${cleanName}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('service-images')
+            .upload(filePath, file, {
+              cacheControl: '3600',
+              upsert: false
+            });
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('service-images')
+            .getPublicUrl(filePath);
+
+          setFreelancerPhoto(publicUrl);
+          if (freelancerPhotoStatus) freelancerPhotoStatus.textContent = 'Photo uploaded successfully!';
+        } catch (err) {
+          console.error('[Admin] Freelancer photo upload failed:', err);
+          if (freelancerPhotoStatus) freelancerPhotoStatus.textContent = 'Upload failed: ' + err.message;
+          showBanner('error', 'Failed to upload freelancer photo: ' + err.message);
+        }
+      });
+
+      btnRemoveFreelancerPhoto?.addEventListener('click', () => {
+        setFreelancerPhoto('');
+        if (freelancerPhotoInput) freelancerPhotoInput.value = '';
+        if (freelancerPhotoStatus) freelancerPhotoStatus.textContent = 'Photo removed.';
+      });
 
       // Delete confirmation modal listeners
       document.getElementById('cancel-delete-btn')?.addEventListener('click', closeDeleteModal);
@@ -703,6 +902,24 @@
         <div class="services-grid" id="services-grid">
           <!-- Populated by JS -->
         </div>
+
+        <section class="admin-announcement-section" aria-labelledby="announcement-admin-title">
+          <div class="admin-announcement-divider"></div>
+          <div class="admin-announcement-header">
+            <div>
+              <h2 class="admin-section-title" id="announcement-admin-title"><span>📣</span> Announcements</h2>
+              <p class="admin-announcement-description">Publish a new announcement for signed-in users.</p>
+            </div>
+            <div class="announcement-admin-latest" id="announcement-latest-preview">
+              <span class="announcement-admin-empty">Loading latest announcement...</span>
+            </div>
+          </div>
+          <textarea id="announcement-content-input" class="admin-form-textarea" rows="4" maxlength="2000" placeholder="Write an announcement for users..."></textarea>
+          <div class="admin-announcement-actions">
+            <span class="admin-announcement-note">Each publish creates a new announcement.</span>
+            <button type="button" class="admin-btn admin-btn-primary" id="publish-announcement-btn">📣 Publish Announcement</button>
+          </div>
+        </section>
       </section>
 
       <!-- VIEW 2: ADD / EDIT SERVICE FORM -->
@@ -749,9 +966,98 @@
                 placeholder="Describe what the service includes, deliverables, client requirements..."
               ></textarea>
             </div>
+
+            <!-- Price & Currency -->
+            <div class="admin-form-grid-2">
+              <div class="admin-form-group">
+                <label class="admin-form-label" for="service-price">Price / السعر</label>
+                <input
+                  type="number"
+                  id="service-price"
+                  class="admin-form-input"
+                  placeholder="e.g. 50"
+                  step="any"
+                  min="0"
+                />
+              </div>
+
+              <div class="admin-form-group">
+                <label class="admin-form-label" for="service-currency">Currency / العملة</label>
+                <select id="service-currency" class="admin-form-select">
+                  <option value="USD" selected>USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="MAD">MAD (د.م.)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="JPY">JPY (¥)</option>
+                  <option value="CAD">CAD ($)</option>
+                  <option value="SAR">SAR (ر.س)</option>
+                  <option value="AED">AED (د.إ)</option>
+                  <option value="EGP">EGP (ج.م)</option>
+                  <option value="TND">TND (د.ت)</option>
+                  <option value="DZD">DZD (د.ج)</option>
+                  <option value="QAR">QAR (ر.ق)</option>
+                  <option value="KWD">KWD (د.ك)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Currency Guidance Notice -->
+            <div id="currency-notice" style="display:none; margin-top:-6px; margin-bottom:18px; padding:12px 16px; border-radius:var(--radius-md); background:rgba(251, 191, 36, 0.1); border:1px solid rgba(251, 191, 36, 0.3); color:#fbbf24; font-size:0.85rem; line-height:1.5;">
+              💡 <strong>تنبيه:</strong> ننصح بإبقاء الدولار الأمريكي كعملة، لأنه يساعد على جذب عملاء من مختلف أنحاء العالم.
+            </div>
           </div>
 
-          <!-- Section 2: Media & Images -->
+          <!-- Section 2: Freelancer Information -->
+          <div class="admin-form-section">
+            <h2 class="admin-section-title">
+              <span>👤</span> Freelancer Information (معلومات مقدّم الخدمة)
+            </h2>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="freelancer-name">Freelancer Name (اسم صاحب الخدمة)</label>
+              <input
+                type="text"
+                id="freelancer-name"
+                class="admin-form-input"
+                placeholder="e.g. Alex Morgan"
+              />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label">Freelancer Photo (صورة صاحب الخدمة)</label>
+              <input type="hidden" id="freelancer-photo-url" />
+              <div style="display:flex; align-items:center; gap:16px; margin-top:4px;">
+                <div id="freelancer-photo-preview-wrap" style="width:70px; height:70px; border-radius:50%; background:var(--bg-secondary); border:2px dashed var(--border-subtle); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+                  <img id="freelancer-photo-img" src="" alt="Freelancer Preview" style="width:100%; height:100%; object-fit:cover; display:none;" />
+                  <span id="freelancer-photo-placeholder" style="font-size:1.8rem; color:var(--text-muted);">👤</span>
+                </div>
+                <div>
+                  <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <label for="freelancer-photo-input" class="admin-btn admin-btn-outline admin-btn-sm" style="cursor:pointer; margin:0;">
+                      📷 Choose Photo
+                    </label>
+                    <input type="file" id="freelancer-photo-input" accept="image/*" style="display:none;" />
+                    <button type="button" id="btn-remove-freelancer-photo" class="admin-btn admin-btn-danger admin-btn-sm" style="display:none;">
+                      ✕ Remove Photo
+                    </button>
+                  </div>
+                  <span id="freelancer-photo-status" style="font-size:0.8rem; color:var(--text-muted); display:block; margin-top:6px;">Upload a professional headshot (JPG, PNG, WebP)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="freelancer-bio">Freelancer Bio (نبذة عن صاحب الخدمة)</label>
+              <textarea
+                id="freelancer-bio"
+                class="admin-form-textarea"
+                style="min-height:90px;"
+                placeholder="Short bio, experience, specialization..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Section 3: Media & Images -->
           <div class="admin-form-section">
             <h2 class="admin-section-title">
               <span>🖼️</span> Service Images (Supabase Storage: service-images)
@@ -777,7 +1083,7 @@
             </div>
           </div>
 
-          <!-- Section 3: Social & Communication Links -->
+          <!-- Section 4: Social & Communication Links -->
           <div class="admin-form-section">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
               <h2 class="admin-section-title" style="margin-bottom:0;padding-bottom:0;border:none;">

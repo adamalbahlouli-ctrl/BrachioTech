@@ -245,6 +245,68 @@
   width: 100%;
 }
 
+.admin-announcement-section {
+  margin-top: 48px;
+  margin-bottom: 28px;
+  padding: 22px;
+  background: var(--bg-card);
+  border: var(--border-glass);
+  border-radius: var(--radius-lg);
+}
+
+.admin-announcement-divider {
+  height: 1px;
+  margin: -22px -22px 24px;
+  background: var(--border-subtle);
+}
+
+.admin-announcement-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.admin-announcement-description,
+.admin-announcement-note {
+  margin: -10px 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.announcement-admin-latest {
+  width: min(100%, 360px);
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
+.announcement-admin-latest strong,
+.announcement-admin-latest time { display: block; }
+.announcement-admin-latest time { margin-top: 3px; color: var(--text-muted); font-size: 0.75rem; }
+.announcement-admin-latest p { margin: 8px 0 0; line-height: 1.5; white-space: pre-wrap; }
+.announcement-admin-empty { color: var(--text-muted); }
+.announcement-delete-btn { margin-top: 12px; }
+
+.admin-announcement-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+@media (max-width: 700px) {
+  .admin-announcement-header,
+  .admin-announcement-actions { flex-direction: column; }
+  .announcement-admin-latest { width: 100%; }
+  .admin-announcement-actions .admin-btn { width: 100%; justify-content: center; }
+}
+
 @media (max-width: 600px) {
   .admin-main { padding: 20px 16px; }
   .admin-topbar { padding: 0 16px; }
@@ -816,4 +878,18 @@
   display: flex;
   gap: 10px;
   justify-content: flex-end;
+}
+
+/* Responsive 2-column form grid */
+.admin-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .admin-form-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }

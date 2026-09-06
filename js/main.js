@@ -636,7 +636,7 @@
 
   // ============================================================
   // ============================================================
-  // INTRO WELCOME MODAL (10% PROBABILITY POPUP ON HOME)
+  // FIRST-VISIT WELCOME MODAL (shown once per browser session)
   // ============================================================
   function initIntroModal() {
     var modalOverlay = document.getElementById('intro-modal-overlay');
@@ -644,29 +644,16 @@
     var startedBtn   = document.getElementById('intro-modal-started-btn');
     if (!modalOverlay) return;
 
-    function getStorageKey() {
-      var user = window.currentAuthUser;
-      if (user && user.id) {
-        return 'bt_intro_seen_' + user.id;
-      }
-      return 'bt_intro_seen_guest';
-    }
+    var SEEN_KEY = 'bt_welcome_seen_v1';
 
     function closeModal() {
       modalOverlay.classList.remove('show');
       modalOverlay.setAttribute('aria-hidden', 'true');
-      try {
-        localStorage.setItem(getStorageKey(), 'true');
-        localStorage.setItem('bt_intro_seen', 'true');
-      } catch (e) {}
+      try { localStorage.setItem(SEEN_KEY, 'true'); } catch (e) {}
     }
 
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeModal);
-    }
-    if (startedBtn) {
-      startedBtn.addEventListener('click', closeModal);
-    }
+    if (closeBtn)   closeBtn.addEventListener('click', closeModal);
+    if (startedBtn) startedBtn.addEventListener('click', closeModal);
 
     modalOverlay.addEventListener('click', function (e) {
       if (e.target === modalOverlay) closeModal();
@@ -678,13 +665,15 @@
       }
     });
 
-    // Exactly 10% probability for the popup to appear on an eligible Home-page visit
-    // (90% of visits -> popup does NOT appear; 10% of visits -> popup appears)
-    if (Math.random() < 0.10) {
+    // Show on very first visit — never again after user dismisses
+    var alreadySeen = false;
+    try { alreadySeen = localStorage.getItem(SEEN_KEY) === 'true'; } catch (e) {}
+
+    if (!alreadySeen) {
       setTimeout(function () {
         modalOverlay.classList.add('show');
         modalOverlay.setAttribute('aria-hidden', 'false');
-      }, 500);
+      }, 600);
     }
   }
 

@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="BrachioTech — The curated marketplace for world-class digital services. Web development, UI/UX, AI automation, video production, and custom software." />
-  <meta name="keywords" content="BrachioTech, marketplace, freelance services, web development, UI/UX design, AI solutions, video editing, mobile apps, digital services" />
+  <meta name="description" content="BrachioTech — Explore verified digital services. Web development, UI/UX design, AI automations, mobile apps, video production, and custom software." />
+  <meta name="keywords" content="BrachioTech, digital services marketplace, hire developer, UI UX designer, AI automations, video editor" />
   <meta name="author" content="BrachioTech" />
   <meta property="og:title" content="BrachioTech — Digital Services Marketplace" />
-  <meta property="og:description" content="Discover and order top-tier digital services. Verified deliverables, direct contact, and guaranteed satisfaction." />
+  <meta property="og:description" content="Browse verified digital services with transparent deliverables, portfolio samples, and direct specialist chat." />
   <meta property="og:image" content="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" />
   <title>BrachioTech — Digital Services Marketplace</title>
   <link rel="icon" href="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png" type="image/png" />
@@ -25,11 +25,11 @@
 <body>
 
 <!-- ==========================================
-     NAVIGATION
+     GLOBAL NAVIGATION
      ========================================== -->
 <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
   <div class="container">
-    <a href="#hero" class="nav-logo" aria-label="BrachioTech Marketplace">
+    <a href="index.html" class="nav-logo" aria-label="BrachioTech Marketplace">
       <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
            alt="BrachioTech Logo"
            width="40" height="40"
@@ -38,17 +38,15 @@
     </a>
 
     <ul class="nav-links" role="list">
-      <li><a href="#hero"         class="nav-link"        id="nav-home">Home</a></li>
-      <li><a href="#services"     class="nav-link"        id="nav-services">Explore Services</a></li>
-      <li><a href="#custom-order" class="nav-link"        id="nav-custom">Service Request</a></li>
-      <li><a href="about.html"    class="nav-link"        id="nav-about">About</a></li>
-      <li><a href="#how-it-works" class="nav-link"        id="nav-process">How It Works</a></li>
+      <li><a href="index.html"           class="nav-link active" id="nav-home">Home</a></li>
+      <li><a href="service-request.html" class="nav-link" id="nav-custom">Service Request</a></li>
+      <li><a href="about.html"           class="nav-link" id="nav-about">About</a></li>
+      <li><a href="how-it-works.html"    class="nav-link" id="nav-how">How It Works</a></li>
     </ul>
 
     <div class="nav-actions">
       <!-- Auth Container (Desktop) -->
       <div class="auth-container" id="nav-auth-container">
-        <!-- Sign in with Google button -->
         <button type="button" class="btn btn-outline btn-sm auth-login-btn" id="google-login-btn" aria-label="Sign in with Google">
           <svg class="google-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -59,7 +57,6 @@
           <span>Sign In</span>
         </button>
 
-        <!-- Logged in state: User profile info & Sign Out -->
         <div class="auth-user-menu" style="display: none;">
           <a href="upload.html" class="auth-admin-link btn btn-outline btn-sm" style="display: none;" title="Admin Dashboard">
             ⚙️ Admin
@@ -79,7 +76,6 @@
         </div>
       </div>
 
-      <a href="#services" class="btn btn-primary btn-sm nav-cta" id="nav-cta-btn">Browse Services</a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-drawer">
         <span></span><span></span><span></span>
       </button>
@@ -89,11 +85,10 @@
 
 <!-- Mobile Drawer -->
 <div class="nav-drawer" id="nav-drawer" aria-label="Mobile navigation">
-  <a href="#hero"         class="nav-link" id="drawer-home">Home</a>
-  <a href="#services"     class="nav-link" id="drawer-services">Explore Services</a>
-  <a href="#custom-order" class="nav-link" id="drawer-custom">Service Request</a>
-  <a href="about.html"    class="nav-link" id="drawer-about">About</a>
-  <a href="#how-it-works" class="nav-link" id="drawer-process">How It Works</a>
+  <a href="index.html"           class="nav-link active" id="drawer-home">Home</a>
+  <a href="service-request.html" class="nav-link" id="drawer-custom">Service Request</a>
+  <a href="about.html"           class="nav-link" id="drawer-about">About</a>
+  <a href="how-it-works.html"    class="nav-link" id="drawer-how">How It Works</a>
 
   <div class="drawer-auth-box" style="padding-top: 14px; border-top: 1px solid var(--border-subtle); margin-top: 8px;">
     <div class="auth-container" id="drawer-auth-container">
@@ -128,411 +123,124 @@
 </div>
 
 <!-- ==========================================
-     MARKETPLACE HERO SECTION
+     MARKETPLACE HEADER & SEARCH SECTION
      ========================================== -->
-<section id="hero" aria-label="Marketplace Hero">
-  <div class="hero-bg-gradient"></div>
-  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+<main id="marketplace-main" style="padding-top: calc(var(--nav-height) + 24px);">
+  <section class="marketplace-page-hero">
+    <div class="container" style="text-align: center;">
+      <div class="hero-badge" style="display: inline-flex; margin-bottom: 14px;">
+        <span class="hero-badge-dot"></span> Verified Digital Marketplace
+      </div>
+      <h1 class="page-main-title" style="font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 800; margin-bottom: 12px;">
+        Explore Verified <span class="gradient-text">Digital Services</span>
+      </h1>
+      <p style="color: var(--text-secondary); max-width: 680px; margin: 0 auto 28px; font-size: 1.05rem;">
+        Discover specialized talent across 10 core digital disciplines. Every service features verified deliverables, direct specialist communication, and reliable turnaround.
+      </p>
 
-  <div class="hero-content">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      Curated Digital Services Marketplace
+      <!-- Live Search Box -->
+      <div class="hero-search-container" style="margin: 0 auto 20px;">
+        <div class="hero-search-box">
+          <span class="hero-search-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </span>
+          <input
+            type="text"
+            id="hero-search-input"
+            class="hero-search-input"
+            placeholder="Search web apps, UI/UX, AI chatbots, video editing..."
+            aria-label="Search digital services"
+          />
+          <button type="button" id="hero-search-btn" class="btn btn-primary hero-search-btn">
+            Search
+          </button>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <h1 class="hero-title">
-      Find world-class <span class="gradient-text">digital services</span><br>
-      for your next breakthrough.
-    </h1>
-
-    <p class="hero-subtitle">
-      Connect with specialized digital talents offering web engineering, UI/UX design, AI automations, video production, and high-impact digital solutions.
-    </p>
-
-    <!-- Marketplace Live Search Bar -->
-    <div class="hero-search-container">
-      <div class="hero-search-box">
-        <span class="hero-search-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </span>
-        <input
-          type="text"
-          id="hero-search-input"
-          class="hero-search-input"
-          placeholder="Try 'Web Application', 'UI/UX', 'AI Chatbot', 'Video Editing'..."
-          aria-label="Search digital services"
-        />
-        <button type="button" id="hero-search-btn" class="btn btn-primary hero-search-btn">
-          Search
+  <!-- ==========================================
+       CATEGORY NAVIGATION (STREAMLINED HORIZONTAL STRIP)
+       ========================================== -->
+  <div id="categories" class="marketplace-categories-bar-wrap" aria-label="Categories">
+    <div class="category-scroll-container">
+      <button type="button" class="category-arrow-btn category-arrow-left" id="category-scroll-left" aria-label="Scroll left">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="category-scroll-strip" id="category-scroll-strip">
+        <button type="button" class="category-strip-btn active" data-category="All">
+          <span class="category-strip-icon">✨</span>
+          <span>All Services</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Web &amp; Software Development">
+          <span class="category-strip-icon">🌐</span>
+          <span>Web &amp; Software</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Graphic Design &amp; UI/UX">
+          <span class="category-strip-icon">🎨</span>
+          <span>UI/UX &amp; Design</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="AI &amp; Automation">
+          <span class="category-strip-icon">🤖</span>
+          <span>AI &amp; Automation</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Mobile Apps &amp; Games">
+          <span class="category-strip-icon">📱</span>
+          <span>Mobile Apps</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Video Editing &amp; Animation">
+          <span class="category-strip-icon">🎬</span>
+          <span>Video &amp; Animation</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Writing &amp; Translation">
+          <span class="category-strip-icon">✍️</span>
+          <span>Writing &amp; Translation</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Digital Marketing &amp; Social Media">
+          <span class="category-strip-icon">📈</span>
+          <span>Marketing &amp; Social</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Audio &amp; Music">
+          <span class="category-strip-icon">🎵</span>
+          <span>Audio &amp; Music</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Business &amp; Data">
+          <span class="category-strip-icon">📊</span>
+          <span>Business &amp; Data</span>
+        </button>
+        <button type="button" class="category-strip-btn" data-category="Photography &amp; Image Editing">
+          <span class="category-strip-icon">📸</span>
+          <span>Photography</span>
         </button>
       </div>
-
-      <!-- Quick Category Pills -->
-      <div class="hero-tags-row">
-        <span class="hero-tags-label">Popular:</span>
-        <a href="#services" class="hero-tag-pill" data-category="Web & Software Development">Web Development</a>
-        <a href="#services" class="hero-tag-pill" data-category="Graphic Design & UI/UX">UI/UX Design</a>
-        <a href="#services" class="hero-tag-pill" data-category="AI & Automation">AI & Automation</a>
-        <a href="#services" class="hero-tag-pill" data-category="Video Editing & Animation">Video Editing</a>
-        <a href="#services" class="hero-tag-pill" data-category="Mobile Apps & Games">Mobile Apps</a>
-      </div>
-    </div>
-
-    <!-- Marketplace Metrics Stats -->
-    <div class="hero-marketplace-stats">
-      <div class="marketplace-stat-item">
-        <div class="marketplace-stat-val">10+</div>
-        <div class="marketplace-stat-desc">Core Disciplines</div>
-      </div>
-      <div class="marketplace-stat-item">
-        <div class="marketplace-stat-val">100%</div>
-        <div class="marketplace-stat-desc">Verified Deliverables</div>
-      </div>
-      <div class="marketplace-stat-item">
-        <div class="marketplace-stat-val">Direct</div>
-        <div class="marketplace-stat-desc">Direct Specialist Chat</div>
-      </div>
-      <div class="marketplace-stat-item">
-        <div class="marketplace-stat-val">Fast</div>
-        <div class="marketplace-stat-desc">Turnaround Delivery</div>
-      </div>
+      <button type="button" class="category-arrow-btn category-arrow-right" id="category-scroll-right" aria-label="Scroll right">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
     </div>
   </div>
-</section>
+
+  <!-- ==========================================
+       SERVICES LISTING GRID
+       ========================================== -->
+  <section class="section" style="padding-top: 10px; padding-bottom: 80px;" aria-label="Services list">
+    <div class="container">
+      <div class="marketplace-filter-wrap" style="justify-content: space-between; margin-bottom: 24px;">
+        <span style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">Service Listings</span>
+        <span class="marketplace-results-count" id="marketplace-results-count">Loading services...</span>
+      </div>
+
+      <!-- Dynamic Supabase-Powered Services Grid -->
+      <div class="marketplace-grid" id="marketplace-services-grid">
+        <!-- Injected by js/marketplace.js -->
+      </div>
+    </div>
+  </section>
+</main>
 
 <!-- ==========================================
-     HORIZONTAL CATEGORIES BAR (STREAMLINED & SCROLLABLE)
-     ========================================== -->
-<div id="categories" class="marketplace-categories-bar-wrap" aria-label="Categories">
-  <div class="category-scroll-container">
-    <button type="button" class="category-arrow-btn category-arrow-left" id="category-scroll-left" aria-label="Scroll left">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <div class="category-scroll-strip" id="category-scroll-strip">
-      <button type="button" class="category-strip-btn active" data-category="All">
-        <span class="category-strip-icon">✨</span>
-        <span>All Services</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Web & Software Development">
-        <span class="category-strip-icon">🌐</span>
-        <span>Web &amp; Software</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Graphic Design & UI/UX">
-        <span class="category-strip-icon">🎨</span>
-        <span>UI/UX &amp; Design</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="AI & Automation">
-        <span class="category-strip-icon">🤖</span>
-        <span>AI &amp; Automation</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Mobile Apps & Games">
-        <span class="category-strip-icon">📱</span>
-        <span>Mobile Apps</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Video Editing & Animation">
-        <span class="category-strip-icon">🎬</span>
-        <span>Video &amp; Animation</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Writing & Translation">
-        <span class="category-strip-icon">✍️</span>
-        <span>Writing &amp; Translation</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Digital Marketing & Social Media">
-        <span class="category-strip-icon">📈</span>
-        <span>Marketing &amp; Social</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Audio & Music">
-        <span class="category-strip-icon">🎵</span>
-        <span>Audio &amp; Music</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Business & Data">
-        <span class="category-strip-icon">📊</span>
-        <span>Business &amp; Data</span>
-      </button>
-      <button type="button" class="category-strip-btn" data-category="Photography & Image Editing">
-        <span class="category-strip-icon">📸</span>
-        <span>Photography</span>
-      </button>
-    </div>
-    <button type="button" class="category-arrow-btn category-arrow-right" id="category-scroll-right" aria-label="Scroll right">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
-  </div>
-</div>
-
-<!-- ==========================================
-     MARKETPLACE SERVICES GRID SECTION
-     ========================================== -->
-<section id="services" class="section" aria-label="Marketplace Services">
-  <div class="container">
-    <div class="section-header reveal">
-      <span class="section-tag">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-        Marketplace Listings
-      </span>
-      <h2 class="section-title">Browse Verified <span class="gradient-text">Services</span></h2>
-      <p class="section-subtitle">Real-time listings synchronized with our database. Click any service to view full specifications, gallery, and direct contact options.</p>
-    </div>
-
-    <!-- Results Count Bar -->
-    <div class="marketplace-filter-wrap" style="justify-content: flex-end; margin-bottom: 20px;">
-      <span class="marketplace-results-count" id="marketplace-results-count">Loading services...</span>
-    </div>
-
-    <!-- Services Dynamic Grid (Supabase Powered) -->
-    <div class="marketplace-grid" id="marketplace-services-grid">
-      <!-- Injected by js/marketplace.js -->
-    </div>
-  </div>
-</section>
-
-<!-- ==========================================
-     HOW THE MARKETPLACE WORKS SECTION
-     ========================================== -->
-<section id="how-it-works" class="section" aria-label="How the marketplace works">
-  <div class="container">
-    <div class="section-header reveal">
-      <span class="section-tag">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-        Simple Workflow
-      </span>
-      <h2 class="section-title">How BrachioTech <span class="gradient-text">Works</span></h2>
-      <p class="section-subtitle">A seamless journey connecting you with verified digital deliverables.</p>
-    </div>
-
-    <div class="steps-grid">
-      <div class="step-card reveal" id="step-1">
-        <div class="step-number">01</div>
-        <div class="step-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </div>
-        <h3>Explore &amp; Discover</h3>
-        <p>Browse through specialized service listings with transparent descriptions, previous samples, and pricing options.</p>
-      </div>
-
-      <div class="step-connector reveal reveal-delay-1" aria-hidden="true">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-
-      <div class="step-card reveal reveal-delay-1" id="step-2">
-        <div class="step-number">02</div>
-        <div class="step-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-          </svg>
-        </div>
-        <h3>Direct Contact &amp; Brief</h3>
-        <p>Click on any service to connect directly with the provider via WhatsApp, LinkedIn, or social channels to agree on requirements.</p>
-      </div>
-
-      <div class="step-connector reveal reveal-delay-2" aria-hidden="true">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-
-      <div class="step-card reveal reveal-delay-2" id="step-3">
-        <div class="step-number">03</div>
-        <div class="step-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-          </svg>
-        </div>
-        <h3>Delivery &amp; Launch</h3>
-        <p>Receive your completed deliverables on schedule with guaranteed quality, revision rounds, and verified client satisfaction.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==========================================
-     SECONDARY SECTION: CUSTOM ENTERPRISE REQUEST
-     (Reserved for tailored custom inquiries)
-     ========================================== -->
-<section id="custom-order" class="custom-order-section" aria-label="Custom Project Request">
-  <div class="container">
-    <div class="custom-order-box reveal">
-      <div class="section-header" style="margin-bottom: 36px;">
-        <span class="section-tag">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-          Direct Platform Inquiries
-        </span>
-        <h2 class="section-title">Submit a <span class="gradient-text">Service Request</span></h2>
-        <p class="section-subtitle">
-          Have an extensive custom project or bespoke technical requirement not listed above? Submit your request directly to BrachioTech platform management.
-        </p>
-      </div>
-
-      <div class="contact-grid">
-        <!-- Quick Info -->
-        <div class="contact-info reveal">
-          <h3>Bespoke Inquiries</h3>
-          <p>We review custom project requests and coordinate with specialized engineering teams to provide proposals within 24 hours.</p>
-
-          <div class="contact-channels">
-            <div class="contact-channel" style="pointer-events: none;">
-              <div class="contact-channel-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
-              </div>
-              <div>
-                <div style="font-weight:600;color:var(--text-primary);margin-bottom:2px;">Platform Review</div>
-                <div>Requests reviewed within 24h</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Project Form -->
-        <div class="reveal reveal-delay-2">
-          <form class="contact-form multi-step-form" id="contact-form" novalidate aria-label="Project request form">
-            <div class="form-progress" aria-label="Form progress">
-              <div class="form-progress-bar" id="form-progress-bar" style="width: 25%"></div>
-            </div>
-            <div class="form-step-indicator" id="form-step-indicator" aria-live="polite">Step 1 of 4</div>
-
-            <!-- STEP 1 -->
-            <div class="form-step active" id="step-1-form" data-step="1">
-              <div class="form-step-title">
-                <span class="step-pill">1</span>
-                Your Details
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="contact-name" class="form-label">Full Name <span class="required">*</span></label>
-                  <input type="text" id="contact-name" name="name" class="form-input" placeholder="Your Name" required autocomplete="name" />
-                </div>
-                <div class="form-group">
-                  <label for="contact-email" class="form-label">Email Address <span class="required">*</span></label>
-                  <input type="email" id="contact-email" name="email" class="form-input" placeholder="you@example.com" required autocomplete="email" />
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <div></div>
-                <button type="button" class="btn btn-primary form-next" id="step1-next" data-next="2">
-                  Next
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- STEP 2 -->
-            <div class="form-step" id="step-2-form" data-step="2">
-              <div class="form-step-title">
-                <span class="step-pill">2</span>
-                Project Type &amp; Budget
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Domain Area <span class="required">*</span></label>
-                <div class="option-grid" id="project-type-grid" role="group" aria-label="Project type">
-                  <button type="button" class="option-btn" data-value="Web Application">Web Application</button>
-                  <button type="button" class="option-btn" data-value="Mobile App">Mobile App</button>
-                  <button type="button" class="option-btn" data-value="AI Automation">AI Automation</button>
-                  <button type="button" class="option-btn" data-value="Full Platform">Full Platform</button>
-                </div>
-                <input type="hidden" id="project-type" name="project_type" />
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Estimated Budget <span class="required">*</span></label>
-                <div class="option-grid" id="budget-grid" role="group" aria-label="Budget range">
-                  <button type="button" class="option-btn" data-value="$100–$300">$100 – $300</button>
-                  <button type="button" class="option-btn" data-value="$300–$700">$300 – $700</button>
-                  <button type="button" class="option-btn" data-value="$700–$1500">$700 – $1500</button>
-                  <button type="button" class="option-btn" data-value="$1500+">$1500+</button>
-                </div>
-                <input type="hidden" id="budget" name="budget" />
-              </div>
-
-              <div class="form-actions">
-                <button type="button" class="btn btn-outline form-prev" id="step2-prev" data-prev="1">Back</button>
-                <button type="button" class="btn btn-primary form-next" id="step2-next" data-next="3">Next</button>
-              </div>
-            </div>
-
-            <!-- STEP 3 -->
-            <div class="form-step" id="step-3-form" data-step="3">
-              <div class="form-step-title">
-                <span class="step-pill">3</span>
-                Project Assets
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Available Assets:</label>
-                <div class="checkbox-grid">
-                  <label class="checkbox-option">
-                    <input type="checkbox" name="assets" value="Design Ready" />
-                    <span class="checkbox-custom"></span>
-                    <span class="checkbox-label">UI/UX Design Ready</span>
-                  </label>
-                  <label class="checkbox-option">
-                    <input type="checkbox" name="assets" value="Specification Doc" />
-                    <span class="checkbox-custom"></span>
-                    <span class="checkbox-label">Detailed Spec Doc</span>
-                  </label>
-                  <label class="checkbox-option">
-                    <input type="checkbox" name="assets" value="Brand / Logo" />
-                    <span class="checkbox-custom"></span>
-                    <span class="checkbox-label">Brand &amp; Logo</span>
-                  </label>
-                  <label class="checkbox-option">
-                    <input type="checkbox" name="assets" value="Backend API" />
-                    <span class="checkbox-custom"></span>
-                    <span class="checkbox-label">Existing Backend API</span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <button type="button" class="btn btn-outline form-prev" id="step3-prev" data-prev="2">Back</button>
-                <button type="button" class="btn btn-primary form-next" id="step3-next" data-next="4">Next</button>
-              </div>
-            </div>
-
-            <!-- STEP 4 -->
-            <div class="form-step" id="step-4-form" data-step="4">
-              <div class="form-step-title">
-                <span class="step-pill">4</span>
-                Project Scope
-              </div>
-
-              <div class="form-group">
-                <label for="contact-message" class="form-label">Brief Description <span class="required">*</span></label>
-                <textarea id="contact-message" name="message" class="form-textarea" placeholder="Describe your custom project requirements, timeline, and goals..." required></textarea>
-              </div>
-
-              <div class="form-actions">
-                <button type="button" class="btn btn-outline form-prev" id="step4-prev" data-prev="3">Back</button>
-                <button type="submit" class="btn btn-primary form-submit" id="contact-submit">
-                  Send Custom Request
-                </button>
-              </div>
-            </div>
-
-            <!-- SUCCESS & ERROR STATES -->
-            <div class="form-success-state" id="form-success-state" aria-live="polite" role="status" hidden>
-              <div class="success-icon">✅</div>
-              <h3>Request Submitted!</h3>
-              <p>Thank you. Platform management will review your custom request and contact you shortly.</p>
-            </div>
-            <div class="form-error" id="form-error" role="alert" aria-live="assertive" hidden>
-              ❌ Failed to send request. Please try again or submit your details again.
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==========================================
-     FOOTER
+     GLOBAL FOOTER
      ========================================== -->
 <footer role="contentinfo">
   <div class="container">
@@ -550,12 +258,10 @@
       </div>
 
       <nav class="footer-nav" aria-label="Footer navigation">
-        <a href="#hero">Home</a>
-        <a href="#services">Services</a>
-        <a href="#categories">Categories</a>
+        <a href="index.html">Home</a>
+        <a href="service-request.html">Service Request</a>
         <a href="about.html">About</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#custom-order">Service Request</a>
+        <a href="how-it-works.html">How It Works</a>
         <a href="admin-login.html" style="color: var(--accent-primary);">Admin Portal ↗</a>
       </nav>
     </div>
@@ -578,7 +284,10 @@
   </div>
 </footer>
 
-<!-- First-time / 10% Intro Welcome Modal -->
+<!-- ==========================================
+     FIRST-VISIT WELCOME INTRO MODAL
+     (shown once per browser — localStorage gated)
+     ========================================== -->
 <div class="intro-modal-backdrop" id="intro-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="intro-modal-title">
   <div class="intro-modal-card">
     <button type="button" class="intro-modal-close" id="intro-modal-close" aria-label="Close modal">×</button>
@@ -586,7 +295,7 @@
       <img src="https://pub-883a584e9ef74dd49406555abdddfff2.r2.dev/IMG-20260903-WA0000.png"
            alt="BrachioTech Logo"
            class="intro-modal-logo"
-           width="56" height="56" />
+           width="64" height="64" />
     </div>
     <div class="hero-badge" style="margin-bottom: 14px; display: inline-flex;">
       <span class="hero-badge-dot"></span> Welcome to BrachioTech
@@ -595,15 +304,16 @@
       Find World-Class <span class="gradient-text">Digital Services</span>
     </h2>
     <p class="intro-modal-text">
-      Connect with specialized digital talents offering web engineering, UI/UX design, AI automations, video production, and high-impact digital solutions for your next breakthrough.
+      A curated marketplace connecting clients with verified digital specialists. Web engineering, UI/UX design, AI automations, video production, and more — all in one place.
     </p>
     <div class="intro-modal-features">
       <div class="intro-feature-pill">🛡️ Verified Deliverables</div>
       <div class="intro-feature-pill">⚡ Direct Specialist Chat</div>
       <div class="intro-feature-pill">🚀 Fast Turnaround</div>
+      <div class="intro-feature-pill">🌐 10 Digital Disciplines</div>
     </div>
     <button type="button" class="intro-modal-btn" id="intro-modal-started-btn">
-      Started
+      Explore Services →
     </button>
   </div>
 </div>
@@ -611,11 +321,10 @@
 <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="js/particles.js" defer></script>
 <script src="js/theme.js"></script>
 <script src="js/main.js" defer></script>
 <script type="module" src="js/auth.js"></script>
+<script type="module" src="js/announcements.js"></script>
 <script type="module" src="js/marketplace.js"></script>
 
 </body>

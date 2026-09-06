@@ -20,7 +20,8 @@ const PLATFORM_ICONS = {
   YouTube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
   Telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.197 1.006.128.832.946z"/></svg>',
   Snapchat: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.02c-4.42 0-8 3.58-8 8 0 1.25.3 2.43.83 3.48-.48.9-1.25 1.58-1.83 2.05-.18.15-.22.41-.09.6.13.2.37.28.58.19.78-.33 1.9-.53 2.87-.27.27.07.56.09.84.09.28 0 .56-.04.83-.12.44-.13.88-.34 1.32-.44.75-.17 1.55-.1 2.3.17.47.17.92.42 1.37.58.26.09.53.14.81.14.28 0 .55-.05.81-.14.45-.16.9-.41 1.37-.58.75-.27 1.55-.34 2.3-.17.44.1.88.31 1.32.44.27.08.55.12.83.12.28 0 .57-.02.84-.09.97-.26 2.09-.06 2.87.27.21.09.45.01.58-.19.13-.19.09-.45-.09-.6-.58-.47-1.35-1.15-1.83-2.05.53-1.05.83-2.23.83-3.48 0-4.42-3.58-8-8-8z"/></svg>',
-  Behance: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7v2h7V7zm1.726 10c-.442 1.297-2.029 3-4.976 3-3.401 0-5.75-2.422-5.75-5.719 0-3.375 2.375-5.781 5.625-5.781 3.562 0 5.375 2.594 5.375 5.719 0 .578-.078 1.172-.156 1.562h-8.25c.109 1.625 1.422 2.656 3.156 2.656 1.484 0 2.453-.656 2.922-1.438h2.054zm-2.5-3.5c-.094-1.344-.984-2.188-2.469-2.188-1.547 0-2.469.875-2.625 2.188h5.094zM7.228 11.238c.781-.469 1.312-1.281 1.312-2.344 0-2.25-1.75-3.894-4.5-3.894H0v15h4.406c2.812 0 4.875-1.688 4.875-4.125 0-1.438-.75-2.656-2.053-3.238v-.094zm-4.478-4.113h1.469c1.172 0 1.953.672 1.953 1.703 0 1.078-.781 1.766-1.953 1.766H2.75V7.125zm1.656 10.75H2.75v-4.078h1.656c1.375 0 2.297.797 2.297 2.031 0 1.266-.922 2.047-2.297 2.047z"/></svg>'
+  Behance: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7v2h7V7zm1.726 10c-.442 1.297-2.029 3-4.976 3-3.401 0-5.75-2.422-5.75-5.719 0-3.375 2.375-5.781 5.625-5.781 3.562 0 5.375 2.594 5.375 5.719 0 .578-.078 1.172-.156 1.562h-8.25c.109 1.625 1.422 2.656 3.156 2.656 1.484 0 2.453-.656 2.922-1.438h2.054zm-2.5-3.5c-.094-1.344-.984-2.188-2.469-2.188-1.547 0-2.469.875-2.625 2.188h5.094zM7.228 11.238c.781-.469 1.312-1.281 1.312-2.344 0-2.25-1.75-3.894-4.5-3.894H0v15h4.406c2.812 0 4.875-1.688 4.875-4.125 0-1.438-.75-2.656-2.053-3.238v-.094zm-4.478-4.113h1.469c1.172 0 1.953.672 1.953 1.703 0 1.078-.781 1.766-1.953 1.766H2.75V7.125zm1.656 10.75H2.75v-4.078h1.656c1.375 0 2.297.797 2.297 2.031 0 1.266-.922 2.047-2.297 2.047z"/></svg>',
+  Gmail: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>'
 };
 
 // Fallback services if Supabase or fetch unavailable
@@ -38,7 +39,7 @@ const SERVICES_FALLBACK = [
 
 function getSlugFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get('service') || '';
+  return params.get('id') || params.get('service') || '';
 }
 
 function buildStars(rating) {
@@ -182,20 +183,31 @@ function renderProduct(service, images = [], links = []) {
 
   // Rating
   const ratingRow = document.getElementById('product-rating-row');
-  if (service.rating && ratingRow) {
-    document.getElementById('product-stars').innerHTML = buildStars(service.rating);
-    setText('product-rating-value', service.rating);
-    setText('product-reviews', service.reviews ? `(${service.reviews} reviews)` : '');
-  } else if (ratingRow) {
-    ratingRow.style.display = 'none';
-  }
+  if (ratingRow) ratingRow.style.display = 'none';
 
   // Price
   const priceEl = document.getElementById('product-price');
-  if (service.price && priceEl) {
-    priceEl.textContent = `From $${service.price} ${service.currency || 'USD'}`;
-  } else if (priceEl) {
-    priceEl.textContent = 'Contact for Pricing';
+  if (priceEl) {
+    if (service.price !== null && service.price !== undefined && service.price !== '') {
+      const num = parseFloat(service.price);
+      const curr = (service.currency || 'USD').toUpperCase();
+      const currencySymbols = {
+        USD: '$', EUR: '€', GBP: '£', JPY: '¥', CAD: 'CA$',
+        MAD: 'MAD', SAR: 'SAR', AED: 'AED', EGP: 'EGP',
+        TND: 'TND', DZD: 'DZD', QAR: 'QAR', KWD: 'KWD'
+      };
+      const sym = currencySymbols[curr] || curr;
+      const formattedNum = isNaN(num) ? escapeHtml(service.price) : num.toLocaleString();
+      let priceHtml = '';
+      if (['USD', 'EUR', 'GBP', 'JPY', 'CAD'].includes(curr)) {
+        priceHtml = `${sym}${formattedNum} <span class="product-price-currency">${curr}</span>`;
+      } else {
+        priceHtml = `${formattedNum} <span class="product-price-currency">${curr}</span>`;
+      }
+      priceEl.innerHTML = `<span class="product-price-prefix">From</span> <span class="product-price-amount">${priceHtml}</span>`;
+    } else {
+      priceEl.innerHTML = `<span class="product-price-amount">Contact for Pricing</span>`;
+    }
   }
 
   // Meta Grid
@@ -218,6 +230,49 @@ function renderProduct(service, images = [], links = []) {
   // Description
   setText('product-description', service.description || 'No detailed description provided.');
 
+  // Freelancer Profile Card
+  const freelancerCard = document.getElementById('product-freelancer-card');
+  if (freelancerCard) {
+    const hasName = Boolean(service.freelancer_name && service.freelancer_name.trim());
+    const hasPhoto = Boolean(service.freelancer_photo_url && service.freelancer_photo_url.trim());
+    const hasBio = Boolean(service.freelancer_bio && service.freelancer_bio.trim());
+
+    if (hasName || hasPhoto || hasBio) {
+      freelancerCard.style.display = 'block';
+
+      const avatarImg = document.getElementById('freelancer-avatar-img');
+      const avatarPlaceholder = document.getElementById('freelancer-avatar-placeholder');
+      if (hasPhoto) {
+        if (avatarImg) {
+          avatarImg.src = service.freelancer_photo_url;
+          avatarImg.alt = service.freelancer_name || 'Service Provider';
+          avatarImg.style.display = 'block';
+        }
+        if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+      } else {
+        if (avatarImg) avatarImg.style.display = 'none';
+        if (avatarPlaceholder) {
+          avatarPlaceholder.textContent = (service.freelancer_name || 'BT').substring(0, 2).toUpperCase();
+          avatarPlaceholder.style.display = 'flex';
+        }
+      }
+
+      setText('freelancer-name-display', service.freelancer_name || 'Verified Specialist');
+
+      const bioEl = document.getElementById('freelancer-bio-display');
+      if (bioEl) {
+        if (hasBio) {
+          bioEl.textContent = service.freelancer_bio;
+          bioEl.style.display = 'block';
+        } else {
+          bioEl.style.display = 'none';
+        }
+      }
+    } else {
+      freelancerCard.style.display = 'none';
+    }
+  }
+
   // Social & Platform Links (Supabase service_links)
   const socialWrap = document.getElementById('product-social-links-wrap');
   const socialButtons = document.getElementById('product-social-buttons');
@@ -229,8 +284,16 @@ function renderProduct(service, images = [], links = []) {
         const plat = link.platform || 'Link';
         const icon = PLATFORM_ICONS[plat] || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>';
         const platClass = `plat-${plat.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+
+        let href = link.url || '#';
+        if (plat.toLowerCase() === 'gmail') {
+          if (!href.startsWith('mailto:') && !href.startsWith('http')) {
+            href = 'mailto:' + href;
+          }
+        }
+
         return `
-          <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="social-platform-btn ${platClass}">
+          <a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" class="social-platform-btn ${platClass}">
             ${icon}
             <span>${escapeHtml(plat)}</span>
           </a>
@@ -368,6 +431,7 @@ async function loadReviews(service) {
   const reviewsList = document.getElementById('reviews-list');
   const aggregateEl = document.getElementById('reviews-aggregate');
   const subtitleEl = document.getElementById('reviews-subtitle');
+  const formWrap = document.getElementById('review-form-wrap');
 
   if (!reviewsList) return;
 
@@ -392,17 +456,22 @@ async function loadReviews(service) {
       if (data && data.length > 0) reviews = data;
     }
 
-    if (!reviews || reviews.length === 0) {
-      renderReviewsEmpty(reviewsList, 'No reviews yet for this service.');
-      if (subtitleEl) subtitleEl.textContent = 'Be the first to review this service!';
-      return;
+    reviews = reviews || [];
+    const totalScore = reviews.reduce((acc, r) => acc + Number(r.rating || 0), 0);
+    const avgScore = reviews.length ? (totalScore / reviews.length).toFixed(1) : '0.0';
+
+    const productRatingRow = document.getElementById('product-rating-row');
+    if (productRatingRow) {
+      productRatingRow.style.display = reviews.length ? 'flex' : 'none';
+      if (reviews.length) {
+        document.getElementById('product-stars').innerHTML = buildStars(avgScore);
+        setText('product-rating-value', avgScore);
+        setText('product-reviews', `(${reviews.length} reviews)`);
+      }
     }
 
-    const totalScore = reviews.reduce((acc, r) => acc + (Number(r.rating || r.stars) || 5), 0);
-    const avgScore = (totalScore / reviews.length).toFixed(1);
-
     if (aggregateEl) {
-      aggregateEl.innerHTML = `
+      aggregateEl.innerHTML = reviews.length ? `
         <div class="reviews-score-badge">
           <span class="reviews-score-num">${avgScore}</span>
           <div class="reviews-score-meta">
@@ -410,19 +479,25 @@ async function loadReviews(service) {
             <span class="reviews-score-count">${reviews.length} ${reviews.length === 1 ? 'review' : 'reviews'}</span>
           </div>
         </div>
-      `;
+      ` : '';
     }
 
     if (subtitleEl) {
-      subtitleEl.textContent = `Based on ${reviews.length} verified client ${reviews.length === 1 ? 'review' : 'reviews'}`;
+      subtitleEl.textContent = reviews.length
+        ? `Based on ${reviews.length} verified client ${reviews.length === 1 ? 'review' : 'reviews'}`
+        : 'Be the first to review this service!';
     }
 
-    reviewsList.innerHTML = reviews.map((rev) => {
+    if (!reviews.length) {
+      renderReviewsEmpty(reviewsList, 'No reviews yet for this service.');
+    } else {
+      reviewsList.innerHTML = reviews.map((rev) => {
       const userName = escapeHtml(rev.user_name || rev.name || rev.reviewer_name || rev.user_email || 'Verified Client');
-      const rating = Math.min(5, Math.max(1, Number(rev.rating || rev.stars || 5)));
+      const rating = Math.min(5, Math.max(1, Number(rev.rating || 1)));
       const comment = rev.comment || rev.review || rev.content || '';
       const createdDate = rev.created_at ? formatDate(rev.created_at) : '';
       const avatarUrl = rev.user_avatar || rev.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=6c63ff&color=fff&size=64`;
+      const isOwner = window.currentAuthUser && window.currentAuthUser.id === rev.user_id;
 
       return `
         <article class="review-item">
@@ -439,9 +514,14 @@ async function loadReviews(service) {
             ${createdDate ? `<time class="review-date" datetime="${escapeHtml(rev.created_at)}">${createdDate}</time>` : ''}
           </div>
           ${comment ? `<p class="review-comment">${escapeHtml(comment)}</p>` : ''}
+          ${isOwner ? `<div class="review-actions"><button type="button" class="review-action-btn" data-review-edit="${escapeHtml(rev.id)}">Edit</button><button type="button" class="review-action-btn review-action-danger" data-review-delete="${escapeHtml(rev.id)}">Delete</button></div>` : ''}
         </article>
       `;
-    }).join('');
+      }).join('');
+    }
+
+    renderReviewForm(service, reviews);
+    bindReviewActions(service, reviews);
 
   } catch (err) {
     console.warn('[BrachioTech Reviews] Error loading reviews:', err);
@@ -449,12 +529,105 @@ async function loadReviews(service) {
   }
 }
 
+function getUserDisplayName(user) {
+  const metadata = user?.user_metadata || {};
+  return metadata.full_name || metadata.name || user?.email?.split('@')[0] || 'User';
+}
+
+function renderReviewForm(service, reviews) {
+  const formWrap = document.getElementById('review-form-wrap');
+  if (!formWrap) return;
+  const user = window.currentAuthUser;
+  if (!user) {
+    formWrap.innerHTML = `<div class="review-login-prompt"><span>Sign in with Google to leave a review.</span><button type="button" class="btn btn-outline btn-sm auth-login-btn">Sign in with Google</button></div>`;
+    return;
+  }
+
+  const ownReview = reviews.find(review => review.user_id === user.id);
+  formWrap.innerHTML = `
+    <form class="review-form" id="review-form">
+      <div class="review-form-heading">${ownReview ? 'Edit your review' : 'Share your experience'}</div>
+      <div class="review-stars-picker" role="radiogroup" aria-label="Choose a rating">
+        ${[1, 2, 3, 4, 5].map(value => `<button type="button" class="review-star-choice ${value <= (ownReview?.rating || 0) ? 'selected' : ''}" data-rating="${value}" role="radio" aria-checked="${value === Number(ownReview?.rating || 0)}" aria-label="${value} out of 5 stars">★</button>`).join('')}
+      </div>
+      <textarea id="review-comment" class="review-comment-input" rows="3" maxlength="1000" placeholder="Tell others about your experience (optional)">${escapeHtml(ownReview?.comment || '')}</textarea>
+      <div class="review-form-footer"><span class="review-form-hint" id="review-form-hint">Choose 1 to 5 stars</span><button type="submit" class="btn btn-primary btn-sm">${ownReview ? 'Save changes' : 'Submit review'}</button></div>
+    </form>
+  `;
+
+  const form = document.getElementById('review-form');
+  let selectedRating = Number(ownReview?.rating || 0);
+  form.querySelectorAll('[data-rating]').forEach(button => {
+    button.addEventListener('click', () => {
+      selectedRating = Number(button.dataset.rating);
+      form.querySelectorAll('[data-rating]').forEach(star => {
+        const selected = Number(star.dataset.rating) <= selectedRating;
+        star.classList.toggle('selected', selected);
+        star.setAttribute('aria-checked', String(Number(star.dataset.rating) === selectedRating));
+      });
+      document.getElementById('review-form-hint').textContent = `${selectedRating} out of 5 stars`;
+    });
+  });
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!selectedRating) {
+      document.getElementById('review-form-hint').textContent = 'Please choose a star rating first.';
+      return;
+    }
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    const payload = {
+      service_id: service.id,
+      user_id: user.id,
+      user_name: getUserDisplayName(user),
+      rating: selectedRating,
+      comment: document.getElementById('review-comment').value.trim(),
+    };
+    const query = ownReview
+      ? supabase.from('reviews').update(payload).eq('id', ownReview.id).select().single()
+      : supabase.from('reviews').insert(payload).select().single();
+    const { error } = await query;
+    if (error) {
+      submitButton.disabled = false;
+      document.getElementById('review-form-hint').textContent = error.message || 'Unable to save your review.';
+      return;
+    }
+    await loadReviews(service);
+  });
+}
+
+function bindReviewActions(service, reviews) {
+  document.querySelectorAll('[data-review-edit]').forEach(button => {
+    button.addEventListener('click', () => {
+      const review = reviews.find(item => item.id === button.dataset.reviewEdit);
+      if (review) renderReviewForm(service, reviews);
+    });
+  });
+  document.querySelectorAll('[data-review-delete]').forEach(button => {
+    button.addEventListener('click', async () => {
+      if (!window.confirm('Delete your review?')) return;
+      const { error } = await supabase.from('reviews').delete().eq('id', button.dataset.reviewDelete);
+      if (error) {
+        window.showToast?.(error.message || 'Unable to delete your review.', 'error');
+        return;
+      }
+      await loadReviews(service);
+    });
+  });
+}
+
+supabase.auth.onAuthStateChange(() => {
+  const service = window.currentProductService;
+  if (service) loadReviews(service);
+});
+
 // Initializer: Supabase First, Fallback to JSON
 async function init() {
   const serviceParam = getSlugFromUrl();
 
   if (!serviceParam) {
-    window.location.href = 'index.html#services';
+    window.location.href = 'services.html';
     return;
   }
 
@@ -521,6 +694,7 @@ async function init() {
     return;
   }
 
+  window.currentProductService = service;
   setTimeout(() => renderProduct(service, serviceImages, serviceLinks), 200);
 }
 
