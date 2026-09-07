@@ -2468,6 +2468,196 @@ footer {
   background: rgba(255,255,255,0.06);
 }
 
+.support-project-trigger {
+  color: var(--accent-primary);
+  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(108, 99, 255, 0.28);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+.support-project-trigger:hover {
+  color: var(--text-primary);
+  background: rgba(108, 99, 255, 0.22);
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+.support-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(3, 6, 20, 0.76);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+}
+
+.support-modal-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.support-modal-card {
+  position: relative;
+  width: min(100%, 480px);
+  padding: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(108, 99, 255, 0.16);
+  transform: translateY(12px) scale(0.97);
+  transition: transform var(--transition-base);
+}
+
+.support-modal-overlay.show .support-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.support-modal-close {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: all var(--transition-fast);
+}
+
+.support-modal-close:hover {
+  color: var(--text-primary);
+  background: rgba(255, 107, 107, 0.16);
+  border-color: rgba(255, 107, 107, 0.35);
+}
+
+.support-modal-heading {
+  padding-left: 28px;
+  margin-bottom: 26px;
+}
+
+.support-modal-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.support-modal-heading h2 {
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 1.55rem;
+}
+
+.support-modal-heading p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.support-options {
+  display: grid;
+  gap: 12px;
+}
+
+.support-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 76px;
+  padding: 13px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.045);
+  transition: all var(--transition-fast);
+}
+
+.support-option:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.09);
+  transform: translateY(-2px);
+}
+
+.support-option-logo {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.45rem;
+  font-weight: 800;
+  font-family: var(--font-display);
+}
+
+.support-option-paypal .support-option-logo {
+  background: #0070ba;
+  font-style: italic;
+}
+
+.support-option-payoneer .support-option-logo {
+  background: #ff4800;
+}
+
+.support-option-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.support-option-copy strong {
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.support-option-copy small {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.support-option-arrow {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  direction: ltr;
+}
+
+[data-theme="light"] .support-modal-overlay {
+  background: rgba(221, 225, 245, 0.72);
+}
+
+[data-theme="light"] .support-modal-card {
+  border-color: rgba(108, 99, 255, 0.18);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(108, 99, 255, 0.12);
+}
+
+[data-theme="light"] .support-modal-close,
+[data-theme="light"] .support-option {
+  border-color: rgba(108, 99, 255, 0.14);
+  background: rgba(255, 255, 255, 0.56);
+}
+
+[data-theme="light"] .support-option:hover {
+  border-color: rgba(108, 99, 255, 0.32);
+  background: rgba(255, 255, 255, 0.9);
+}
+
 .footer-divider {
   height: 1px;
   background: rgba(255,255,255,0.06);

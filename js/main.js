@@ -678,6 +678,79 @@
   }
 
   // ============================================================
+  // SUPPORT THE PROJECT MODAL
+  // ============================================================
+  function initSupportModal() {
+    var footers = $$('footer .footer-nav');
+    if (footers.length === 0 || document.getElementById('support-modal-overlay')) return;
+
+    footers.forEach(function (footerNav) {
+      var supportLink = document.createElement('button');
+      supportLink.type = 'button';
+      supportLink.className = 'support-project-trigger';
+      supportLink.textContent = 'Support the Project';
+      supportLink.setAttribute('aria-haspopup', 'dialog');
+      supportLink.setAttribute('aria-controls', 'support-modal-overlay');
+      footerNav.appendChild(supportLink);
+    });
+
+    var overlay = document.createElement('div');
+    overlay.className = 'support-modal-overlay';
+    overlay.id = 'support-modal-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'support-modal-title');
+    overlay.innerHTML =
+      '<div class="support-modal-card">' +
+        '<button type="button" class="support-modal-close" aria-label="Close support modal">×</button>' +
+        '<div class="support-modal-heading">' +
+          '<span class="support-modal-eyebrow">BrachioTech</span>' +
+          '<h2 id="support-modal-title">Support Project Continuity</h2>' +
+          '<p>Your support helps us keep improving and building more services.</p>' +
+        '</div>' +
+        '<div class="support-options" role="list">' +
+          '<a class="support-option support-option-paypal" href="https://www.paypal.me/AdamElBahlouli" target="_blank" rel="noopener noreferrer" role="listitem">' +
+            '<span class="support-option-logo" aria-hidden="true">P</span>' +
+            '<span class="support-option-copy"><strong>PayPal</strong><small>Support us through PayPal</small></span>' +
+            '<span class="support-option-arrow" aria-hidden="true">↗</span>' +
+          '</a>' +
+          '<a class="support-option support-option-payoneer" href="https://link.payoneer.com/Token?t=11DD79DDB26E41369BB18F41B789A52B&amp;src=pl" target="_blank" rel="noopener noreferrer" role="listitem">' +
+            '<span class="support-option-logo" aria-hidden="true">P</span>' +
+            '<span class="support-option-copy"><strong>Payoneer</strong><small>Support us through Payoneer</small></span>' +
+            '<span class="support-option-arrow" aria-hidden="true">↗</span>' +
+          '</a>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    var closeBtn = overlay.querySelector('.support-modal-close');
+    var triggers = $$('.support-project-trigger');
+
+    function closeModal() {
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function openModal() {
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    triggers.forEach(function (trigger) { trigger.addEventListener('click', openModal); });
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('show')) closeModal();
+    });
+  }
+
+  // ============================================================
   // MAIN INIT
   // ============================================================
   function init() {
@@ -690,7 +763,8 @@
       { name: 'SmoothScroll',   fn: initSmoothScroll },
       { name: 'LazyImages',     fn: initLazyImages },
       { name: 'PackageButtons', fn: initPackageButtons },
-      { name: 'IntroModal',     fn: initIntroModal }
+      { name: 'IntroModal',     fn: initIntroModal },
+      { name: 'SupportModal',   fn: initSupportModal }
     ];
 
     modules.forEach(function (mod) {
