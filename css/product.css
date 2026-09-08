@@ -298,7 +298,8 @@
 }
 
 .product-cta-primary,
-.product-cta-secondary {
+.product-cta-secondary,
+.product-cta-share {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -316,7 +317,8 @@
 }
 
 .product-cta-primary svg,
-.product-cta-secondary svg {
+.product-cta-secondary svg,
+.product-cta-share svg {
   flex-shrink: 0;
 }
 
@@ -924,7 +926,8 @@
   }
 
   .product-cta-primary,
-  .product-cta-secondary {
+  .product-cta-secondary,
+  .product-cta-share {
     width: 100%;
     flex: none;
     justify-content: center;
