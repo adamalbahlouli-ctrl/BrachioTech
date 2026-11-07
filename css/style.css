@@ -2698,6 +2698,24 @@ footer {
   object-fit: contain;
 }
 
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-bottom p a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.footer-bottom p a:hover {
+  color: var(--accent-secondary, #4ecdc4);
+  text-decoration: underline;
+}
+
 /* ============================================
    ANIMATIONS
    ============================================ */
